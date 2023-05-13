@@ -9,20 +9,20 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class ObjectPool<T>
 {
     [SerializeField, Tooltip("最大アイテム数")]
-    protected uint _Length = 10;
+    protected uint _length = 10;
 
     /// <summary>アイテム配列</summary>
-    protected T[] _Values = null;
+    protected T[] _values = null;
 
     /// <summary>アイテム配列</summary>
-    public T[] Values { get => _Values; }
+    public T[] Values { get => _values; }
 
     /// <summary>オブジェクトプール</summary>
     /// <param name="length">アイテム数</param>
     public ObjectPool(uint? length = null)
     {
-        if (length != null) _Length = (uint)length;
-        _Values = new T[_Length];
+        if (length != null) _length = (uint)length;
+        _values = new T[_length];
     }
 
     /// <summary>現在のプールにアイテム生成の余裕があれば生成</summary>
@@ -31,12 +31,12 @@ public class ObjectPool<T>
     public T Create(T instant)
     {
         T t = default;
-        for(int i = 0; i < _Values.Length; i++)
+        for(int i = 0; i < _values.Length; i++)
         {
-            if (_Values[i] == null)
+            if (_values[i] == null)
             {
-                _Values[i] = instant;
-                t = _Values[i];
+                _values[i] = instant;
+                t = _values[i];
                 break;
             }
         }
@@ -48,8 +48,8 @@ public class ObjectPool<T>
     /// <returns>プールから外したアイテム</returns>
     public T Remove(uint index)
     {
-        T t = _Values[index];
-        _Values[index] = default;
+        T t = _values[index];
+        _values[index] = default;
         return t;
     } 
 }
@@ -62,13 +62,13 @@ public class GameObjectPool : ObjectPool<GameObject>
     /// <param name="length">オブジェクト数</param>
     public GameObjectPool(GameObject pref, uint? length = null)
     {
-        if (length != null) _Length = (uint)length;
-        _Values = new GameObject[_Length];
+        if (length != null) _length = (uint)length;
+        _values = new GameObject[_length];
 
-        for (int i = 0; i < _Values.Length; i++)
+        for (int i = 0; i < _values.Length; i++)
         {
-            _Values[i] = UnityEngine.Object.Instantiate(pref);
-            _Values[i].SetActive(false);
+            _values[i] = UnityEngine.Object.Instantiate(pref);
+            _values[i].SetActive(false);
         }
     }
 
@@ -77,23 +77,23 @@ public class GameObjectPool : ObjectPool<GameObject>
     /// <param name="length">オブジェクト数</param>
     public GameObjectPool(string prefPath, uint? length = null)
     {
-        if (length != null) _Length = (uint)length;
-        _Values = new GameObject[_Length];
+        if (length != null) _length = (uint)length;
+        _values = new GameObject[_length];
 
-        for(int i = 0; i < _Values.Length; i++)
+        for(int i = 0; i < _values.Length; i++)
         {
-            _Values[i] = UnityEngine.Object.Instantiate((GameObject)Resources.Load(prefPath));
-            _Values[i].SetActive(false);
+            _values[i] = UnityEngine.Object.Instantiate((GameObject)Resources.Load(prefPath));
+            _values[i].SetActive(false);
         }
     }
 
     /// <summary>オブジェクトプールしたGameObjectを全てDestroyして解放する</summary>
     public void PoolDelete()
     {
-        for (int i = 0; i < _Values.Length; i++)
+        for (int i = 0; i < _values.Length; i++)
         {
-            UnityEngine.Object.Destroy(_Values[i]);
-            _Values[i] = null;
+            UnityEngine.Object.Destroy(_values[i]);
+            _values[i] = null;
         }
     }
 
@@ -102,7 +102,7 @@ public class GameObjectPool : ObjectPool<GameObject>
     public GameObject Instansiate()
     {
         GameObject obj = null;
-        foreach(GameObject val in _Values)
+        foreach(GameObject val in _values)
         {
             if (val is not null && !val.activeSelf) 
             {

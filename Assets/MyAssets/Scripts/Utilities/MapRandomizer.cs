@@ -3,66 +3,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class MapRandomizer : MonoBehaviour
 {
     [SerializeField, Tooltip("マスの数(一辺5マス以上)")]
-    Vector2Int _MapSize = new Vector2Int(5, 5);
+    Vector2Int _mapSize = new Vector2Int(5, 5);
 
     [SerializeField, Tooltip("マス目1辺の長さ")]
-    float _Unit = 10f;
+    float _unit = 10f;
 
     [SerializeField, Tooltip("true : 乱数シードを指定する")]
-    bool _UseSeed = false;
+    bool _useSeed = false;
 
     [SerializeField, Tooltip("乱数シード")]
-    int _Seed = 10;
+    int _seed = 10;
 
 
 
     [Header("地面プレハブ")]
     [SerializeField, Tooltip("普通地面区画")]
-    GameObject _CommonFloor = null;
+    GameObject _commonFloor = null;
 
     [SerializeField, Tooltip("直進道路区画")]
-    GameObject _StraightRoad = null;
+    GameObject _straightRoad = null;
 
     [SerializeField, Tooltip("急な登坂区画")]
-    GameObject _SteepSlopeRoad = null;
+    GameObject _steepSlopeRoad = null;
 
     [SerializeField, Tooltip("緩い登坂区画")]
-    GameObject _GentleSlopeRoad = null;
+    GameObject _gentleSlopeRoad = null;
 
     [SerializeField, Tooltip("曲線道路区画")]
-    GameObject _CurveRoad = null;
+    GameObject _curveRoad = null;
 
     [Header("壁プレハブ")]
     [SerializeField, Tooltip("高低差埋めの壁 普通")]
-    GameObject _DifferentHeightWall = null;
+    GameObject _differentHeightWall = null;
 
     [SerializeField, Tooltip("高低差埋めの壁 両面あり")]
-    GameObject _BothSideWall = null;
+    GameObject _bothSideWall = null;
 
     [SerializeField, Tooltip("壁の角を埋める柱")]
-    GameObject _WallCornerPost = null;
+    GameObject _wallCornerPost = null;
 
     [Header("建物プレハブ")]
     [SerializeField, Tooltip("4×3の土地を使う建物")]
-    GameObject[] _Buldings4x3 = null;
+    GameObject[] _buldings4x3 = null;
 
     [SerializeField, Tooltip("3×3の土地を使う建物")]
-    GameObject[] _Buldings3x3 = null;
+    GameObject[] _buldings3x3 = null;
 
     [SerializeField, Tooltip("3×2の土地を使う建物")]
-    GameObject[] _Buldings3x2 = null;
+    GameObject[] _buldings3x2 = null;
 
     [SerializeField, Tooltip("2×2の土地を使う建物")]
-    GameObject[] _Buldings2x2 = null;
+    GameObject[] _buldings2x2 = null;
 
     [SerializeField, Tooltip("2×1の土地を使う建物")]
-    GameObject[] _Buldings2x1 = null;
+    GameObject[] _buldings2x1 = null;
 
     [SerializeField, Tooltip("1つの土地を使う建物")]
-    GameObject[] _Buldings1x1 = null;
+    GameObject[] _buldings1x1 = null;
 
 
 
@@ -93,30 +94,30 @@ public class MapRandomizer : MonoBehaviour
     void Awake()
     {
         /*乱数指定*/
-        if (!_UseSeed)
+        if (!_useSeed)
         {
             //シード値生成
-            _Seed = Random.Range(int.MinValue, int.MaxValue);
+            _seed = Random.Range(int.MinValue, int.MaxValue);
         }
-        Random.InitState(_Seed);
+        Random.InitState(_seed);
 
 
         /*テーブル初期化*/
-        if (_MapSize.x < 5) _MapSize.x = 5;
-        if (_MapSize.y < 5) _MapSize.y = 5;
-        map = new MapCell[_MapSize.y, _MapSize.x];
-        for (int y = 0; y < _MapSize.y; y++)
+        if (_mapSize.x < 5) _mapSize.x = 5;
+        if (_mapSize.y < 5) _mapSize.y = 5;
+        map = new MapCell[_mapSize.y, _mapSize.x];
+        for (int y = 0; y < _mapSize.y; y++)
         {
-            for (int x = 0; x < _MapSize.x; x++)
+            for (int x = 0; x < _mapSize.x; x++)
             {
                 map[y, x] = new MapCell();
             }
         }
 
         /*リンク設定*/
-        for (int y = 0; y < _MapSize.y; y++)
+        for (int y = 0; y < _mapSize.y; y++)
         {
-            for (int x = 0; x < _MapSize.x; x++)
+            for (int x = 0; x < _mapSize.x; x++)
             {
                 //真下取得
                 if (y > 0)
@@ -129,7 +130,7 @@ public class MapRandomizer : MonoBehaviour
                         map[y, x].downLeft = map[y - 1, x - 1];
                     }
                     //右下取得
-                    if (x < _MapSize.x - 1)
+                    if (x < _mapSize.x - 1)
                     {
                         map[y, x].downRight = map[y - 1, x + 1];
                     }
@@ -140,12 +141,12 @@ public class MapRandomizer : MonoBehaviour
                     map[y, x].left = map[y, x - 1];
                 }
                 //真右取得
-                if (x < _MapSize.x - 1)
+                if (x < _mapSize.x - 1)
                 {
                     map[y, x].right = map[y, x + 1];
                 }
                 //真上取得
-                if (y < _MapSize.y - 1)
+                if (y < _mapSize.y - 1)
                 {
                     map[y, x].up = map[y + 1, x];
 
@@ -155,7 +156,7 @@ public class MapRandomizer : MonoBehaviour
                         map[y, x].upLeft = map[y + 1, x - 1];
                     }
                     //右上取得
-                    if (x < _MapSize.x - 1)
+                    if (x < _mapSize.x - 1)
                     {
                         map[y, x].upRight = map[y + 1, x + 1];
                     }
@@ -163,10 +164,12 @@ public class MapRandomizer : MonoBehaviour
             }
         }
 
-
         SetHeightDiff();
         SetRoad();
         SetParts();
+
+        //
+        BoxCollider col = GetComponent<BoxCollider>();
     }
 
 
@@ -186,7 +189,7 @@ public class MapRandomizer : MonoBehaviour
         float rand = Random.value;
         if (rand < 0.25f)
         {
-            processDepth = new Vector2Int(0, _MapSize.y - 1);
+            processDepth = new Vector2Int(0, _mapSize.y - 1);
             
             if(rand < 0.125f)
             {
@@ -201,7 +204,7 @@ public class MapRandomizer : MonoBehaviour
         }
         else if(rand < 0.5f)
         {
-            processDepth = new Vector2Int(_MapSize.x - 1, 0);
+            processDepth = new Vector2Int(_mapSize.x - 1, 0);
 
             if (rand < 0.375f)
             {
@@ -216,7 +219,7 @@ public class MapRandomizer : MonoBehaviour
         }
         else if(rand < 0.75f)
         {
-            processDepth = new Vector2Int(_MapSize.x - 1, _MapSize.y - 1);
+            processDepth = new Vector2Int(_mapSize.x - 1, _mapSize.y - 1);
 
             if (rand < 0.625f)
             {
@@ -247,15 +250,15 @@ public class MapRandomizer : MonoBehaviour
         int depth = 0;
         int width = 0;
         Vector2Int processWidth = Vector2Int.zero;
-        while (-1 < processDepth.x && processDepth.x < _MapSize.x
-                && -1 < processDepth.y && processDepth.y < _MapSize.y)
+        while (-1 < processDepth.x && processDepth.x < _mapSize.x
+                && -1 < processDepth.y && processDepth.y < _mapSize.y)
         {
             processWidth = processDepth;
 
             if (depth < 1)
             {
-                depth = (int)Random.Range(2f, Mathf.Min(_MapSize.x, _MapSize.y) / 2f);
-                width = (int)Random.Range(0f, Mathf.Min(_MapSize.x, _MapSize.y));                
+                depth = (int)Random.Range(2f, Mathf.Min(_mapSize.x, _mapSize.y) / 2f);
+                width = (int)Random.Range(0f, Mathf.Min(_mapSize.x, _mapSize.y));                
             }
 
             for (int i = 0; i < width; i++)
@@ -279,7 +282,7 @@ public class MapRandomizer : MonoBehaviour
         int[] advanceLimit = new int[4];
         if (rand < 0.5f)
         {
-            int startX = (int)Random.Range(_MapSize.x * 0.2f, _MapSize.x * 0.6f);
+            int startX = (int)Random.Range(_mapSize.x * 0.2f, _mapSize.x * 0.6f);
             //北方向へ
             if (rand < 0.25f)
             {
@@ -292,32 +295,32 @@ public class MapRandomizer : MonoBehaviour
                 current = map[1, startX];
 
                 advanceDirection = Compass.North;
-                advanceLimit[0] = _MapSize.y;
-                advanceLimit[1] = _MapSize.x - startX - 2;
+                advanceLimit[0] = _mapSize.y;
+                advanceLimit[1] = _mapSize.x - startX - 2;
                 advanceLimit[2] = 0;
                 advanceLimit[3] = startX - 2;
             }
             //南方向へ
             else
             {
-                map[_MapSize.y - 1, startX].floorType = FloorType.StraightRoad;
-                map[_MapSize.y - 1, startX].enter = Compass.North;
-                map[_MapSize.y - 1, startX].exit = Compass.South;
-                map[_MapSize.y - 2, startX].floorType = FloorType.StraightRoad;
-                map[_MapSize.y - 2, startX].enter = Compass.North;
-                map[_MapSize.y - 2, startX].exit = Compass.South;
-                current = map[_MapSize.y - 2, startX];
+                map[_mapSize.y - 1, startX].floorType = FloorType.StraightRoad;
+                map[_mapSize.y - 1, startX].enter = Compass.North;
+                map[_mapSize.y - 1, startX].exit = Compass.South;
+                map[_mapSize.y - 2, startX].floorType = FloorType.StraightRoad;
+                map[_mapSize.y - 2, startX].enter = Compass.North;
+                map[_mapSize.y - 2, startX].exit = Compass.South;
+                current = map[_mapSize.y - 2, startX];
 
                 advanceDirection = Compass.South;
                 advanceLimit[0] = 0;
-                advanceLimit[1] = _MapSize.x - startX - 2;
-                advanceLimit[2] = _MapSize.y;
+                advanceLimit[1] = _mapSize.x - startX - 2;
+                advanceLimit[2] = _mapSize.y;
                 advanceLimit[3] = startX - 2;
             }
         }
         else
         {
-            int startY = (int)Random.Range(_MapSize.y * 0.2f, _MapSize.y * 0.6f);
+            int startY = (int)Random.Range(_mapSize.y * 0.2f, _mapSize.y * 0.6f);
             //東方向へ
             if (rand < 0.75f)
             {
@@ -330,32 +333,32 @@ public class MapRandomizer : MonoBehaviour
                 current = map[startY, 1];
 
                 advanceDirection = Compass.East;
-                advanceLimit[0] = _MapSize.y - startY - 2;
-                advanceLimit[1] = _MapSize.x;
+                advanceLimit[0] = _mapSize.y - startY - 2;
+                advanceLimit[1] = _mapSize.x;
                 advanceLimit[2] = startY - 2;
                 advanceLimit[3] = 0;
             }
             //西方向へ
             else
             {
-                map[startY, _MapSize.x - 1].floorType = FloorType.StraightRoad;
-                map[startY, _MapSize.x - 1].enter = Compass.East;
-                map[startY, _MapSize.x - 1].exit = Compass.West;
-                map[startY, _MapSize.x - 2].floorType = FloorType.StraightRoad;
-                map[startY, _MapSize.x - 2].enter = Compass.East;
-                map[startY, _MapSize.x - 2].exit = Compass.West;
-                current = map[startY, _MapSize.x - 2];
+                map[startY, _mapSize.x - 1].floorType = FloorType.StraightRoad;
+                map[startY, _mapSize.x - 1].enter = Compass.East;
+                map[startY, _mapSize.x - 1].exit = Compass.West;
+                map[startY, _mapSize.x - 2].floorType = FloorType.StraightRoad;
+                map[startY, _mapSize.x - 2].enter = Compass.East;
+                map[startY, _mapSize.x - 2].exit = Compass.West;
+                current = map[startY, _mapSize.x - 2];
 
                 advanceDirection = Compass.West;
-                advanceLimit[0] = _MapSize.y - startY - 2;
+                advanceLimit[0] = _mapSize.y - startY - 2;
                 advanceLimit[1] = 0;
                 advanceLimit[2] = startY - 2;
-                advanceLimit[3] = _MapSize.x;
+                advanceLimit[3] = _mapSize.x;
             }
         }
 
         //穴掘り
-        int loopLimit = _MapSize.x * _MapSize.y;
+        int loopLimit = _mapSize.x * _mapSize.y;
         Compass beforeStep = advanceDirection;
         bool isCurve = false;
         for (int i = 0; i < loopLimit; i++)
@@ -613,13 +616,13 @@ public class MapRandomizer : MonoBehaviour
     void SetParts()
     {
         //構造物配置決めのためのリスト
-        List<Vector2Int> buildCandidates = new List<Vector2Int>(_MapSize.x * _MapSize.y);
+        List<Vector2Int> buildCandidates = new List<Vector2Int>(_mapSize.x * _mapSize.y);
 
         /*地形配置*/
         GameObject pref = null;
-        for (int y = 0; y < _MapSize.y; y++)
+        for (int y = 0; y < _mapSize.y; y++)
         {
-            for (int x = 0; x < _MapSize.x; x++)
+            for (int x = 0; x < _mapSize.x; x++)
             {
                 Vector3 forward = Vector3.forward;
                 if (map[y, x].floorType != FloorType.CommonFloor)
@@ -632,15 +635,15 @@ public class MapRandomizer : MonoBehaviour
                             switch (map[y, x].exit)
                             {
                                 case Compass.East:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     break;
                                 //直進
                                 case Compass.South:
-                                    pref = _StraightRoad;
+                                    pref = _straightRoad;
                                     forward = Vector3.left;
                                     break;
                                 case Compass.West:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     forward = Vector3.left;
                                     break;
                                 default: break;
@@ -651,15 +654,15 @@ public class MapRandomizer : MonoBehaviour
                             switch (map[y, x].exit)
                             {
                                 case Compass.North:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     break;
                                 case Compass.South:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     forward = Vector3.right;
                                     break;
                                 //直進
                                 case Compass.West:
-                                    pref = _StraightRoad;
+                                    pref = _straightRoad;
                                     break;
                                 default: break;
                             }
@@ -670,15 +673,15 @@ public class MapRandomizer : MonoBehaviour
                             {
                                 //直進
                                 case Compass.North:
-                                    pref = _StraightRoad;
+                                    pref = _straightRoad;
                                     forward = Vector3.left;
                                     break;
                                 case Compass.East:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     forward = Vector3.right;
                                     break;
                                 case Compass.West:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     forward = Vector3.back;
                                     break;
                                 default: break;
@@ -689,15 +692,15 @@ public class MapRandomizer : MonoBehaviour
                             switch (map[y, x].exit)
                             {
                                 case Compass.North:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     forward = Vector3.left;
                                     break;
                                 //直進
                                 case Compass.East:
-                                    pref = _StraightRoad;
+                                    pref = _straightRoad;
                                     break;
                                 case Compass.South:
-                                    pref = _CurveRoad;
+                                    pref = _curveRoad;
                                     forward = Vector3.back;
                                     break;
                                 default: break;
@@ -708,7 +711,7 @@ public class MapRandomizer : MonoBehaviour
                 }
                 else
                 {
-                    pref = _CommonFloor;
+                    pref = _commonFloor;
                 }
 
                 //南隣の区画をチェック
@@ -722,30 +725,30 @@ public class MapRandomizer : MonoBehaviour
                             && (map[y - 1, x].enter == map[y, x].enter || map[y - 1, x].exit == map[y, x].exit))
                         {
                             forward = Vector3.left;
-                            pref = _SteepSlopeRoad;
+                            pref = _steepSlopeRoad;
 
                             //高低差壁作成
                             if (map[y, x].right != null && !map[y, x].right.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit + _Unit / 2f, 0f, y * _Unit);
+                                wall.transform.position = new Vector3(x * _unit + _unit / 2f, 0f, y * _unit);
                                 wall.transform.forward = Vector3.right;
                             }
                             if (map[y, x].left != null && !map[y, x].left.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit - _Unit / 2f, 0f, y * _Unit);
+                                wall.transform.position = new Vector3(x * _unit - _unit / 2f, 0f, y * _unit);
                                 wall.transform.forward = Vector3.left;
                             }
                         }
                         else
                         {
                             //高低差壁作成
-                            GameObject wall = Instantiate(_DifferentHeightWall);
+                            GameObject wall = Instantiate(_differentHeightWall);
                             wall.transform.SetParent(transform);
-                            wall.transform.position = new Vector3(x * _Unit, 0f, y * _Unit - _Unit / 2f);
+                            wall.transform.position = new Vector3(x * _unit, 0f, y * _unit - _unit / 2f);
                             wall.transform.forward = Vector3.back;
                         }
                     }
@@ -756,15 +759,15 @@ public class MapRandomizer : MonoBehaviour
                         //コーナーポストを置く判定
                         if (map[y, x].right != null && !map[y, x].right.isUpperFloor)
                         {
-                            GameObject post = Instantiate(_WallCornerPost);
+                            GameObject post = Instantiate(_wallCornerPost);
                             post.transform.SetParent(transform);
-                            post.transform.position = new Vector3(x * _Unit + _Unit / 2f, 0f, y * _Unit - _Unit / 2f);
+                            post.transform.position = new Vector3(x * _unit + _unit / 2f, 0f, y * _unit - _unit / 2f);
                         }
                         if (map[y, x].left != null && !map[y, x].left.isUpperFloor)
                         {
-                            GameObject post = Instantiate(_WallCornerPost);
+                            GameObject post = Instantiate(_wallCornerPost);
                             post.transform.SetParent(transform);
-                            post.transform.position = new Vector3(x * _Unit - _Unit / 2f, 0f, y * _Unit - _Unit / 2f);
+                            post.transform.position = new Vector3(x * _unit - _unit / 2f, 0f, y * _unit - _unit / 2f);
                         }
                     }
                 }
@@ -779,30 +782,30 @@ public class MapRandomizer : MonoBehaviour
                             && (map[y, x].up.enter == map[y, x].enter || map[y, x].up.exit == map[y, x].exit))
                         {
                             forward = Vector3.right;
-                            pref = _SteepSlopeRoad;
+                            pref = _steepSlopeRoad;
 
                             //高低差壁作成
                             if (map[y, x].right != null && !map[y, x].right.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit + _Unit / 2f, 0f, y * _Unit);
+                                wall.transform.position = new Vector3(x * _unit + _unit / 2f, 0f, y * _unit);
                                 wall.transform.forward = Vector3.right;
                             }
                             if (map[y, x].left != null && !map[y, x].left.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit - _Unit / 2f, 0f, y * _Unit);
+                                wall.transform.position = new Vector3(x * _unit - _unit / 2f, 0f, y * _unit);
                                 wall.transform.forward = Vector3.left;
                             }
                         }
                         else
                         {
                             //高低差壁作成
-                            GameObject wall = Instantiate(_DifferentHeightWall);
+                            GameObject wall = Instantiate(_differentHeightWall);
                             wall.transform.SetParent(transform);
-                            wall.transform.position = new Vector3(x * _Unit, 0f, y * _Unit + _Unit / 2f);
+                            wall.transform.position = new Vector3(x * _unit, 0f, y * _unit + _unit / 2f);
                         }
                     }
 
@@ -812,15 +815,15 @@ public class MapRandomizer : MonoBehaviour
                         //コーナーポストを置く判定
                         if (map[y, x].right != null && !map[y, x].right.isUpperFloor)
                         {
-                            GameObject post = Instantiate(_WallCornerPost);
+                            GameObject post = Instantiate(_wallCornerPost);
                             post.transform.SetParent(transform);
-                            post.transform.position = new Vector3(x * _Unit + _Unit / 2f, 0f, y * _Unit + _Unit / 2f);
+                            post.transform.position = new Vector3(x * _unit + _unit / 2f, 0f, y * _unit + _unit / 2f);
                         }
                         if (map[y, x].left != null && !map[y, x].left.isUpperFloor)
                         {
-                            GameObject post = Instantiate(_WallCornerPost);
+                            GameObject post = Instantiate(_wallCornerPost);
                             post.transform.SetParent(transform);
-                            post.transform.position = new Vector3(x * _Unit - _Unit / 2f, 0f, y * _Unit + _Unit / 2f);
+                            post.transform.position = new Vector3(x * _unit - _unit / 2f, 0f, y * _unit + _unit / 2f);
                         }
                     }
                 }
@@ -834,29 +837,29 @@ public class MapRandomizer : MonoBehaviour
                         if ((map[y, x].left.floorType != FloorType.CommonFloor && map[y, x].floorType != FloorType.CommonFloor)
                             && (map[y, x].left.enter == map[y, x].enter || map[y, x].left.exit == map[y, x].exit))
                         {
-                            pref = _SteepSlopeRoad;
+                            pref = _steepSlopeRoad;
 
                             //高低差壁作成
                             if (map[y, x].up != null && !map[y, x].up.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit, 0f, y * _Unit + _Unit / 2f);
+                                wall.transform.position = new Vector3(x * _unit, 0f, y * _unit + _unit / 2f);
                             }
                             if (map[y, x].down != null && !map[y, x].down.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit, 0f, y * _Unit - _Unit / 2f);
+                                wall.transform.position = new Vector3(x * _unit, 0f, y * _unit - _unit / 2f);
                                 wall.transform.forward = Vector3.back;
                             }
                         }
                         else
                         {
                             //高低差壁作成
-                            GameObject wall = Instantiate(_DifferentHeightWall);
+                            GameObject wall = Instantiate(_differentHeightWall);
                             wall.transform.SetParent(transform);
-                            wall.transform.position = new Vector3(x * _Unit - _Unit / 2f, 0f, y * _Unit);
+                            wall.transform.position = new Vector3(x * _unit - _unit / 2f, 0f, y * _unit);
                             wall.transform.forward = Vector3.left;
                         }
                     }
@@ -872,29 +875,29 @@ public class MapRandomizer : MonoBehaviour
                             && (map[y, x].right.enter == map[y, x].enter || map[y, x].right.exit == map[y, x].exit))
                         {
                             forward = Vector3.back;
-                            pref = _SteepSlopeRoad;
+                            pref = _steepSlopeRoad;
 
                             //高低差壁作成
                             if (map[y, x].up != null && !map[y, x].up.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit, 0f, y * _Unit + _Unit / 2f);
+                                wall.transform.position = new Vector3(x * _unit, 0f, y * _unit + _unit / 2f);
                             }
                             if (map[y, x].down != null && !map[y, x].down.isUpperFloor)
                             {
-                                GameObject wall = Instantiate(_BothSideWall);
+                                GameObject wall = Instantiate(_bothSideWall);
                                 wall.transform.SetParent(transform);
-                                wall.transform.position = new Vector3(x * _Unit, 0f, y * _Unit - _Unit / 2f);
+                                wall.transform.position = new Vector3(x * _unit, 0f, y * _unit - _unit / 2f);
                                 wall.transform.forward = Vector3.back;
                             }
                         }
                         else
                         {
                             //高低差壁作成
-                            GameObject wall = Instantiate(_DifferentHeightWall);
+                            GameObject wall = Instantiate(_differentHeightWall);
                             wall.transform.SetParent(transform);
-                            wall.transform.position = new Vector3(x * _Unit + _Unit / 2f, 0f, y * _Unit);
+                            wall.transform.position = new Vector3(x * _unit + _unit / 2f, 0f, y * _unit);
                             wall.transform.forward = Vector3.right;
                         }
                     }
@@ -903,7 +906,7 @@ public class MapRandomizer : MonoBehaviour
                 //地面の生成
                 GameObject ins = Instantiate(pref);
                 ins.transform.SetParent(transform);
-                ins.transform.position = new Vector3(x, map[y, x].isUpperFloor ? 0.2f : 0f, y) * _Unit;
+                ins.transform.position = new Vector3(x, map[y, x].isUpperFloor ? 0.2f : 0f, y) * _unit;
                 ins.transform.forward = forward;
 
                 //道路以外は建造物配置候補
@@ -928,9 +931,9 @@ public class MapRandomizer : MonoBehaviour
                 MapCell[] cells = map[candidate.y, candidate.x].GetField3x3();
                 if (cells is not null)
                 {
-                    GameObject build = Instantiate(_Buldings3x3[(int)Random.Range(0f, _Buldings3x3.Length - 0.01f)]);
+                    GameObject build = Instantiate(_buldings3x3[(int)Random.Range(0f, _buldings3x3.Length - 0.01f)]);
                     build.transform.SetParent(transform);
-                    build.transform.position = new Vector3(candidate.x, map[candidate.y, candidate.x].isUpperFloor ? 0.2f : 0f, candidate.y) * _Unit;
+                    build.transform.position = new Vector3(candidate.x, map[candidate.y, candidate.x].isUpperFloor ? 0.2f : 0f, candidate.y) * _unit;
 
                     foreach (MapCell cell in cells)
                     {
@@ -939,9 +942,9 @@ public class MapRandomizer : MonoBehaviour
                 }
                 else
                 {
-                    GameObject build = Instantiate(_Buldings1x1[(int)Random.Range(0f, _Buldings1x1.Length - 0.01f)]);
+                    GameObject build = Instantiate(_buldings1x1[(int)Random.Range(0f, _buldings1x1.Length - 0.01f)]);
                     build.transform.SetParent(transform);
-                    build.transform.position = new Vector3(candidate.x, map[candidate.y, candidate.x].isUpperFloor ? 0.2f : 0f, candidate.y) * _Unit;
+                    build.transform.position = new Vector3(candidate.x, map[candidate.y, candidate.x].isUpperFloor ? 0.2f : 0f, candidate.y) * _unit;
                     map[candidate.y, candidate.x].isBuilt = true;
                 }
             }

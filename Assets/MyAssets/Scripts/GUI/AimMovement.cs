@@ -10,33 +10,33 @@ public class AimMovement : MonoBehaviour
     #region メンバ
 
     /// <summary>メインカメラコンポーネント</summary>
-    Camera _MainCamera = null;
+    Camera _mainCamera = null;
 
     /// <summary>プレイヤーのパラメータ</summary>
-    PlayerParameter _Param = null;
+    PlayerParameter _param = null;
 
 
     /// <summary>照準までの距離の実数値</summary>
-    float _Distance = 0.0f;
+    float _distance = 0.0f;
 
     /// <summary>照準までの距離の識別</summary>
-    DistanceType _DistanceType = DistanceType.OutOfRange;
+    DistanceType _distanceType = DistanceType.OutOfRange;
     #endregion
 
 
     #region プロパティ
     /// <summary>照準までの距離の実数値</summary>
-    public float Distance { get => _Distance; }
+    public float Distance { get => _distance; }
     /// <summary>照準までの距離の識別</summary>
-    public DistanceType DistType { get => _DistanceType; }
+    public DistanceType DistType { get => _distanceType; }
     #endregion
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _MainCamera = Camera.main;
-        _Param = FindObjectOfType<PlayerParameter>();
+        _mainCamera = Camera.main;
+        _param = FindObjectOfType<PlayerParameter>();
     }
 
 
@@ -48,7 +48,7 @@ public class AimMovement : MonoBehaviour
         Vector3 rayhitPos = Vector3.zero;
 
         //プレイヤー位置からカメラ前方方向に地面を探索
-        if (Physics.Raycast(_Param.EyePoint.transform.position, _MainCamera.transform.forward, out rayhitGround, _Param.LockMaxRange, LayerManager.Instance.OnTheReticle))
+        if (Physics.Raycast(_param.EyePoint.transform.position, _mainCamera.transform.forward, out rayhitGround, _param.LockMaxRange, LayerManager.Instance.OnTheReticle))
         {
             //確認できたら該当座標を保存
             rayhitPos = rayhitGround.point;
@@ -57,31 +57,31 @@ public class AimMovement : MonoBehaviour
             //_Param.GazeAt = rayhitGround.transform.GetComponent<PlayerParameter>();
             
             //照準位置までの実数距離から識別値を設定
-            if (_Distance < _Param.ProximityRange)
+            if (_distance < _param.ProximityRange)
             {
-                _DistanceType = DistanceType.WithinProximity;
+                _distanceType = DistanceType.WithinProximity;
             }
-            else if (_Distance < _Param.LockMaxRange)
+            else if (_distance < _param.LockMaxRange)
             {
-                _DistanceType = DistanceType.OutOfProximity;
+                _distanceType = DistanceType.OutOfProximity;
             }
         }
         else
         {
             //確認できなければ、最大射程距離を参照
-            rayhitPos = _Param.EyePoint.transform.position + _MainCamera.transform.forward * _Param.LockMaxRange;
+            rayhitPos = _param.EyePoint.transform.position + _mainCamera.transform.forward * _param.LockMaxRange;
             //照準までの距離の識別値を射程外に
-            _DistanceType = DistanceType.OutOfRange;
+            _distanceType = DistanceType.OutOfRange;
             //ステータスコンポーネントを破棄
             //_Param.GazeAt = null;
         }
 
         //照準を配置
         transform.position = rayhitPos;
-        _Param.ReticlePoint = rayhitPos;
+        _param.ReticlePoint = rayhitPos;
 
         //照準位置までの距離を計算(各プレイヤーの最大射程距離を限界値とする)
-        _Distance = Vector3.Distance(transform.position, _Param.EyePoint.transform.position);
+        _distance = Vector3.Distance(transform.position, _param.EyePoint.transform.position);
     }
 }
 

@@ -7,21 +7,21 @@ using Cinemachine;
 public class CMFreeLookUtility : MonoBehaviour
 {
     /// <summary>“–ŠY‚ÌCinemachineFreeLook</summary>
-    CinemachineFreeLook _CM = default;
+    CinemachineFreeLook _cm = default;
 
     // Start is called before the first frame update
     void Start()
     {
-        _CM = GetComponent<CinemachineFreeLook>();
+        _cm = GetComponent<CinemachineFreeLook>();
         SeekPlayer();
     }
 
     // Update is called once per frame
     void Update()
     {
-        _CM.enabled = true;
+        _cm.enabled = true;
 
-        if (!_CM.Follow || !_CM.LookAt)
+        if (!_cm.Follow || !_cm.LookAt)
         {
             SeekPlayer();
         }
@@ -34,8 +34,8 @@ public class CMFreeLookUtility : MonoBehaviour
 
         if(player)
         {
-            _CM.Follow = player.transform;
-            _CM.LookAt = player.EyePoint ? player.EyePoint.transform : player.transform;
+            _cm.Follow = player.transform;
+            _cm.LookAt = player.EyePoint ? player.EyePoint.transform : player.transform;
         }
     }
 }
