@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 1b633269e4ab8dc4f8434d5bc3ba1023, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18383303, g: 0.3361673, b: 0.5611491, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -190,6 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 696889591}
   - component: {fileID: 696889592}
+  - component: {fileID: 696889593}
   m_Layer: 8
   m_Name: Map
   m_TagString: Untagged
@@ -224,28 +225,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb53fff26c99a6428558ae189f3a169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MapSize: {x: 30, y: 30}
-  _Unit: 10
-  _UseSeed: 0
-  _Seed: 10
-  _CommonFloor: {fileID: 8318677690160863254, guid: aefa72aa6d1cc6d4ab422d4c20c03211, type: 3}
-  _StraightRoad: {fileID: 1374511181659535715, guid: 6dfadfe0ae9fe1b4ea41427553722a1f, type: 3}
-  _SteepSlopeRoad: {fileID: 4797157088309641137, guid: 3bce5e96b9100c04984975e216d94381, type: 3}
-  _GentleSlopeRoad: {fileID: 0}
-  _CurveRoad: {fileID: 3990418977516283613, guid: e0e3b0bec7c98a649a48cdcb6fb6b727, type: 3}
-  _DifferentHeightWall: {fileID: 7126736635773846509, guid: 79a684bbcd4972e489a2f0fd7279d392, type: 3}
-  _BothSideWall: {fileID: 4417099514701376387, guid: 954d895973205164a82b866b80b57149, type: 3}
-  _WallCornerPost: {fileID: 923731591599587551, guid: bc421ee7b6f45b0408378ed618df553f, type: 3}
-  _Buldings4x3: []
-  _Buldings3x3:
+  _mapSize: {x: 30, y: 30}
+  _useSeed: 0
+  _seed: 10
+  _commonFloor: {fileID: 8318677690160863254, guid: aefa72aa6d1cc6d4ab422d4c20c03211, type: 3}
+  _straightRoad: {fileID: 1374511181659535715, guid: 6dfadfe0ae9fe1b4ea41427553722a1f, type: 3}
+  _steepSlopeRoad: {fileID: 4797157088309641137, guid: 3bce5e96b9100c04984975e216d94381, type: 3}
+  _gentleSlopeRoad: {fileID: 0}
+  _curveRoad: {fileID: 3990418977516283613, guid: e0e3b0bec7c98a649a48cdcb6fb6b727, type: 3}
+  _commonFloorInnerStair: {fileID: 2483208149281015612, guid: 9c7e3adc663d42546b751daf50e4d79d, type: 3}
+  _differentHeightWall: {fileID: 7126736635773846509, guid: 79a684bbcd4972e489a2f0fd7279d392, type: 3}
+  _bothSideWall: {fileID: 4417099514701376387, guid: 954d895973205164a82b866b80b57149, type: 3}
+  _wallCornerPost: {fileID: 923731591599587551, guid: bc421ee7b6f45b0408378ed618df553f, type: 3}
+  _innerStairLeft: {fileID: 8544237057830643551, guid: 1e02e9516e772a847a3d58a27a483493, type: 3}
+  _innerStairRight: {fileID: 4407123046204002992, guid: 820612048b8a038448602266c739770e, type: 3}
+  _outerStairLeft: {fileID: 104578430144610950, guid: 4b5679815928e464d8576acfeb9ca563, type: 3}
+  _outerStairRight: {fileID: 7749702476187365121, guid: 693ffe07190bf464886dae9be38e3fea, type: 3}
+  _concreteFence: {fileID: 5268849572505154618, guid: 7e119080e90e381479265291ac68f128, type: 3}
+  _concreteFenceCornerPost: {fileID: 4966365708199559901, guid: 9086ca128d34ba445837f34ad7704245, type: 3}
+  _latticeFence: {fileID: 7986655438538341638, guid: bde41912097da254cb0490c5bd05b05c, type: 3}
+  _roadBlockAreaLimit: {fileID: 862514359819192315, guid: a19527df0b0a40f4c947f5292a58431d, type: 3}
+  _bridgeStair: {fileID: 2072180452001570780, guid: f3bad400cfcc8b64280baf82020e29a9, type: 3}
+  _bridgeStraight: {fileID: 284717702702682400, guid: fa016245ac709354dadd191c780b539b, type: 3}
+  _bridgeStraightStrut: {fileID: 6565637941918872714, guid: 3b30ebd9bfa6644438e50b4e93b14761, type: 3}
+  _bridgeCorner: {fileID: 1050730003059631365, guid: 3edab9d0380f59c4183da0b44b85fa50, type: 3}
+  _pipeTwoStraight: {fileID: 0}
+  _pipeTwoHigher: {fileID: 0}
+  _buldings4x3:
+  - {fileID: 6026005697377070668, guid: 1ab765f9600e04446a36b7d5da96f1f4, type: 3}
+  _buldings3x3:
   - {fileID: 7014089133179523098, guid: 824f1ac0af450364e9c173592c753765, type: 3}
   - {fileID: 2466545049246801578, guid: 8e18cbcca9280e4499c3fcef982b11cd, type: 3}
-  _Buldings3x2: []
-  _Buldings2x2: []
-  _Buldings2x1: []
-  _Buldings1x1:
+  _buldings3x2:
+  - {fileID: 9115724347144186956, guid: 8d15086370e42a240bfc8acfb527332b, type: 3}
+  - {fileID: 2384300629250923748, guid: c648226b94fe4734885e4066ee17457e, type: 3}
+  - {fileID: 819133034792880706, guid: 305ff37b14c1e2f43804221a968a943a, type: 3}
+  - {fileID: 7795499069509161474, guid: 471871940f2f71c4a919da76acfde45e, type: 3}
+  _buldings2x2:
+  - {fileID: 5771912537099969180, guid: 90787c962fe942b4197a873a2f4d2afa, type: 3}
+  - {fileID: 1486586378937764705, guid: f598433d7e8e4e143ac0d9d7ca0c249c, type: 3}
+  _buldings2x1:
+  - {fileID: 3388684676739645332, guid: 2d3bee417390eae4fa695480ce7c22d4, type: 3}
+  - {fileID: 8165097857628927976, guid: dd94fa23dc367d74cbfdfbdbd81e4fc9, type: 3}
+  _buldings1x1:
   - {fileID: 667466312562358309, guid: 6be93db8c51910f4497504ad958d28b7, type: 3}
   - {fileID: 5876276153994014568, guid: a8c9fbe9f2568fe4f82ecbb600119350, type: 3}
+--- !u!65 &696889593
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696889590}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
