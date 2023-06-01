@@ -118,12 +118,18 @@ public class CharacterMove : MonoBehaviour
                 //重力をかける
                 _rb.AddForce(GravityDirection * 2f, ForceMode.Acceleration);
             }
-            //移動力がなければ、現在の速度が閾値を下回った時に0にする
+            //移動力がない
             else
             {
+                //現在の速度が閾値を下回った時に0にする
                 if (VelocityOnPlane.sqrMagnitude < VELOCITY_ZERO_BORDER)
                 {
                     _rb.velocity = Vector3.Project(_rb.velocity, -GravityDirection);
+                }
+                //ブレーキをかける
+                else
+                {
+                    _ForceOfBrake = -_rb.velocity;
                 }
 
                 //重力をかける

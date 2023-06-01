@@ -7,6 +7,8 @@ TagManager:
   - Allise
   - Enemy
   - EyePoint
+  - GunTriggerHands
+  - GunSupportHands
   layers:
   - Default
   - TransparentFX

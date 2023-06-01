@@ -11,6 +11,9 @@ public class CharacterParameter : MonoBehaviour
     MotionState _state = null;
 
 
+
+
+
     [SerializeField, Tooltip("キャラクターの目線位置")]
     protected Transform _eyePoint = null;
 

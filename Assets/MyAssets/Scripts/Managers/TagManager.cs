@@ -16,10 +16,6 @@ public class TagManager : Singleton<TagManager>
     string _Enemy = "Enemy";
     [SerializeField, Tooltip("味方キャラクターのタグ")]
     string _Allies = "Allies";
-    [SerializeField, Tooltip("OffMeshLinkのうち、段差を上り下りするモノのタグ")]
-    string _OffMeshLinkJumpStep = "OffMeshLinkJumpStep";
-    [SerializeField, Tooltip("OffMeshLinkのうち、遠距離にジャンプするモノのタグ")]
-    string _OffMeshLinkJumpFar = "OffMeshLinkJumpFar";
     [SerializeField, Tooltip("攻撃情報を持つコライダーのタグ")]
     string _AttackCollider = "AttackCollider";
     [SerializeField, Tooltip("攻撃を受けることになるコライダーのタグ")]
@@ -35,10 +31,6 @@ public class TagManager : Singleton<TagManager>
     public string Enemy { get => _Enemy; }
     /// <summary>味方キャラクターのタグ</summary>
     public string Allies { get => _Allies; }
-    /// <summary>OffMeshLinkのうち、段差を上り下りするモノのタグ</summary>
-    public string OffMeshLinkJumpStep { get => _OffMeshLinkJumpStep; }
-    /// <summary>OffMeshLinkのうち、遠距離にジャンプするモノのタグ</summary>
-    public string OffMeshLinkJumpFar { get => _OffMeshLinkJumpFar; }
     /// <summary>攻撃情報を持つコライダーのタグ</summary>
     public string AttackCollider { get => _AttackCollider; }
     /// <summary>攻撃を受けることになるコライダーのタグ</summary>

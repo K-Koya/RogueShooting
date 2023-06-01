@@ -29,14 +29,14 @@ public class InputUtility : Singleton<InputUtility>
     [SerializeField, Tooltip("InputActionにおける、ジャンプ入力名")]
     string _ButtonNameJump = "Jump";
 
-    [SerializeField, Tooltip("InputActionにおける、特殊コマンド入力名")]
-    string _ButtonNameAimCommand = "AimCommand";
+    [SerializeField, Tooltip("InputActionにおける、インタラクト入力名")]
+    string _ButtonNameInteract = "Interact";
 
-    [SerializeField, Tooltip("InputActionにおける、攻撃入力名")]
-    string _ButtonNameAttack = "Attack";
+    [SerializeField, Tooltip("InputActionにおける、射撃入力名")]
+    string _ButtonNameFire = "Fire";
 
-    [SerializeField, Tooltip("InputActionにおける、ガード入力名")]
-    string _ButtonNameGuard = "Guard";
+    [SerializeField, Tooltip("InputActionにおける、リロード入力名")]
+    string _ButtonNameReload = "Reload";
 
     [SerializeField, Tooltip("InputActionにおける、回避入力名")]
     string _ButtonNameDodge = "Dodge";
@@ -44,8 +44,6 @@ public class InputUtility : Singleton<InputUtility>
     [SerializeField, Tooltip("InputActionにおける、決定ボタン入力名")]
     string _ButtonNameDecide = "Decide";
 
-    [SerializeField, Tooltip("InputActionにおける、アクティブスキルコマンドの入力名")]
-    string _ButtonNameSkillCommand = "SkillCommand";
     #endregion
     /*
     #region コントローラー振動用メンバ
@@ -98,23 +96,20 @@ public class InputUtility : Singleton<InputUtility>
     /// <summary> ジャンプの入力状況 </summary>
     static InputAction _JumpAction = default;
 
-    /// <summary> 特殊コマンドボタンの入力状況 </summary>
-    static InputAction _AimCommandAction = default;
+    /// <summary> インタラクトボタンの入力状況 </summary>
+    static InputAction _InteractAction = default;
 
-    /// <summary> 攻撃ボタンの入力状況 </summary>
-    static InputAction _AttackAction = default;
+    /// <summary> 射撃ボタンの入力状況 </summary>
+    static InputAction _FireAction = default;
 
-    /// <summary> ガードボタンの入力状況 </summary>
-    static InputAction _GuardAction = default;
+    /// <summary> リロードボタンの入力状況 </summary>
+    static InputAction _ReloadAction = default;
 
     /// <summary> 回避ボタンの入力状況 </summary>
     static InputAction _DodgeAction = default;
 
     /// <summary> 決定ボタンの入力状況 </summary>
     static InputAction _DecideAction = default;
-
-    /// <summary> アクティブスキルコマンド4つの入力状況 </summary>
-    static InputAction[] _SkillCommandActions = default;
     #endregion
 
     #region プロパティ
@@ -140,40 +135,22 @@ public class InputUtility : Singleton<InputUtility>
     static public bool GetDownJump { get => _JumpAction.triggered; }
     /// <summary> ジャンプボタン押下中 </summary>
     static public bool GetJump { get => _JumpAction.IsPressed(); }
-    /// <summary> 特殊コマンドボタン押下直後 </summary>
-    static public bool GetDownAimCommand { get => _AimCommandAction.triggered; }
-    /// <summary> 特殊コマンドボタン押下中 </summary>
-    static public bool GetAimCommand { get => _AimCommandAction.IsPressed(); }
+    /// <summary> インタラクトボタン押下直後 </summary>
+    static public bool GetDownAimCommand { get => _InteractAction.triggered; }
+    /// <summary> インタラクトボタン押下中 </summary>
+    static public bool GetAimCommand { get => _InteractAction.IsPressed(); }
     /// <summary> 攻撃ボタン押下直後 </summary>
-    static public bool GetDownAttack { get => _AttackAction.triggered; }
+    static public bool GetDownAttack { get => _FireAction.triggered; }
     /// <summary> 攻撃ボタン押下中 </summary>
-    static public bool GetAttack { get => _AttackAction.IsPressed(); }
+    static public bool GetAttack { get => _FireAction.IsPressed(); }
     /// <summary> ガードボタン押下直後 </summary>
-    static public bool GetDownGuard { get => _GuardAction.triggered; }
-    /// <summary> ガードボタン押下中 </summary>
-    static public bool GetGuard { get => _GuardAction.IsPressed(); }
+    static public bool GetDownReload { get => _ReloadAction.triggered; }
     /// <summary> 回避ボタン押下直後 </summary>
     static public bool GetDownDodge { get => _DodgeAction.triggered; }
     /// <summary> 回避ボタン押下中 </summary>
     static public bool GetDodge { get => _DodgeAction.IsPressed(); }
     /// <summary> 決定ボタン押下直後 </summary>
     static public bool GetDownDecide { get => _DecideAction.triggered; }
-    /// <summary> 1番目のアクティブスキルコマンドボタン押下直後 </summary>
-    static public bool GetSkillCommand1 { get => _SkillCommandActions[0].IsPressed(); }
-    /// <summary> 1番目のアクティブスキルコマンドボタン押下中 </summary>
-    static public bool GetDownSkillCommand1 { get => _SkillCommandActions[0].triggered; }
-    /// <summary> 2番目のアクティブスキルコマンドボタン押下直後 </summary>
-    static public bool GetSkillCommand2 { get => _SkillCommandActions[1].IsPressed(); }
-    /// <summary> 2番目のアクティブスキルコマンドボタン押下中 </summary>
-    static public bool GetDownSkillCommand2 { get => _SkillCommandActions[1].triggered; }
-    /// <summary> 3番目のアクティブスキルコマンドボタン押下直後 </summary>
-    static public bool GetSkillCommand3 { get => _SkillCommandActions[2].IsPressed(); }
-    /// <summary> 3番目のアクティブスキルコマンドボタン押下中 </summary>
-    static public bool GetDownSkillCommand3 { get => _SkillCommandActions[2].triggered; }
-    /// <summary> 4番目のアクティブスキルコマンドボタン押下直後 </summary>
-    static public bool GetSkillCommand4 { get => _SkillCommandActions[3].IsPressed(); }
-    /// <summary> 4番目のアクティブスキルコマンドボタン押下中 </summary>
-    static public bool GetDownSkillCommand4 { get => _SkillCommandActions[3].triggered; }
     #endregion
 
     // Start is called before the first frame update
@@ -188,17 +165,12 @@ public class InputUtility : Singleton<InputUtility>
         _MoveDirectionAction = actionMap[_StickNameMoveDirection];
         _CameraMoveAction = actionMap[_StickNameCameraMove];
         _JumpAction = actionMap[_ButtonNameJump];
-        _AimCommandAction = actionMap[_ButtonNameAimCommand];
-        _AttackAction = actionMap[_ButtonNameAttack];
-        _GuardAction = actionMap[_ButtonNameGuard];
+        _InteractAction = actionMap[_ButtonNameInteract];
+        _FireAction = actionMap[_ButtonNameFire];
+        _ReloadAction = actionMap[_ButtonNameReload];
         _DodgeAction = actionMap[_ButtonNameDodge];
         _DecideAction = actionMap[_ButtonNameDecide];
 
-        _SkillCommandActions = new InputAction[4];
-        for (int i = 0; i < _SkillCommandActions.Length; i++)
-        {
-            _SkillCommandActions[i] = actionMap[$"{_ButtonNameSkillCommand}{i + 1}"];
-        }
     }
     /*
         void OnDestroy()
