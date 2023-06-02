@@ -136,14 +136,14 @@ public class InputUtility : Singleton<InputUtility>
     /// <summary> ジャンプボタン押下中 </summary>
     static public bool GetJump { get => _JumpAction.IsPressed(); }
     /// <summary> インタラクトボタン押下直後 </summary>
-    static public bool GetDownAimCommand { get => _InteractAction.triggered; }
+    static public bool GetDownInteract { get => _InteractAction.triggered; }
     /// <summary> インタラクトボタン押下中 </summary>
-    static public bool GetAimCommand { get => _InteractAction.IsPressed(); }
-    /// <summary> 攻撃ボタン押下直後 </summary>
-    static public bool GetDownAttack { get => _FireAction.triggered; }
-    /// <summary> 攻撃ボタン押下中 </summary>
-    static public bool GetAttack { get => _FireAction.IsPressed(); }
-    /// <summary> ガードボタン押下直後 </summary>
+    static public bool GetInteract { get => _InteractAction.IsPressed(); }
+    /// <summary> 射撃ボタン押下直後 </summary>
+    static public bool GetDownFire { get => _FireAction.triggered; }
+    /// <summary> 射撃ボタン押下中 </summary>
+    static public bool GetFire { get => _FireAction.IsPressed(); }
+    /// <summary> リロードボタン押下直後 </summary>
     static public bool GetDownReload { get => _ReloadAction.triggered; }
     /// <summary> 回避ボタン押下直後 </summary>
     static public bool GetDownDodge { get => _DodgeAction.triggered; }

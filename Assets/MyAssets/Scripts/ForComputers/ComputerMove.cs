@@ -22,11 +22,6 @@ public class ComputerMove : CharacterMove
     /// <summary>移動先を定めるコルーチン</summary>
     Coroutine _setDestinationCoroutine = null;
 
-    /// <summary>行動時間</summary>
-    float _moveTime = 0f;
-
-    /// <summary>行動の制限時間</summary>
-    float _moveTimeLimit = 10f;
 
     #region ナビメッシュ用メンバ
     [SerializeField, Tooltip("目的地に接近したとみなす距離")]

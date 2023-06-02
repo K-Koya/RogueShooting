@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AimCommand",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "ae15a3db-70df-46d3-811a-e043fbb3aab6",
                     "expectedControlType": "Button",
@@ -69,9 +69,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
+                    "name": "Fire",
                     "type": "Button",
                     "id": "70d944bc-4579-4d52-b7eb-010c0e48ea6b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "4b55dcc2-bb30-489a-ac83-8b53aa186449",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -87,54 +96,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Guard",
-                    "type": "Button",
-                    "id": "4b55dcc2-bb30-489a-ac83-8b53aa186449",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Decide",
                     "type": "Button",
                     "id": "82ebf5fe-a9cf-4b68-9962-38a1f3d48a5e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SkillCommand1",
-                    "type": "Button",
-                    "id": "013afbf9-a92b-475f-a6d3-47274779e8e0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SkillCommand2",
-                    "type": "Button",
-                    "id": "8fc7ecf0-9186-4d1d-b3ca-96f16dbc5be4",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SkillCommand3",
-                    "type": "Button",
-                    "id": "3fde5eaf-0dfe-44fa-8f01-517e5e348743",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SkillCommand4",
-                    "type": "Button",
-                    "id": "388e9341-62b4-4950-8976-2a78435fff6e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -391,29 +355,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AimCommand",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "e472554e-ef60-4837-86d4-567070ea0f8a",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AimCommand",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "cc8cfcc7-752d-4862-8f4c-607a0461c383",
-                    "path": "<XInputController>/rightShoulder",
+                    "path": "<XInputController>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AimCommand",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -424,7 +388,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -435,7 +399,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -446,7 +410,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -485,39 +449,6 @@
                 },
                 {
                     "name": "",
-                    "id": "7c45bd91-23a8-40b5-8c05-14a58c45a8fa",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Guard",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ca7ea298-116d-46e9-a0b4-7d23b6674d74",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Guard",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1342dcf9-dfff-41f3-9df2-bbd74f5ebd41",
-                    "path": "<XInputController>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Guard",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "7d6dcee7-6123-4ffd-9679-dbcae72535e7",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
@@ -529,133 +460,34 @@
                 },
                 {
                     "name": "",
-                    "id": "13d4c73e-874e-4456-893e-15594fc4247c",
-                    "path": "<Keyboard>/1",
+                    "id": "7c45bd91-23a8-40b5-8c05-14a58c45a8fa",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SkillCommand1",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "eae899d0-544f-4be5-b7a5-7830ea5ecf23",
-                    "path": "<Gamepad>/dpad/up",
+                    "id": "ca7ea298-116d-46e9-a0b4-7d23b6674d74",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SkillCommand1",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "f4d8802d-784d-4abd-bd42-c7af2b0000c4",
-                    "path": "<XInputController>/dpad/up",
+                    "id": "1342dcf9-dfff-41f3-9df2-bbd74f5ebd41",
+                    "path": "<XInputController>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SkillCommand1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5c822792-936d-42c3-af51-d61913343772",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5d4bdbf8-bb02-4eb4-a72c-bd8b34f9522e",
-                    "path": "<Gamepad>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b175a5ee-183f-4009-88e3-7ef375fdd868",
-                    "path": "<XInputController>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bda9798c-1b49-4ff5-8b08-8cdf729c272e",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a67e18ae-2064-4066-910e-1f5f93013209",
-                    "path": "<Gamepad>/dpad/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a3f44a45-71ac-436f-bce9-048d056d5963",
-                    "path": "<XInputController>/dpad/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "04870293-dd71-4b6a-a429-1cd24c3e993d",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand4",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "696ec2ab-0e3f-45df-8a9d-2b1d371ef574",
-                    "path": "<Gamepad>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand4",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1c9eed70-6329-4bf9-a666-9fff6166bf52",
-                    "path": "<XInputController>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SkillCommand4",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

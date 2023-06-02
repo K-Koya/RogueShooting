@@ -18,34 +18,6 @@ public class GunInfo : MonoBehaviour
 
 
 
-
-    /// <summary>銃のアニメーター</summary>
-    Animator _anim = null; 
-
-    [SerializeField, Tooltip("銃の持ち手の内、トリガーを引く方を指示する位置姿勢情報")]
-    Transform _gunTriggerHands = null;
-
-    [SerializeField, Tooltip("銃の持ち手の内、支える方を指示する位置姿勢情報")]
-    Transform _gunSupportHands = null;
-
-    [SerializeField, Tooltip("弾の最大装填数")]
-    byte _maxLoadAmmo = 15;
-
-    /// <summary>現在の弾の装填数</summary>
-    byte _currentLoadAmmo = 15;
-
-    [SerializeField, Tooltip("射撃間隔")]
-    float _shotInterval = 0.3f;
-
-    /// <summary>射撃間隔計測タイマー</summary>
-    float _intervalTimer = 0.0f;
-
-    /// <summary>true : セミオート式</summary>
-    bool _isSemiAuto = false;
-
-
-
-
     public enum GunType : byte
     {
         Prop = 0,
@@ -59,8 +31,34 @@ public class GunInfo : MonoBehaviour
         FlagGrenade = 8,
         SmokeGrenade = 9,
     }
-    /// <summary>該当の銃型</summary>
+    [SerializeField, Tooltip("該当の銃型")]
     GunType type = GunType.HandGun;
+
+    /// <summary>銃のアニメーター</summary>
+    Animator _anim = null; 
+
+    [SerializeField, Tooltip("銃の持ち手の内、トリガーを引く方を指示する位置姿勢情報")]
+    Transform _gunTriggerHands = null;
+
+    [SerializeField, Tooltip("銃の持ち手の内、支える方を指示する位置姿勢情報")]
+    Transform _gunSupportHands = null;
+
+    [SerializeField, Tooltip("弾の最大装填数")]
+    byte _maxLoadAmmo = 15;
+
+    [SerializeField, Tooltip("現在の弾の装填数")]
+    byte _currentLoadAmmo = 15;
+
+    [SerializeField, Tooltip("射撃間隔")]
+    float _shotInterval = 0.3f;
+
+    /// <summary>射撃間隔計測タイマー</summary>
+    float _intervalTimer = 0.0f;
+
+    /// <summary>true : セミオート式</summary>
+    bool _isSemiAuto = false;
+
+
 
     #region デリゲート
     /// <summary>発射処理</summary>
@@ -115,18 +113,21 @@ public class GunInfo : MonoBehaviour
             case GunType.HandGun:
                 _maxLoadAmmo = (byte)Mathf.Clamp(_maxLoadAmmo, 6, 16);
                 _DoShot = DoShotSemiAuto;
+                _DoReload = DoReloadSemiAuto;
                 _isSemiAuto = true;
 
                 break;
             case GunType.Magnum:
                 _maxLoadAmmo = (byte)Mathf.Clamp(_maxLoadAmmo, 5, 8);
                 _DoShot = DoShotSemiAuto;
+                _DoReload = DoReloadSemiAuto;
                 _isSemiAuto = true;
 
                 break;
             case GunType.AssultRifle:
                 _maxLoadAmmo = (byte)Mathf.Clamp(_maxLoadAmmo, 20, 60);
                 _DoShot = DoShotFullAuto;
+                _DoReload = DoReloadFullAuto;
                 _isSemiAuto = false;
 
                 break;
@@ -134,6 +135,7 @@ public class GunInfo : MonoBehaviour
             case GunType.SmokeGrenade:
                 _maxLoadAmmo = 1;
                 _DoShot = DoShotSemiAuto;
+                _DoReload = DoReloadSemiAuto;
                 _isSemiAuto = true;
 
                 break;
@@ -146,11 +148,6 @@ public class GunInfo : MonoBehaviour
         if (_intervalTimer > 0f)
         {
             _intervalTimer -= Time.deltaTime;
-
-            if(_isSemiAuto && _intervalTimer <= 0f)
-            {
-                _intervalTimer = 0.01f;
-            }
         }
     }
 
@@ -161,7 +158,7 @@ public class GunInfo : MonoBehaviour
         _anim.SetBool(PARAM_NAME_IS_CATION, flag);
     }
 
-    /// <summary>引き金を1回引く度に1回射撃</summary>
+    /// <summary>セミオート武器の射撃</summary>
     void DoShotSemiAuto()
     {
         //残弾が0発なら射撃しない
@@ -183,13 +180,13 @@ public class GunInfo : MonoBehaviour
         _intervalTimer = _shotInterval;
     }
 
-    /// <summary></summary>
+    /// <summary>セミオート武器のリロード</summary>
     void DoReloadSemiAuto()
     {
-
+        _currentLoadAmmo = _maxLoadAmmo;
     }
 
-    /// <summary>引き金を引いている間は一定間隔で射撃</summary>
+    /// <summary>フルオート武器の射撃</summary>
     void DoShotFullAuto()
     {
         //残弾が0発なら射撃しない
@@ -199,5 +196,21 @@ public class GunInfo : MonoBehaviour
             return;
         }
 
+        //射撃中は受け付けない
+        if (_intervalTimer > 0f)
+        {
+
+            return;
+        }
+
+        _currentLoadAmmo--;
+        _anim.SetTrigger(PARAM_NAME_DO_SHOT);
+        _intervalTimer = _shotInterval;
+    }
+
+    /// <summary>フルオート武器のリロード</summary>
+    void DoReloadFullAuto()
+    {
+        _currentLoadAmmo = _maxLoadAmmo;
     }
 }

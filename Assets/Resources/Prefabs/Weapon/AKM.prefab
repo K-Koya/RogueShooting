@@ -402,6 +402,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gunTriggerHands: {fileID: 2406423690300923957}
   _gunSupportHands: {fileID: 2681594525760922363}
+  _maxLoadAmmo: 40
+  _currentLoadAmmo: 40
+  _shotInterval: 0.1
 --- !u!1 &5668136043846341211
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CharacterParameter : MonoBehaviour
 {
+    /// <summary>最大所持銃器数</summary>
+    protected const byte INVENTORY_SIZE = 5;
+
     /// <summary>移動可否ビットフラグ</summary>
     MotionEnableFlag _can = (MotionEnableFlag)byte.MaxValue;
 
@@ -26,6 +29,12 @@ public class CharacterParameter : MonoBehaviour
     [SerializeField, Tooltip("キャラクターの移動方向情報")]
     protected Vector3 _moveDirection = Vector3.zero;
 
+    /// <summary>所持銃器情報</summary>
+    protected GunInfo[] _inventory = null;
+
+    /// <summary>所持銃器のうち、手に持っているものの番号</summary>
+    protected byte _inventoryNumber = 0;
+
 
     #region プロパティ
     /// <summary>移動可否ビットフラグ</summary>
@@ -43,6 +52,11 @@ public class CharacterParameter : MonoBehaviour
     /// <summary>キャラクターの移動方向情報</summary>
     public Vector3 MoveDirection { get => _moveDirection; set => _moveDirection = value; }
 
+    /// <summary>所持銃器のうち、手に持っているものの番号</summary>
+    public byte InventoryNumber { get => _inventoryNumber; }
+
+    /// <summary>所持銃器のうち、手に持っているもの</summary>
+    public GunInfo UsingGun { get => _inventory[_inventoryNumber]; }
     #endregion
 
     // Start is called before the first frame update
@@ -57,6 +71,18 @@ public class CharacterParameter : MonoBehaviour
         {
             _eyePoint = transform;
         }
+
+
+        _inventory = new GunInfo[INVENTORY_SIZE];
+        GunInfo[] infos = GetComponentsInChildren<GunInfo>();
+        for(int i = 0; i < INVENTORY_SIZE; i++)
+        {
+            if(i < infos.Length)
+            {
+                _inventory[i] = infos[i];
+            }
+        }
+        _inventoryNumber = 0;
     }
 
     // Update is called once per frame
@@ -65,6 +91,13 @@ public class CharacterParameter : MonoBehaviour
 
 
         SetMotionEnableFlag();
+    }
+
+    /// <summary>手に持っている銃を取り替える処理</summary>
+    /// <param name="index">対象番号</param>
+    public void SwitchGun(byte index = 0)
+    {
+        _inventoryNumber = index;
     }
 
     /// <summary>ステートに応じて動作許可フラグを指定</summary>
@@ -120,7 +153,6 @@ public class CharacterParameter : MonoBehaviour
             default: break;
         }
     }
-
 }
 
 /// <summary>移動可否ビットフラグ</summary>

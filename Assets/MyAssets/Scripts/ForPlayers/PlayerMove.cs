@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerParameter : CharacterParameter
+public class PlayerMove : CharacterMove
 {
 
-    public float LockMaxRange { get; set; }
-    public float ProximityRange { get; set; }
-    public Vector3 ReticlePoint { get; set; }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -19,5 +16,20 @@ public class PlayerParameter : CharacterParameter
     protected override void Update()
     {
         base.Update();
+
+        ShotProcess();
+    }
+
+    void ShotProcess()
+    {
+        if (InputUtility.GetFire)
+        {
+            _param.UsingGun.DoShot();
+        }
+
+        if (InputUtility.GetDownReload)
+        {
+            _param.UsingGun.DoReload();
+        }
     }
 }

@@ -8,12 +8,6 @@ public class SetWeaponRig : MonoBehaviour
     [SerializeField, Tooltip("‰Šú‘•”õeŠí")]
     GunInfo _initializeWeapon = null;
 
-    [SerializeField, Tooltip("‰Eè—pIKİ’è")]
-    TwoBoneIKConstraint _rightHandIk = null;
-
-    [SerializeField, Tooltip("¶è—pIKİ’è")]
-    TwoBoneIKConstraint _leftHandIk = null;
-
     [SerializeField, Tooltip("‰Eè‚ÌˆÊ’up¨î•ñ")]
     Transform _rightHand = null;
 
@@ -42,7 +36,15 @@ public class SetWeaponRig : MonoBehaviour
 
     void Update()
     {
-        
+        if (_dataRightHandTarget)
+        {
+            _rightHandTarget.position = _dataRightHandTarget.position;
+        }
+
+        if (_dataLeftHandTarget)
+        {
+            _leftHandTarget.position = _dataLeftHandTarget.position;
+        }
     }
 
     /// <summary>æ“¾‚µ‚½e</summary>
@@ -51,18 +53,24 @@ public class SetWeaponRig : MonoBehaviour
     {
         GunInfo gg = gunObj.GetComponent<GunInfo>();
 
-        if (_rightHandIk && _rightHand)
+        if (_rightHandTarget && _rightHand)
         {
-            _dataRightHandTarget = _rightHandIk.data.target;
-            _rightHandIk.data.target = gg.GunTriggerHands;
-            _rightHandIk.transform.rotation = _rightHand.transform.rotation;
+            _dataRightHandTarget = gg.GunTriggerHands;
+            _rightHandTarget.rotation = _rightHand.transform.rotation;
+        }
+        else
+        {
+            _dataRightHandTarget = null;
         }
 
-        if (_leftHandIk && _leftHand)
+        if (_leftHandTarget && _leftHand)
         {
-            _dataLeftHandTarget = _leftHandIk.data.target;
-            _leftHandIk.data.target = gg.GunSupportHands;
-            _leftHandIk.transform.rotation = _leftHand.transform.rotation;
+            _dataLeftHandTarget = gg.GunSupportHands;
+            _leftHandTarget.rotation = _leftHand.transform.rotation;
+        }
+        else
+        {
+            _dataLeftHandTarget = null;
         }
     }
 }
