@@ -13,8 +13,8 @@ public class GunInfo : MonoBehaviour
     /// <summary>アニメーターパラメータ名 : DoShot</summary>
     string PARAM_NAME_DO_SHOT = "DoShot";
 
-    /// <summary>アニメーターパラメータ名 : DoReload</summary>
-    string PARAM_NAME_DO_RELOAD = "DoReload";
+    /// <summary>アニメーターパラメータ名 : IsReload</summary>
+    string PARAM_NAME_IS_RELOAD = "IsReload";
 
 
 
@@ -91,6 +91,12 @@ public class GunInfo : MonoBehaviour
     public void DoReload()
     {
         _DoReload?.Invoke();
+    }
+
+    /// <summary>持つ銃器を変更</summary>
+    public void DoSwitch()
+    {
+        _anim.SetBool(PARAM_NAME_IS_RELOAD, false);
     }
 
     /// <summary>移動速度情報をこちらも取得</summary>
@@ -183,7 +189,11 @@ public class GunInfo : MonoBehaviour
     /// <summary>セミオート武器のリロード</summary>
     void DoReloadSemiAuto()
     {
-        _currentLoadAmmo = _maxLoadAmmo;
+        //残弾が減っていたら実行
+        if (_currentLoadAmmo < _maxLoadAmmo)
+        {
+            _anim.SetBool(PARAM_NAME_IS_RELOAD, true);
+        }
     }
 
     /// <summary>フルオート武器の射撃</summary>
@@ -211,6 +221,16 @@ public class GunInfo : MonoBehaviour
     /// <summary>フルオート武器のリロード</summary>
     void DoReloadFullAuto()
     {
+        //残弾が減っていたら実行
+        if (_currentLoadAmmo < _maxLoadAmmo)
+        {
+            _anim.SetBool(PARAM_NAME_IS_RELOAD, true);
+        }
+    }
+
+    public void ReloadComprete()
+    {
         _currentLoadAmmo = _maxLoadAmmo;
+        _anim.SetBool(PARAM_NAME_IS_RELOAD, false);
     }
 }

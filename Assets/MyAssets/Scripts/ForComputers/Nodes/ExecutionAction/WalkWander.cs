@@ -36,7 +36,6 @@ public class WalkWander : IExecutionMethod
         if (move.IsFoundDestination)
         {
             _isInitialized = true;
-            param.State.Kind = MotionState.StateKind.Walk;
         }
         else
         {

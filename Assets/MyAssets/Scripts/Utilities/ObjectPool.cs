@@ -59,8 +59,9 @@ public class GameObjectPool : ObjectPool<GameObject>
 {
     /// <summary>UnityのGameObjectのプール</summary>
     /// <param name="pref">プールするオブジェクトのプレハブ</param>
+    /// <param name="parent">親オブジェト</param>
     /// <param name="length">オブジェクト数</param>
-    public GameObjectPool(GameObject pref, uint? length = null)
+    public GameObjectPool(GameObject pref, Transform parent = null, uint? length = null)
     {
         if (length != null) _length = (uint)length;
         _values = new GameObject[_length];
@@ -68,14 +69,16 @@ public class GameObjectPool : ObjectPool<GameObject>
         for (int i = 0; i < _values.Length; i++)
         {
             _values[i] = UnityEngine.Object.Instantiate(pref);
+            _values[i].transform.parent = parent;
             _values[i].SetActive(false);
         }
     }
 
     /// <summary>UnityのGameObjectのプール</summary>
     /// <param name="pref">プールするオブジェクトのプレハブパス</param>
+    /// <param name="parent">親オブジェト</param>
     /// <param name="length">オブジェクト数</param>
-    public GameObjectPool(string prefPath, uint? length = null)
+    public GameObjectPool(string prefPath, Transform parent = null, uint? length = null)
     {
         if (length != null) _length = (uint)length;
         _values = new GameObject[_length];
@@ -83,6 +86,7 @@ public class GameObjectPool : ObjectPool<GameObject>
         for(int i = 0; i < _values.Length; i++)
         {
             _values[i] = UnityEngine.Object.Instantiate((GameObject)Resources.Load(prefPath));
+            _values[i].transform.parent = parent;
             _values[i].SetActive(false);
         }
     }

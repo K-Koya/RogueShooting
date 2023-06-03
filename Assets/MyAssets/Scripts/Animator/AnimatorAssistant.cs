@@ -7,6 +7,12 @@ public class AnimatorAssistant : MonoBehaviour
     /// <summary>アニメーターパラメータ名 : ResultSpeed</summary>
     string _PARAM_NAME_RESULT_SPEED = "ResultSpeed";
 
+    /// <summary>アニメーターパラメータ名 : RelativeMoveDirectionX</summary>
+    string _PARAM_NAME_RELATIVE_MOVE_DIRECTION_X = "RelativeMoveDirectionX";
+
+    /// <summary>アニメーターパラメータ名 : RelativeMoveDirectionY</summary>
+    string _PARAM_NAME_RELATIVE_MOVE_DIRECTION_Y = "RelativeMoveDirectionY";
+
     /// <summary>該当キャラクターのパラメータ</summary>
     CharacterParameter _param = null;
 

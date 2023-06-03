@@ -97,6 +97,7 @@ public class CharacterParameter : MonoBehaviour
     /// <param name="index">‘ÎÛ”Ô†</param>
     public void SwitchGun(byte index = 0)
     {
+        UsingGun.DoSwitch();
         _inventoryNumber = index;
     }
 

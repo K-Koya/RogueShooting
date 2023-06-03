@@ -12,37 +12,37 @@ public class InputUtility : Singleton<InputUtility>
     #region InputActionのActionsキー
     [Header("以下、InputActionのActionsに登録した名前を登録")]
     [SerializeField, Tooltip("InputActionにおける、スタートボタン名")]
-    string _ButtonNameStart = "Start";
+    string _buttonNameStart = "Start";
 
     [SerializeField, Tooltip("InputActionにおける、ポーズメニューボタン名")]
-    string _ButtonNamePause = "Pause";
+    string _buttonNamePause = "Pause";
 
     [SerializeField, Tooltip("InputActionにおける、リストメニューボタン名")]
-    string _ButtonNameOption = "Option";
+    string _buttonNameOption = "Option";
 
     [SerializeField, Tooltip("InputActionにおける、移動方向の入力名")]
-    string _StickNameMoveDirection = "MoveDirection";
+    string _stickNameMoveDirection = "MoveDirection";
 
     [SerializeField, Tooltip("InputActionにおける、カメラ移動入力名")]
-    string _StickNameCameraMove = "CameraMove";
+    string _stickNameCameraMove = "CameraMove";
 
     [SerializeField, Tooltip("InputActionにおける、ジャンプ入力名")]
-    string _ButtonNameJump = "Jump";
+    string _buttonNameJump = "Jump";
 
     [SerializeField, Tooltip("InputActionにおける、インタラクト入力名")]
-    string _ButtonNameInteract = "Interact";
+    string _buttonNameInteract = "Interact";
 
     [SerializeField, Tooltip("InputActionにおける、射撃入力名")]
-    string _ButtonNameFire = "Fire";
+    string _buttonNameFire = "Fire";
 
     [SerializeField, Tooltip("InputActionにおける、リロード入力名")]
-    string _ButtonNameReload = "Reload";
+    string _buttonNameReload = "Reload";
 
     [SerializeField, Tooltip("InputActionにおける、回避入力名")]
-    string _ButtonNameDodge = "Dodge";
+    string _buttonNameRun = "Run";
 
     [SerializeField, Tooltip("InputActionにおける、決定ボタン入力名")]
-    string _ButtonNameDecide = "Decide";
+    string _buttonNameDecide = "Decide";
 
     #endregion
     /*
@@ -52,7 +52,7 @@ public class InputUtility : Singleton<InputUtility>
 
     [Header("コントローラー振動用に用いるパラメーター")]
     [SerializeField, Range(0, 1), Tooltip("コントローラーの右側の振動の強さ")]
-    float _RightShakePower = 0.5f;
+    float _rightShakePower = 0.5f;
 
     /// <summary>DOTween保管用 : コントローラーの右側の振動の強さ</summary>
     float _TweenRightShakePower = 0f;
@@ -64,7 +64,7 @@ public class InputUtility : Singleton<InputUtility>
     float _TweenLeftShakePower = 0f;
 
     [SerializeField, Tooltip("コントローラーの振動させる時間")]
-    float _ShakeInterval = 0.75f;
+    float _shakeInterval = 0.75f;
 
     [SerializeField, Tooltip("コントローラーの振動していない時間")]
     float _UnShakeInterval = 0.75f;
@@ -79,78 +79,78 @@ public class InputUtility : Singleton<InputUtility>
 
     #region InputAction
     /// <summary> スタートボタンの入力状況 </summary>
-    static InputAction _StartAction = default;
+    static InputAction _startAction = default;
 
     /// <summary> ポーズメニュー起動の入力状況 </summary>
-    static InputAction _PauseAction = default;
+    static InputAction _pauseAction = default;
 
     /// <summary> リストメニュー起動の入力状況 </summary>
-    static InputAction _OptionAction = default;
+    static InputAction _optionAction = default;
 
     /// <summary> 移動操作の入力状況 </summary>
-    static InputAction _MoveDirectionAction = default;
+    static InputAction _moveDirectionAction = default;
 
     /// <summary> カメラ移動操作の入力状況 </summary>
-    static InputAction _CameraMoveAction = default;
+    static InputAction _cameraMoveAction = default;
 
     /// <summary> ジャンプの入力状況 </summary>
-    static InputAction _JumpAction = default;
+    static InputAction _jumpAction = default;
 
     /// <summary> インタラクトボタンの入力状況 </summary>
-    static InputAction _InteractAction = default;
+    static InputAction _interactAction = default;
 
     /// <summary> 射撃ボタンの入力状況 </summary>
-    static InputAction _FireAction = default;
+    static InputAction _fireAction = default;
 
     /// <summary> リロードボタンの入力状況 </summary>
-    static InputAction _ReloadAction = default;
+    static InputAction _reloadAction = default;
 
     /// <summary> 回避ボタンの入力状況 </summary>
-    static InputAction _DodgeAction = default;
+    static InputAction _runAction = default;
 
     /// <summary> 決定ボタンの入力状況 </summary>
-    static InputAction _DecideAction = default;
+    static InputAction _decideAction = default;
     #endregion
 
     #region プロパティ
     /// <summary> スタートボタン押下直後 </summary>
-    static public bool GetDownStart { get => _StartAction.triggered; }
+    static public bool GetDownStart { get => _startAction.triggered; }
     /// <summary> ポーズボタン押下直後 </summary>
-    static public bool GetDownPause { get => _PauseAction.triggered; }
+    static public bool GetDownPause { get => _pauseAction.triggered; }
     /// <summary> リストメニューボタン押下直後 </summary>
-    static public bool GetDownOption { get => _OptionAction.triggered; }
+    static public bool GetDownOption { get => _optionAction.triggered; }
     /// <summary> 移動操作直後 </summary>
-    static public bool GetMoveDown { get => _MoveDirectionAction.triggered; }
+    static public bool GetMoveDown { get => _moveDirectionAction.triggered; }
     /// <summary> 移動操作の方向取得 </summary>
-    static public Vector2 GetMoveDirection { get => _MoveDirectionAction.ReadValue<Vector2>(); }
+    static public Vector2 GetMoveDirection { get => _moveDirectionAction.ReadValue<Vector2>(); }
     /// <summary> 移動操作終了 </summary>
-    static public bool GetMoveUp { get => _MoveDirectionAction.WasReleasedThisFrame(); }
+    static public bool GetMoveUp { get => _moveDirectionAction.WasReleasedThisFrame(); }
     /// <summary> カメラ操作直後 </summary>
-    static public bool GetCameraMoveDown { get => _CameraMoveAction.triggered; }
+    static public bool GetCameraMoveDown { get => _cameraMoveAction.triggered; }
     /// <summary> カメラ操作の方向取得 </summary>
-    static public Vector2 GetCameraMoveDirection { get => _CameraMoveAction.ReadValue<Vector2>(); }
+    static public Vector2 GetCameraMoveDirection { get => _cameraMoveAction.ReadValue<Vector2>(); }
     /// <summary> カメラ操作終了 </summary>
-    static public bool GetCameraMoveUp { get => _CameraMoveAction.WasReleasedThisFrame(); }
+    static public bool GetCameraMoveUp { get => _cameraMoveAction.WasReleasedThisFrame(); }
     /// <summary> ジャンプボタン押下直後 </summary>
-    static public bool GetDownJump { get => _JumpAction.triggered; }
+    static public bool GetDownJump { get => _jumpAction.triggered; }
     /// <summary> ジャンプボタン押下中 </summary>
-    static public bool GetJump { get => _JumpAction.IsPressed(); }
+    static public bool GetJump { get => _jumpAction.IsPressed(); }
     /// <summary> インタラクトボタン押下直後 </summary>
-    static public bool GetDownInteract { get => _InteractAction.triggered; }
+    static public bool GetDownInteract { get => _interactAction.triggered; }
     /// <summary> インタラクトボタン押下中 </summary>
-    static public bool GetInteract { get => _InteractAction.IsPressed(); }
+    static public bool GetInteract { get => _interactAction.IsPressed(); }
     /// <summary> 射撃ボタン押下直後 </summary>
-    static public bool GetDownFire { get => _FireAction.triggered; }
+    static public bool GetDownFire { get => _fireAction.triggered; }
     /// <summary> 射撃ボタン押下中 </summary>
-    static public bool GetFire { get => _FireAction.IsPressed(); }
+    static public bool GetFire { get => _fireAction.IsPressed(); }
     /// <summary> リロードボタン押下直後 </summary>
-    static public bool GetDownReload { get => _ReloadAction.triggered; }
+    static public bool GetDownReload { get => _reloadAction.triggered; }
     /// <summary> 回避ボタン押下直後 </summary>
-    static public bool GetDownDodge { get => _DodgeAction.triggered; }
+    static public bool GetDownRun { get => _runAction.triggered; }
     /// <summary> 回避ボタン押下中 </summary>
-    static public bool GetDodge { get => _DodgeAction.IsPressed(); }
+    static public bool GetRun { get => _runAction.IsPressed(); }
     /// <summary> 決定ボタン押下直後 </summary>
-    static public bool GetDownDecide { get => _DecideAction.triggered; }
+    static public bool GetDownDecide { get => _decideAction.triggered; }
     #endregion
 
     // Start is called before the first frame update
@@ -159,17 +159,17 @@ public class InputUtility : Singleton<InputUtility>
         //入力を関連付け
         PlayerInput input = GetComponent<PlayerInput>();
         InputActionMap actionMap = input.currentActionMap;
-        _StartAction = actionMap[_ButtonNameStart];
-        _PauseAction = actionMap[_ButtonNamePause];
-        _OptionAction = actionMap[_ButtonNameOption];
-        _MoveDirectionAction = actionMap[_StickNameMoveDirection];
-        _CameraMoveAction = actionMap[_StickNameCameraMove];
-        _JumpAction = actionMap[_ButtonNameJump];
-        _InteractAction = actionMap[_ButtonNameInteract];
-        _FireAction = actionMap[_ButtonNameFire];
-        _ReloadAction = actionMap[_ButtonNameReload];
-        _DodgeAction = actionMap[_ButtonNameDodge];
-        _DecideAction = actionMap[_ButtonNameDecide];
+        _startAction = actionMap[_buttonNameStart];
+        _pauseAction = actionMap[_buttonNamePause];
+        _optionAction = actionMap[_buttonNameOption];
+        _moveDirectionAction = actionMap[_stickNameMoveDirection];
+        _cameraMoveAction = actionMap[_stickNameCameraMove];
+        _jumpAction = actionMap[_buttonNameJump];
+        _interactAction = actionMap[_buttonNameInteract];
+        _fireAction = actionMap[_buttonNameFire];
+        _reloadAction = actionMap[_buttonNameReload];
+        _runAction = actionMap[_buttonNameRun];
+        _decideAction = actionMap[_buttonNameDecide];
 
     }
     /*
@@ -206,9 +206,9 @@ public class InputUtility : Singleton<InputUtility>
             while (enabled)
             {
                 _TweenLeftShakePower = _LeftShakePower;
-                _TweenRightShakePower = _RightShakePower;
+                _TweenRightShakePower = _rightShakePower;
 
-                yield return new WaitForSeconds(_ShakeInterval);
+                yield return new WaitForSeconds(_shakeInterval);
 
                 _TweenLeftShakePower = 0f;
                 _TweenRightShakePower = 0f;
@@ -222,10 +222,10 @@ public class InputUtility : Singleton<InputUtility>
         {
             while (enabled)
             {
-                DOTween.To(() => _TweenLeftShakePower, f => _TweenLeftShakePower = f, 0, _ShakeInterval).SetEase(_TweenShakeModeLeft);
-                DOTween.To(() => _TweenRightShakePower, f => _TweenRightShakePower = f, 0, _ShakeInterval).SetEase(_TweenShakeModeRight);
+                DOTween.To(() => _TweenLeftShakePower, f => _TweenLeftShakePower = f, 0, _shakeInterval).SetEase(_TweenShakeModeLeft);
+                DOTween.To(() => _TweenRightShakePower, f => _TweenRightShakePower = f, 0, _shakeInterval).SetEase(_TweenShakeModeRight);
 
-                yield return new WaitForSeconds(_ShakeInterval);
+                yield return new WaitForSeconds(_shakeInterval);
 
                 _TweenLeftShakePower = 0f;
                 _TweenRightShakePower = 0f;
@@ -233,7 +233,7 @@ public class InputUtility : Singleton<InputUtility>
                 yield return new WaitForSeconds(_UnShakeInterval);
 
                 _TweenLeftShakePower = _LeftShakePower;
-                _TweenRightShakePower = _RightShakePower;
+                _TweenRightShakePower = _rightShakePower;
             }
         }
 
@@ -244,9 +244,9 @@ public class InputUtility : Singleton<InputUtility>
             {
                 Sequence seqLeft = DOTween.Sequence();
                 Sequence seqRight = DOTween.Sequence();
-                seqLeft.Append(DOTween.To(() => _TweenLeftShakePower, f => _TweenLeftShakePower = f, 0, _ShakeInterval).SetEase(Ease.InCubic));
-                seqRight.Append(DOTween.To(() => _TweenRightShakePower, f => _TweenRightShakePower = f, _RightShakePower, _ShakeInterval / 2f).SetEase(Ease.InCubic));
-                seqRight.Append(DOTween.To(() => _TweenRightShakePower, f => _TweenRightShakePower = f, 0, _ShakeInterval / 2f).SetEase(Ease.OutCubic));
+                seqLeft.Append(DOTween.To(() => _TweenLeftShakePower, f => _TweenLeftShakePower = f, 0, _shakeInterval).SetEase(Ease.InCubic));
+                seqRight.Append(DOTween.To(() => _TweenRightShakePower, f => _TweenRightShakePower = f, _rightShakePower, _shakeInterval / 2f).SetEase(Ease.InCubic));
+                seqRight.Append(DOTween.To(() => _TweenRightShakePower, f => _TweenRightShakePower = f, 0, _shakeInterval / 2f).SetEase(Ease.OutCubic));
                 seqLeft.Play();
                 seqRight.Play();
 

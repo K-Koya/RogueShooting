@@ -101,13 +101,7 @@ public class CharacterMove : MonoBehaviour
                 CharacterRotation(_param.MoveDirection, -GravityDirection, 720f);
 
                 //‘¬“x§ŒÀ‚ğ‚©‚¯‚Â‚Â—Í‚ğ‚©‚¯‚é
-                if (_param.State.Kind == MotionState.StateKind.Walk
-                    && _speed < _limitSpeedWalk)
-                {
-                    _rb.AddForce(transform.forward * _moveInputRate * _movePower, ForceMode.Acceleration);
-                }
-                else if (_param.State.Kind == MotionState.StateKind.Run
-                            && _speed < _limitSpeedRun)
+                if (_speed < _limitSpeedWalk)
                 {
                     _rb.AddForce(transform.forward * _moveInputRate * _movePower, ForceMode.Acceleration);
                 }
