@@ -43,6 +43,12 @@ public class GunInfo : MonoBehaviour
     [SerializeField, Tooltip("銃の持ち手の内、支える方を指示する位置姿勢情報")]
     Transform _gunSupportHands = null;
 
+    [SerializeField, Tooltip("射撃音を発するスピーカー")]
+    AudioSource _shotSESource = null;
+
+    [SerializeField, Tooltip("リロード音を発するスピーカー")]
+    AudioSource _reloadSESource = null;
+
     [SerializeField, Tooltip("弾の最大装填数")]
     byte _maxLoadAmmo = 15;
 
@@ -228,9 +234,43 @@ public class GunInfo : MonoBehaviour
         }
     }
 
+    #region アニメーターイベント用
+    /// <summary>リロード完了</summary>
     public void ReloadComprete()
     {
         _currentLoadAmmo = _maxLoadAmmo;
         _anim.SetBool(PARAM_NAME_IS_RELOAD, false);
     }
+
+    /// <summary>小さい発砲音</summary>
+    public void EmitSEShotSmall()
+    {
+        _shotSESource.PlayOneShot(SEManager.Instance.GunShotSmall);
+    }
+
+    /// <summary>大きい発砲音</summary>
+    public void EmitSEShotLarge()
+    {
+        _shotSESource.PlayOneShot(SEManager.Instance.GunShotLarge);
+    }
+
+    /// <summary>マガジンを外す音</summary>
+    public void EmitSERemoveMagazine()
+    {
+        _reloadSESource.PlayOneShot(SEManager.Instance.MagazineRemove);
+    }
+
+    /// <summary>マガジンを着ける音</summary>
+    public void EmitSEConnectMagazine()
+    {
+        _reloadSESource.PlayOneShot(SEManager.Instance.MagazineConnect);
+    }
+
+    /// <summary>プルバック音</summary>
+    public void EmitSEPullBack()
+    {
+        _reloadSESource.PlayOneShot(SEManager.Instance.PullBack);
+    }
+
+    #endregion
 }

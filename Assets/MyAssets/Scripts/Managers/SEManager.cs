@@ -22,15 +22,31 @@ public class SEManager : Singleton<SEManager>
     [SerializeField, Tooltip("効果音 : 銃声大")]
     AudioClip _gunshotLarge = null;
 
+    [SerializeField, Tooltip("効果音 : マガジンを外す時の音")]
+    AudioClip _magazineRemove = null;
+
+    [SerializeField, Tooltip("効果音 : マガジンを着ける時の音")]
+    AudioClip _magazineConnect = null;
+
+    [SerializeField, Tooltip("効果音 : プルバック音")]
+    AudioClip _pullBack = null;
+
 
     /// <summary>効果音 : 石畳・歩行時足音</summary>
-    AudioClip FootStampWalkOnRock { get => _footStampWalkOnRocks[(int)Random.Range(0f, _numberOfFootStampWalkOnRock)]; }
+    public AudioClip FootStampWalkOnRock { get => _footStampWalkOnRocks[Random.Range(0, _numberOfFootStampWalkOnRock)]; }
     /// <summary>効果音 : 石畳・走行時足音</summary>
-    AudioClip FootStampRunOnRock { get => _footStampRunOnRocks[(int)Random.Range(0f, _numberOfFootStampRunOnRock)]; }
+    public AudioClip FootStampRunOnRock { get => _footStampRunOnRocks[Random.Range(0, _numberOfFootStampRunOnRock)]; }
     /// <summary>効果音 : 銃声小</summary>
-    AudioClip GunShotSmall { get => _gunshotSmall; }
+    public AudioClip GunShotSmall { get => _gunshotSmall; }
     /// <summary>効果音 : 銃声大</summary>
-    AudioClip GunshotLarge { get => _gunshotLarge; }
+    public AudioClip GunShotLarge { get => _gunshotLarge; }
+    /// <summary>効果音 : マガジンを外す時の音</summary>
+    public AudioClip MagazineRemove { get => _magazineRemove; }
+    /// <summary>効果音 : マガジンを着ける時の音</summary>
+    public AudioClip MagazineConnect { get => _magazineConnect; }
+    /// <summary>効果音 : プルバック音</summary>
+    public AudioClip PullBack { get => _pullBack; }
+
 
 
     // Start is called before the first frame update
