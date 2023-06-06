@@ -25,7 +25,7 @@ public class IdleLookForward : IExecutionMethod
             move.Destination = null;
             if (_minTime > _maxTime) _minTime = _maxTime;
             _timer = Random.Range(_minTime, _maxTime);
-            param.State.Kind = MotionState.StateKind.Stay;
+            param.LookDirection = param.transform.forward;
             _isInitialized = true;
         }
 

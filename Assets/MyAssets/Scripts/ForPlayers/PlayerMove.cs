@@ -21,6 +21,8 @@ public class PlayerMove : CharacterMove
     {
         base.Update();
 
+        _param.LookDirection = _MainCameraTransform.forward;
+
         MoveByPlayer();
         ShotProcess();
     }
@@ -47,10 +49,20 @@ public class PlayerMove : CharacterMove
         {
             _param.MoveDirection = CalculateMoveDirection(InputUtility.GetMoveDirection);
             _param.CharDirection = _param.MoveDirection;
+
+            if (InputUtility.GetRun)
+            {
+                _param.State.Kind = MotionState.StateKind.Run;
+            }
+            else
+            {
+                _param.State.Kind = MotionState.StateKind.Walk;
+            }
         }
         else
         {
             _param.MoveDirection = Vector3.zero;
+            _param.State.Kind = MotionState.StateKind.Stay;
         }
 
         //“ü—Í‚ª‚ ‚ê‚ÎˆÚ“®—Í‚Ìˆ—

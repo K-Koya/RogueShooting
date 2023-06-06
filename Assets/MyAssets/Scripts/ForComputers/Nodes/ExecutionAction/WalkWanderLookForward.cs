@@ -4,7 +4,7 @@ using UnityEngine;
 using BehaviorTreeNode;
 
 [System.Serializable]
-public class WalkWander : IExecutionMethod
+public class WalkWanderLookForward : IExecutionMethod
 {
     [SerializeField, Tooltip("‚¤‚ë‚Â‚«‚Ì”ÍˆÍ")]
     float _wanderDistance = 20f;
@@ -46,6 +46,8 @@ public class WalkWander : IExecutionMethod
                 return Status.Failure;
             }
         }
+
+        param.LookDirection = param.MoveDirection;
 
         if (move.IsCloseDestination)
         {

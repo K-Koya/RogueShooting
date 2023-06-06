@@ -29,6 +29,9 @@ public class CharacterParameter : MonoBehaviour
     [SerializeField, Tooltip("キャラクターの移動方向情報")]
     protected Vector3 _moveDirection = Vector3.zero;
 
+    [SerializeField, Tooltip("キャラクターの注視方向情報")]
+    protected Vector3 _lookDirection = Vector3.forward;
+
     /// <summary>所持銃器情報</summary>
     protected GunInfo[] _inventory = null;
 
@@ -51,6 +54,9 @@ public class CharacterParameter : MonoBehaviour
 
     /// <summary>キャラクターの移動方向情報</summary>
     public Vector3 MoveDirection { get => _moveDirection; set => _moveDirection = value; }
+
+    /// <summary>キャラクターの注視方向情報</summary>
+    public Vector3 LookDirection { get => _lookDirection; set => _lookDirection = value; }
 
     /// <summary>所持銃器のうち、手に持っているものの番号</summary>
     public byte InventoryNumber { get => _inventoryNumber; }

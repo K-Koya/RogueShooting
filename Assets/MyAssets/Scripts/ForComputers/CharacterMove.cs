@@ -15,8 +15,8 @@ public class CharacterMove : MonoBehaviour
     [SerializeField, Tooltip("歩行最高速")]
     protected float _limitSpeedWalk = 2f;
 
-    [SerializeField, Tooltip("走行最高速")]
-    protected float _limitSpeedRun = 4.5f;
+    [SerializeField, Tooltip("走行速度倍率")]
+    protected float _RatioSpeedRun = 2.5f;
 
 
     #region メンバ
@@ -94,20 +94,21 @@ public class CharacterMove : MonoBehaviour
         //着地中
         if (IsGround)
         {
+            //回転する
+            Vector3 supVec = Vector3.ProjectOnPlane(_param.LookDirection, -GravityDirection);
+            CharacterRotation(supVec, -GravityDirection, 720f);
+
             //移動力がかかっている
             if (_moveInputRate > 0f)
             {
-                //回転する
-                CharacterRotation(_param.MoveDirection, -GravityDirection, 720f);
-
                 //速度制限をかけつつ力をかける
                 if (_speed < _limitSpeedWalk)
                 {
-                    _rb.AddForce(transform.forward * _moveInputRate * _movePower, ForceMode.Acceleration);
+                    _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
                 }
 
                 //速度(向き)を、入力方向へ設定
-                _rb.velocity = Quaternion.FromToRotation(Vector3.ProjectOnPlane(_rb.velocity, -GravityDirection), transform.forward) * _rb.velocity;
+                _rb.velocity = Quaternion.FromToRotation(Vector3.ProjectOnPlane(_rb.velocity, -GravityDirection), _param.MoveDirection) * _rb.velocity;
 
                 //重力をかける
                 _rb.AddForce(GravityDirection * 2f, ForceMode.Acceleration);
@@ -115,16 +116,8 @@ public class CharacterMove : MonoBehaviour
             //移動力がない
             else
             {
-                //現在の速度が閾値を下回った時に0にする
-                if (VelocityOnPlane.sqrMagnitude < VELOCITY_ZERO_BORDER)
-                {
-                    _rb.velocity = Vector3.Project(_rb.velocity, -GravityDirection);
-                }
-                //ブレーキをかける
-                else
-                {
-                    _ForceOfBrake = -_rb.velocity;
-                }
+                //速度を0に
+                _rb.velocity = Vector3.Project(_rb.velocity, -GravityDirection);
 
                 //重力をかける
                 _rb.AddForce(GravityDirection * 1f, ForceMode.Acceleration);
