@@ -12,11 +12,11 @@ public class CharacterMove : MonoBehaviour
 
     #endregion
 
-    [SerializeField, Tooltip("歩行最高速")]
+    [SerializeField, Tooltip("歩行時最高速")]
     protected float _limitSpeedWalk = 2f;
 
-    [SerializeField, Tooltip("走行速度倍率")]
-    protected float _RatioSpeedRun = 2.5f;
+    [SerializeField, Tooltip("走行時最高速")]
+    protected float _limitSpeedRun = 4f;
 
 
     #region メンバ
@@ -102,7 +102,11 @@ public class CharacterMove : MonoBehaviour
             if (_moveInputRate > 0f)
             {
                 //速度制限をかけつつ力をかける
-                if (_speed < _limitSpeedWalk)
+                if(_param.State.Kind == MotionState.StateKind.Run && _speed < _limitSpeedRun)
+                {
+                    _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
+                }
+                else if (_speed < _limitSpeedWalk)
                 {
                     _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
                 }

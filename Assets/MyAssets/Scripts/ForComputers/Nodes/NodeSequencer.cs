@@ -8,15 +8,13 @@ namespace BehaviorTreeNode
     [System.Serializable]
     public class NodeSequencer : INodeConnecter
     {
-        [Header("Sequencer")]
-
         /*
          * 配下ノードを順繰りに施行するノード\n逆に言えば、どれかのノードが失敗したら即処理をやめる
          */
 
         [SerializeReference, SelectableSerializeReference]
         [Tooltip("配下ノード : 上から順にノード施行")]
-        INodeConnecter[] _doSequences = null;
+        INodeConnecter[] _sequencer = null;
 
         /// <summary>順繰り処理中の配下ノード</summary>
         List<INodeConnecter> _runningSequences = null;
@@ -29,7 +27,7 @@ namespace BehaviorTreeNode
             //このノードに初めて入った時
             if (_runningSequences is null)
             {
-                _runningSequences = _doSequences.ToList();
+                _runningSequences = _sequencer.ToList();
             }
 
             //基本全部成功するまで施行
@@ -52,6 +50,9 @@ namespace BehaviorTreeNode
 
                 //成功
                 _runningSequences.RemoveAt(0);
+
+                //1フレーム待機
+                return Status.Running;
             }
 
             //全部成功

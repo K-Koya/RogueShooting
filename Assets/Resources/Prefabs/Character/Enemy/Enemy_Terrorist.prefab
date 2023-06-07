@@ -247,7 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _limitSpeedWalk: 1.5
-  _limitSpeedRun: 3
+  _limitSpeedRun: 5
   _closeDistance: 1.5
   _isFoundDestination: 0
   _isCloseDestination: 1
@@ -334,33 +334,54 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 300156904480178179
-      type: {class: WalkWanderLookForward, ns: , asm: Assembly-CSharp}
+    - rid: 1409463022264778776
+      type: {class: NodeIf, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        _wanderDistance: 20
-        _basePosition: {x: 0, y: 0, z: 0}
+        _if:
+          rid: 1409463022264778777
+        _doNext:
+          rid: 1409463022264778778
+    - rid: 1409463022264778777
+      type: {class: AtRandom, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _numberOfSelection: 0.8
+    - rid: 1409463022264778778
+      type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _execution:
+          rid: 1409463022264778779
+    - rid: 1409463022264778779
+      type: {class: WalkWanderLookForward, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _wanderDistance: 10
         _timeOut: 1
+    - rid: 1409463022264778780
+      type: {class: NodeIf, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _if:
+          rid: 1409463022264778781
+        _doNext:
+          rid: 1409463022264778782
+    - rid: 1409463022264778781
+      type: {class: AtRandom, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _numberOfSelection: 0.3
+    - rid: 1409463022264778782
+      type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _execution:
+          rid: 1409463022264778783
+    - rid: 1409463022264778783
+      type: {class: IdleLookForward, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _maxTime: 10
+        _minTime: 5
     - rid: 2660164533856763906
       type: {class: NodeSequencer, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        _doSequences:
-        - rid: 2660164533856763914
-        - rid: 2660164533856763916
-    - rid: 2660164533856763914
-      type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
-      data:
-        executionMethod:
-          rid: 300156904480178179
-    - rid: 2660164533856763916
-      type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
-      data:
-        executionMethod:
-          rid: 2660164533856763917
-    - rid: 2660164533856763917
-      type: {class: IdleLookForward, ns: , asm: Assembly-CSharp}
-      data:
-        _maxTime: 3
-        _minTime: 1
+        _sequencer:
+        - rid: 1409463022264778776
+        - rid: 1409463022264778780
 --- !u!1 &422324470169778194
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,9 +435,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -449,7 +470,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -543,16 +564,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8478793955386732787}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.009981871, y: 0.055190478, z: -0.012564552, w: 0.9983469}
+  m_LocalPosition: {x: -0.0057605077, y: -0.3428127, z: -0.004840616}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7334473008002416339}
   - {fileID: 7263471142711752937}
   - {fileID: 4254810497273377120}
-  m_Father: {fileID: 80875476208109481}
-  m_RootOrder: 3
+  m_Father: {fileID: 80875476208109541}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9215955574492592719
 GameObject:
@@ -1572,11 +1593,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _footSESource: {fileID: 8902302949141302806}
---- !u!4 &80875476208109481 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400078, guid: c8c1b80e0e148554ab523e26bd2f886c, type: 3}
-  m_PrefabInstance: {fileID: 80875476207983975}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &80875476208109495 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400080, guid: c8c1b80e0e148554ab523e26bd2f886c, type: 3}

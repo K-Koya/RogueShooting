@@ -139,6 +139,8 @@ public class ComputerMove : CharacterMove
             _moveInputRate = _param.MoveDirection.magnitude;
             //ˆÚ“®•ûŒü‚ðŽæ“¾
             _param.MoveDirection *= 1f / _moveInputRate;
+            //ˆÚ“®—Í‚ðŒvŽZ
+            _movePower = 5f;
         }
         else
         {

@@ -73,7 +73,7 @@ public class PlayerMove : CharacterMove
             //ˆÚ“®•ûŒü‚ðŽæ“¾
             _param.MoveDirection *= 1 / _moveInputRate;
             //ˆÚ“®—ÍŽw’è
-            _movePower = _limitSpeedRun;
+            _movePower = 5f;
         }
         else
         {
@@ -86,7 +86,7 @@ public class PlayerMove : CharacterMove
         bool isMoving = Vector3.SqrMagnitude(VelocityOnPlane) > 0.01f;
         if (isMoving)
         {
-            _ForceOfBrake = -VelocityOnPlane.normalized * 0.2f;
+            _ForceOfBrake = -VelocityOnPlane.normalized * 0.8f;
         }
     }
 

@@ -231,9 +231,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -266,7 +266,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _limitSpeedWalk: 1.5
-  _limitSpeedRun: 3
+  _limitSpeedRun: 5
   _closeDistance: 1.5
   _isFoundDestination: 0
   _isCloseDestination: 1
@@ -458,37 +458,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rootNode:
-    rid: 2660164533856763906
+    rid: 1409463025636474889
   references:
     version: 2
     RefIds:
-    - rid: 300156904480178180
-      type: {class: WalkWanderLookForward, ns: , asm: Assembly-CSharp}
-      data:
-        _wanderDistance: 20
-        _basePosition: {x: 0, y: 0, z: 0}
-        _timeOut: 1
-    - rid: 2660164533856763906
+    - rid: 1409463025636474889
       type: {class: NodeSequencer, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        _doSequences:
-        - rid: 2660164533856763914
-        - rid: 2660164533856763916
-    - rid: 2660164533856763914
+        _sequencer:
+        - rid: 1409463025636474890
+        - rid: 1409463025636474896
+    - rid: 1409463025636474890
+      type: {class: NodeRepeat, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _count: 3
+        _repeat:
+        - rid: 1409463025636474892
+    - rid: 1409463025636474892
       type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        executionMethod:
-          rid: 300156904480178180
-    - rid: 2660164533856763916
+        _execution:
+          rid: 1409463025636474893
+    - rid: 1409463025636474893
+      type: {class: WalkWanderLookForward, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _wanderDistance: 20
+        _timeOut: 1
+    - rid: 1409463025636474896
       type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        executionMethod:
-          rid: 2660164533856763917
-    - rid: 2660164533856763917
-      type: {class: IdleLookForward, ns: , asm: Assembly-CSharp}
+        _execution:
+          rid: 1409463025636474897
+    - rid: 1409463025636474897
+      type: {class: IdleLookForward, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        _maxTime: 3
-        _minTime: 1
+        _maxTime: 5
+        _minTime: 2
 --- !u!1 &3743907076359777466
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,16 +548,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5557848675775742531}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.026639402, y: 0.05653975, z: -0.0054992237, w: 0.9980298}
+  m_LocalPosition: {x: -0.0039258087, y: -0.34447542, z: -0.0077675283}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5100051847274985981}
   - {fileID: 2339065035829586723}
   - {fileID: 8824585431335328083}
-  m_Father: {fileID: 2508830218591537831}
-  m_RootOrder: 3
+  m_Father: {fileID: 2508830218591537971}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7111952187843756905
 GameObject:
@@ -2021,11 +2026,6 @@ PrefabInstance:
 --- !u!4 &2508830218591537827 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400154, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
-  m_PrefabInstance: {fileID: 2508830218591670713}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2508830218591537831 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400158, guid: bdd7a03fd93bf2d4cb6babd63ceabee8, type: 3}
   m_PrefabInstance: {fileID: 2508830218591670713}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2508830218591537953 stripped
