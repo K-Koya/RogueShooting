@@ -76,8 +76,18 @@ public class ComputerMove : CharacterMove
     {
         base.Update();
 
-        MoveByNavMesh();
+        if (_param.State.Kind is MotionState.StateKind.Defeat)
+        {
+            _isCloseDestination = true;
+            _setDestinationCoroutine = null;
+            _nav.ResetPath();
+            _destination = null;
+            _resultDestination = null;
 
+            return;
+        }
+
+        MoveByNavMesh();
         SetResultDestination();
     }
 
@@ -194,6 +204,7 @@ public class ComputerMove : CharacterMove
         }
     }
 
+#if UNITY_EDITOR
     /// <summary>ナビメッシュによる移動経路を書き出し</summary>
     void OnDrawGizmos()
     {
@@ -209,4 +220,6 @@ public class ComputerMove : CharacterMove
             }
         }
     }
+#endif
+
 }

@@ -24,6 +24,12 @@ public class LayerManager : Singleton<LayerManager>
     LayerMask _Player = default;
     [SerializeField, Tooltip("味方レイヤ")]
     LayerMask _Allies = default;
+    [SerializeField, Tooltip("インタラクト可能な物レイヤ")]
+    LayerMask _Prop = default;
+    [SerializeField, Tooltip("味方のダメージレイヤ")]
+    LayerMask _AlliseDamager = default;
+    [SerializeField, Tooltip("敵のダメージレイヤ")]
+    LayerMask _EnemyDamager = default;
     #endregion
 
     #region プロパティ
@@ -51,7 +57,9 @@ public class LayerManager : Singleton<LayerManager>
     /// <summary>全ての味方キャラクターのレイヤ</summary>
     public LayerMask AllAllies { get => _Allies | _Player; }
     /// <summary>レティクルが乗る（ターゲットできるオブジェクト）のレイヤ</summary>
-    public LayerMask OnTheReticle { get => _Allies | _Enemy | _Ground; }
+    public LayerMask OnTheReticle { get => _Allies | _Enemy | _Ground | _Prop; }
+    /// <summary>銃弾が当たるレイヤ</summary>
+    public LayerMask BulletHit { get => _AlliseDamager | _EnemyDamager | _Ground; }
 
     #endregion
 }

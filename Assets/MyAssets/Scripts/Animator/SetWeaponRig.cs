@@ -5,9 +5,6 @@ using UnityEngine.Animations.Rigging;
 
 public class SetWeaponRig : MonoBehaviour
 {
-    [SerializeField, Tooltip("初期装備銃器")]
-    GunInfo _initializeWeapon = null;
-
     [SerializeField, Tooltip("右手の位置姿勢情報")]
     Transform _rightHand = null;
 
@@ -28,10 +25,7 @@ public class SetWeaponRig : MonoBehaviour
 
     void Start()
     {
-        if (_initializeWeapon)
-        {
-            DoSet(_initializeWeapon.gameObject);
-        }
+
     }
 
     void Update()
@@ -47,7 +41,7 @@ public class SetWeaponRig : MonoBehaviour
         }
     }
 
-    /// <summary>取得した銃</summary>
+    /// <summary>取得した銃を持つ処理</summary>
     /// <param name="gunObj">銃オブジェクト</param>
     public void DoSet(GameObject gunObj)
     {
@@ -72,5 +66,11 @@ public class SetWeaponRig : MonoBehaviour
         {
             _dataLeftHandTarget = null;
         }
+    }
+
+    public void DoRelease()
+    {
+        _dataRightHandTarget = null;
+        _dataLeftHandTarget = null;
     }
 }

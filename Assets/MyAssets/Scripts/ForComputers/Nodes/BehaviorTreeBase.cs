@@ -25,6 +25,11 @@ public class BehaviorTreeBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_param.State.Kind is MotionState.StateKind.Defeat)
+        {
+            return;
+        }
+
         _rootNode.NextNode(_param, _move);
     }
 }

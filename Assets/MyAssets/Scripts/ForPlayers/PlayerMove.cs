@@ -7,6 +7,9 @@ public class PlayerMove : CharacterMove
     /// <summary>MainCameraの位置等の情報</summary>
     Transform _MainCameraTransform = null;
 
+    /// <summary>プレイヤーの照準情報</summary>
+    PlayerReticle _reticle = null;
+
 
 
     // Start is called before the first frame update
@@ -14,12 +17,18 @@ public class PlayerMove : CharacterMove
     {
         base.Start();
         _MainCameraTransform = Camera.main.transform;
+        _reticle = GetComponent<PlayerReticle>();
     }
 
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
+
+        if (_param.State.Kind is MotionState.StateKind.Defeat)
+        {
+            return;
+        }
 
         _param.LookDirection = _MainCameraTransform.forward;
 
@@ -95,7 +104,7 @@ public class PlayerMove : CharacterMove
     {
         if (InputUtility.GetFire)
         {
-            _param.UsingGun.DoShot();
+            _param.UsingGun.DoShot(_reticle.Point);
         }
 
         if (InputUtility.GetDownReload)

@@ -90,6 +90,11 @@ public class CharacterMove : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_param.State.Kind is MotionState.StateKind.Defeat)
+        {
+            return;
+        }
+
         //’…’n‚µ‚Ä‚¢‚é‚©”Û‚©‚Å•ªŠò
         //’…’n’†
         if (IsGround)

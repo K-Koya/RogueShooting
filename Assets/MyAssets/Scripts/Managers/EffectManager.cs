@@ -4,24 +4,34 @@ using UnityEngine;
 
 public class EffectManager : Singleton<EffectManager>
 {
-    [Header("以下に共通パーティクルのプレハブをアサイン")]
+    [Header("以下に共通エフェクトのプレハブをアサイン")]
 
-    [SerializeField, Tooltip("マズルフラッシュエフェクト")]
-    GameObject _MuzzleFlashEffectPref = null;
+    [SerializeField, Tooltip("AKMの射出弾エフェクト")]
+    GameObject _bulletAKMPref = null;
+
+    [SerializeField, Tooltip("SAR2000の射出弾エフェクト")]
+    GameObject _bulletSAR2000Pref = null;
 
 
-    /// <summary>マズルフラッシュエフェクトのプール</summary>
-    GameObjectPool _MuzzleFlashEffects = null;
+    /// <summary>AKMの射出弾エフェクトのプール</summary>
+    GameObjectPool _bulletAKMEffects = null;
+
+    /// <summary>SAR2000の射出弾エフェクトのプール</summary>
+    GameObjectPool _bulletSAR2000Effects = null;
 
 
-    /// <summary>マズルフラッシュエフェクトのプール</summary>
-    public GameObjectPool MuzzleFlashEffects => _MuzzleFlashEffects;
+    /// <summary>AKMの射出弾エフェクトのプール</summary>
+    public GameObjectPool BulletAKMEffects => _bulletAKMEffects;
+
+    /// <summary>SAR2000の射出弾エフェクトのプール</summary>
+    public GameObjectPool BulletSAR2000Effects => _bulletSAR2000Effects;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _MuzzleFlashEffects = new GameObjectPool(_MuzzleFlashEffectPref, transform, 20);
+        _bulletAKMEffects = new GameObjectPool(_bulletAKMPref, transform, 60);
+        _bulletSAR2000Effects = new GameObjectPool(_bulletSAR2000Pref, transform, 20);
     }
 
 }
