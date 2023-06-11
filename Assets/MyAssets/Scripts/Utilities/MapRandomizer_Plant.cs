@@ -522,6 +522,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     map[startY + 1, startX].floorType = FloorType.StraightRoad;
                     map[startY + 1, startX].enter = Compass.South;
                     map[startY + 1, startX].exit = Compass.North;
+                    map[startY + 1, startX].isUpperFloor = map[startY, startX].isUpperFloor;
                     current = map[startY + 1, startX];
 
                     advanceDirection = Compass.North;
@@ -538,6 +539,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     map[_mapSize.y - startY - 1, startX].floorType = FloorType.StraightRoad;
                     map[_mapSize.y - startY - 1, startX].enter = Compass.North;
                     map[_mapSize.y - startY - 1, startX].exit = Compass.South;
+                    map[_mapSize.y - startY - 1, startX].isUpperFloor = map[startY, startX].isUpperFloor;
                     current = map[_mapSize.y - startY - 1, startX];
 
                     advanceDirection = Compass.South;
@@ -554,6 +556,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     map[startY, startX + 1].floorType = FloorType.StraightRoad;
                     map[startY, startX + 1].enter = Compass.West;
                     map[startY, startX + 1].exit = Compass.East;
+                    map[startY, startX + 1].isUpperFloor = map[startY, startX].isUpperFloor;
                     current = map[startY, startX + 1];
 
                     advanceDirection = Compass.East;
@@ -570,6 +573,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     map[startY, _mapSize.x - startX - 1].floorType = FloorType.StraightRoad;
                     map[startY, _mapSize.x - startX - 1].enter = Compass.East;
                     map[startY, _mapSize.x - startX - 1].exit = Compass.West;
+                    map[startY, _mapSize.x - startX - 1].isUpperFloor = map[startY, startX].isUpperFloor;
                     current = map[startY, _mapSize.x - startX - 1];
 
                     advanceDirection = Compass.West;
