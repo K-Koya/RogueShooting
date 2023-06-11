@@ -28,6 +28,7 @@ public class BulletController : MonoBehaviour
     /// <summary>発砲地点</summary>
     Vector3 _start = Vector3.zero;
 
+
     void Start()
     {
         _shotAmmo = GetComponentInChildren<MeshRenderer>();
@@ -57,23 +58,7 @@ public class BulletController : MonoBehaviour
             }
         }
         else
-        {
-            //_fixedSpeedだけ先（すなわちFixedUpdateの今のフレームで通過するセグメント）の状況を見る
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, _fixedSpeed, LayerManager.Instance.BulletHit))
-            {
-                //被ダメージコンポーネントがあればダメージ処理呼び出し
-                Damager damager = hit.collider.GetComponent<Damager>();
-                if (damager)
-                {
-                    damager.GetDamage(_maxPower, _impact);
-                }
-
-                //弾を消す予約
-                _destroyDelayTime = _shotLine.time;
-                _shotAmmo.enabled = false;
-            }
-
+        {            
             //正面方向へ前進
             transform.position += transform.forward * _fixedSpeed;
 
@@ -84,5 +69,17 @@ public class BulletController : MonoBehaviour
                 _shotAmmo.enabled = false;
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Damager dmg = null;
+        if(other.TryGetComponent(out dmg))
+        {
+            dmg.GetDamage(_maxPower, _impact, transform.forward);
+        }
+
+        _destroyDelayTime = _shotLine.time;
+        _shotAmmo.enabled = false;
     }
 }

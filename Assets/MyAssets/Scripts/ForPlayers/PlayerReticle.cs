@@ -38,8 +38,10 @@ public class PlayerReticle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(LayerManager.Instance.OnTheReticle.value);
+
         RaycastHit hit;
-        if(Physics.Raycast(_mainCameraTransform.position, _mainCameraTransform.forward, out hit, _maxDistance, LayerManager.Instance.OnTheReticle))
+        if(Physics.Raycast(_mainCameraTransform.position, _mainCameraTransform.forward, out hit, _maxDistance, LayerManager.Instance.OnTheReticle, QueryTriggerInteraction.Collide))
         {
             IReticleFocused irf = hit.transform.gameObject.GetComponent<IReticleFocused>();
             if(irf is not null) _data = irf.GetData();
@@ -53,6 +55,15 @@ public class PlayerReticle : MonoBehaviour
             _point = _mainCameraTransform.position + _mainCameraTransform.forward * _maxDistance;
         }
     }
+
+#if UNITY_EDITOR
+    /// <summary>照準先を示すレイキャスト</summary>
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        if(_mainCameraTransform) Gizmos.DrawLine(_mainCameraTransform.position, _point);
+    }
+#endif
 }
 
 /// <summary>照準を合わせたときにデータを取得できるインターフェース</summary>

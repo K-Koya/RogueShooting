@@ -12,18 +12,18 @@ public class CharacterParameter : MonoBehaviour
     protected short _maxLife = 100;
 
     [SerializeField, Tooltip("現在ライフ")]
-    protected float _currentLife = 100;
+    protected short _currentLife = 100;
 
 
 
     /// <summary>移動可否ビットフラグ</summary>
-    MotionEnableFlag _can = (MotionEnableFlag)byte.MaxValue;
+    protected MotionEnableFlag _can = (MotionEnableFlag)byte.MaxValue;
 
     /// <summary>行動状態</summary>
-    MotionState _state = null;
+    protected MotionState _state = null;
 
     /// <summary>武器の持ち手制御</summary>
-    SetWeaponRig _weponRig = null;
+    protected SetWeaponRig _weponRig = null;
 
 
 
@@ -33,6 +33,9 @@ public class CharacterParameter : MonoBehaviour
 
     /// <summary>照準器の位置</summary>
     protected Vector3 _reticlePoint = Vector3.zero;
+
+    [SerializeField, Tooltip("キャラクターの種類")]
+    protected CharacterKind _character = CharacterKind.Player;
 
     [SerializeField, Tooltip("キャラクターの向き情報")]
     protected Vector3 _characterDirection = Vector3.zero;
@@ -133,17 +136,6 @@ public class CharacterParameter : MonoBehaviour
             return;
         }
 
-        //攻撃を受けたら怯み状態に
-        if(_hurtTime > 0f)
-        {
-            _hurtTime -= Time.deltaTime;
-        }
-        else if(_state.Kind is MotionState.StateKind.Hurt)
-        {
-            _state.Kind = MotionState.StateKind.Stay;
-            _hurtTime = 0f;
-        }
-
         SetMotionEnableFlag();
     }
 
@@ -171,19 +163,20 @@ public class CharacterParameter : MonoBehaviour
     /// <summary>被ダメージ処理</summary>
     /// <param name="damage">ダメージ量</param>
     /// <param name="impact">衝撃</param>
-    public void GaveDamage(short damage, float impact)
+    /// <param name="impactDirection">衝撃の方向</param>
+    public virtual void GaveDamage(short damage, float impact, Vector3 impactDirection)
     {
         _currentLife -= damage;
         if (_currentLife < 1)
         {
             _state.Kind = MotionState.StateKind.Defeat;
-            ReleaseGunAll();
+            //ReleaseGunAll();
         }
+        //ライフがなくなり次第倒された状態に
         else
         {
             _state.Kind = MotionState.StateKind.Hurt;
             _isHurtTriggered = true;
-            _hurtTime = 0.5f;
         }
     }
 
@@ -240,6 +233,16 @@ public class CharacterParameter : MonoBehaviour
             default: break;
         }
     }
+}
+
+/// <summary>キャラクターの種類</summary>
+public enum CharacterKind : byte
+{
+    Player = 0,
+    BodyGuard1 = 1,
+    BodyGuard2 = 2,
+    BodyGuard3 = 3,
+    Terrorist = 11,
 }
 
 /// <summary>移動可否ビットフラグ</summary>

@@ -19,8 +19,8 @@ public class Damager : MonoBehaviour
     /// <summary>ダメージ発生</summary>
     /// <param name="damage">基本ダメージ</param>
     /// <param name="impact">衝撃の大きさ</param>
-    public void GetDamage(short damage, float impact)
+    public void GetDamage(short damage, float impact, Vector3 impactDirection)
     {
-        _param.GaveDamage((short)(damage * _damageRatio), impact);
+        _param.GaveDamage((short)(damage * _damageRatio), impact, impactDirection);
     }
 }

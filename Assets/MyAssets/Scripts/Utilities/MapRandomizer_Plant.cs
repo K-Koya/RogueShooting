@@ -1,10 +1,9 @@
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 //[RequireComponent(typeof(BoxCollider))]
-public class MapRandomizer : MonoBehaviour
+public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 {
     /// <summary>基本試行回数</summary>
     int NUMBER_OF_TRIAL = 40;
@@ -19,6 +18,17 @@ public class MapRandomizer : MonoBehaviour
     byte GAME_AREA_AROUND_DISTANCE = 7;
 
 
+    /// <summary>スタート地点になるフロア座標</summary>
+    Vector2Int _startFloor = new Vector2Int();
+
+    /// <summary>スタート地点になるフロアの高さ</summary>
+    float _startFloorHeight = 0f;
+
+
+    /// <summary>スタート地点になるフロア座標</summary>
+    public Vector3 StartFloorBasePosition => new Vector3(_startFloor.x * UNIT_FOR_FLOOR, _startFloorHeight, _startFloor.y * UNIT_FOR_FLOOR);
+
+
     [SerializeField, Tooltip("マスの数(一辺15マス以上)")]
     Vector2Int _mapSize = new Vector2Int(15, 15);
 
@@ -28,6 +38,9 @@ public class MapRandomizer : MonoBehaviour
     [SerializeField, Tooltip("乱数シード")]
     int _seed = 10;
 
+
+    /// <summary>エリア外に行けないようにするコライダー</summary>
+    BoxCollider[] _areaLimits = null;
 
 
     [Header("地面プレハブ")]
@@ -329,13 +342,32 @@ public class MapRandomizer : MonoBehaviour
                 }
             }
         }
-    }
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
+        //エリア四方の壁張り
+        _areaLimits = GetComponents<BoxCollider>();
+        for(int i = 0; i < 4 && i < _areaLimits.Length; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    _areaLimits[i].center = new Vector3((GAME_AREA_AROUND_DISTANCE - 0.5f) * UNIT_FOR_FLOOR, 5f, (_mapSize.y - 2f) * UNIT_FOR_FLOOR / 2f);
+                    _areaLimits[i].size = new Vector3(0.5f, 10f, (_mapSize.y - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR);
+                    break;
+                case 1:
+                    _areaLimits[i].center = new Vector3((_mapSize.x - GAME_AREA_AROUND_DISTANCE - 1.5f) * UNIT_FOR_FLOOR, 5f, (_mapSize.y - 2f) * UNIT_FOR_FLOOR / 2f);
+                    _areaLimits[i].size = new Vector3(0.5f, 10f, (_mapSize.y - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR);
+                    break;
+                case 2:
+                    _areaLimits[i].center = new Vector3((_mapSize.x - 2f) * UNIT_FOR_FLOOR / 2f, 5f, (GAME_AREA_AROUND_DISTANCE - 0.5f) * UNIT_FOR_FLOOR);
+                    _areaLimits[i].size = new Vector3((_mapSize.x - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR, 10f, 0.5f);
+                    break;
+                case 3:
+                    _areaLimits[i].center = new Vector3((_mapSize.x - 2f) * UNIT_FOR_FLOOR / 2f, 5f, (_mapSize.y - GAME_AREA_AROUND_DISTANCE - 1.5f) * UNIT_FOR_FLOOR);
+                    _areaLimits[i].size = new Vector3((_mapSize.x - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR, 10f, 0.5f);
+                    break;
+                default: break;
+            }
+        }
     }
 
     /// <summary>高低差構成</summary>
@@ -434,341 +466,380 @@ public class MapRandomizer : MonoBehaviour
     /// <summary>道路指定</summary>
     void SetRoad()
     {
-        //外周のどこかをスタート位置に指定
+        //マップの中央付近のどこかをスタート位置に指定
+        int startX = (int)Random.Range(_mapSize.x * 0.4f, _mapSize.x * 0.6f);
+        int startY = (int)Random.Range(_mapSize.y * 0.4f, _mapSize.y * 0.6f);
+
+        //東西南北穴掘りする方向を指定
+        Compass[] fowards = new Compass[2];
         float rand = Random.value;
-        MapCell current = null;
-        Compass advanceDirection = Compass.North;
-        int[] advanceLimit = new int[4];
-        if (rand < 0.5f)
+        //一方は北方向へ
+        if(rand < 0.5f)
         {
-            int startX = (int)Random.Range(_mapSize.x * 0.4f, _mapSize.x * 0.6f);
-            //北方向へ
+            fowards[0] = Compass.North;
+            //もう一方は南方向へ
             if (rand < 0.25f)
             {
-                map[0, startX].floorType = FloorType.StraightRoad;
-                map[0, startX].enter = Compass.South;
-                map[0, startX].exit = Compass.North;
-                map[1, startX].floorType = FloorType.StraightRoad;
-                map[1, startX].enter = Compass.South;
-                map[1, startX].exit = Compass.North;
-                current = map[1, startX];
-
-                advanceDirection = Compass.North;
-                advanceLimit[0] = _mapSize.y;
-                advanceLimit[1] = _mapSize.x - startX - 2;
-                advanceLimit[2] = 0;
-                advanceLimit[3] = startX - 2;
+                fowards[1] = Compass.South;
             }
-            //南方向へ
+            //もう一方は西方向へ
             else
             {
-                map[_mapSize.y - 1, startX].floorType = FloorType.StraightRoad;
-                map[_mapSize.y - 1, startX].enter = Compass.North;
-                map[_mapSize.y - 1, startX].exit = Compass.South;
-                map[_mapSize.y - 2, startX].floorType = FloorType.StraightRoad;
-                map[_mapSize.y - 2, startX].enter = Compass.North;
-                map[_mapSize.y - 2, startX].exit = Compass.South;
-                current = map[_mapSize.y - 2, startX];
-
-                advanceDirection = Compass.South;
-                advanceLimit[0] = 0;
-                advanceLimit[1] = _mapSize.x - startX - 2;
-                advanceLimit[2] = _mapSize.y;
-                advanceLimit[3] = startX - 2;
+                fowards[1] = Compass.West;
             }
         }
+        //一方は東方向へ
         else
         {
-            int startY = (int)Random.Range(_mapSize.y * 0.4f, _mapSize.y * 0.6f);
-            //東方向へ
+            fowards[0] = Compass.East;
+            //もう一方は南方向へ
             if (rand < 0.75f)
             {
-                map[startY, 0].floorType = FloorType.StraightRoad;
-                map[startY, 0].enter = Compass.West;
-                map[startY, 0].exit = Compass.East;
-                map[startY, 1].floorType = FloorType.StraightRoad;
-                map[startY, 1].enter = Compass.West;
-                map[startY, 1].exit = Compass.East;
-                current = map[startY, 1];
-
-                advanceDirection = Compass.East;
-                advanceLimit[0] = _mapSize.y - startY - 2;
-                advanceLimit[1] = _mapSize.x;
-                advanceLimit[2] = startY - 2;
-                advanceLimit[3] = 0;
+                fowards[1] = Compass.South;
             }
-            //西方向へ
+            //もう一方は西方向へ
             else
             {
-                map[startY, _mapSize.x - 1].floorType = FloorType.StraightRoad;
-                map[startY, _mapSize.x - 1].enter = Compass.East;
-                map[startY, _mapSize.x - 1].exit = Compass.West;
-                map[startY, _mapSize.x - 2].floorType = FloorType.StraightRoad;
-                map[startY, _mapSize.x - 2].enter = Compass.East;
-                map[startY, _mapSize.x - 2].exit = Compass.West;
-                current = map[startY, _mapSize.x - 2];
-
-                advanceDirection = Compass.West;
-                advanceLimit[0] = _mapSize.y - startY - 2;
-                advanceLimit[1] = 0;
-                advanceLimit[2] = startY - 2;
-                advanceLimit[3] = _mapSize.x;
+                fowards[1] = Compass.West;
             }
         }
 
-        //穴掘り
-        int loopLimit = _mapSize.x * _mapSize.y;
-        Compass beforeStep = advanceDirection;
-        bool isCurve = false;
-        for (int i = 0; i < loopLimit; i++)
+        //2方向に穴掘り
+        map[startY, startX].enter = fowards[1];
+        map[startY, startX].exit = fowards[0];
+        foreach (Compass f in fowards)
         {
-            bool isDetectNext = false;
-            Compass goNext = advanceDirection;
-            for (int k = 0; k < NUMBER_OF_TRIAL && !isDetectNext; k++)
+            MapCell current = null;
+            Compass advanceDirection = Compass.North;
+            int[] advanceLimit = new int[4];
+
+            //掘る前に下処理
+            switch (f)
             {
-                rand = Random.value;
-                //右サイドに向けて進行
-                if (rand > 0.9f)
-                {
-                    if ((int)advanceDirection > 2)
-                    {
-                        goNext = Compass.North;
-                    }
-                    else
-                    {
-                        goNext = advanceDirection + 1;
-                    }
-                }
-                //左サイドに向けて進行
-                else if (rand > 0.8f)
-                {
-                    if ((int)advanceDirection < 1)
-                    {
-                        goNext = Compass.West;
-                    }
-                    else
-                    {
-                        goNext = advanceDirection - 1;
-                    }
-                }
+                case Compass.North:
 
-                isCurve = goNext != beforeStep;
+                    map[startY, startX].floorType = FloorType.StraightRoad;
+                    map[startY + 1, startX].floorType = FloorType.StraightRoad;
+                    map[startY + 1, startX].enter = Compass.South;
+                    map[startY + 1, startX].exit = Compass.North;
+                    current = map[startY + 1, startX];
 
+                    advanceDirection = Compass.North;
+                    advanceLimit[0] = _mapSize.y;
+                    advanceLimit[1] = _mapSize.x - startX - 2;
+                    advanceLimit[2] = 0;
+                    advanceLimit[3] = startX - 2;
 
-                //次に向かう方向
-                switch (goNext)
-                {
-                    //北方向へ
-                    case Compass.North:
-                        if (current.up.floorType == FloorType.CommonFloor && advanceLimit[0] > 0)
-                        {
-                            if (isCurve)
-                            {
-                                current.floorType = FloorType.CurveRoad;
-                            }
+                    break;
 
-                            //今の区画が上で、次の区画が下の場合
-                            if (current.isUpperFloor && !current.up.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.up.isUpperFloor = true;
-                                }
-                                else
-                                {
-                                    current.isUpperFloor = false;
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
-                            //今の区画が下で、次の区画が上の場合
-                            else if (!current.isUpperFloor && current.up.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.up.isUpperFloor = false;
-                                }
-                                else
-                                {
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
+                case Compass.South:
 
-                            current.exit = Compass.North;
+                    map[_mapSize.y - startY, startX].floorType = FloorType.StraightRoad;
+                    map[_mapSize.y - startY - 1, startX].floorType = FloorType.StraightRoad;
+                    map[_mapSize.y - startY - 1, startX].enter = Compass.North;
+                    map[_mapSize.y - startY - 1, startX].exit = Compass.South;
+                    current = map[_mapSize.y - startY - 1, startX];
 
-                            current = current.up;
-                            current.floorType = FloorType.StraightRoad;
-                            current.enter = Compass.South;
-                            isDetectNext = true;
+                    advanceDirection = Compass.South;
+                    advanceLimit[0] = 0;
+                    advanceLimit[1] = _mapSize.x - startX - 2;
+                    advanceLimit[2] = _mapSize.y;
+                    advanceLimit[3] = startX - 2;
 
-                            advanceLimit[0]--;
-                        }
-                        break;
-                    //南方向へ
-                    case Compass.South:
-                        if (current.down.floorType == FloorType.CommonFloor && advanceLimit[2] > 0)
-                        {
-                            if (isCurve)
-                            {
-                                current.floorType = FloorType.CurveRoad;
-                            }
+                    break;
 
-                            //今の区画が上で、次の区画が下の場合
-                            if (current.isUpperFloor && !current.down.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.down.isUpperFloor = true;
-                                }
-                                else
-                                {
-                                    current.isUpperFloor = false;
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
-                            //今の区画が下で、次の区画が上の場合
-                            else if (!current.isUpperFloor && current.down.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.down.isUpperFloor = false;
-                                }
-                                else
-                                {
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
+                case Compass.East:
 
-                            current.exit = Compass.South;
+                    map[startY, startX].floorType = FloorType.StraightRoad;
+                    map[startY, startX + 1].floorType = FloorType.StraightRoad;
+                    map[startY, startX + 1].enter = Compass.West;
+                    map[startY, startX + 1].exit = Compass.East;
+                    current = map[startY, startX + 1];
 
-                            current = current.down;
-                            current.floorType = FloorType.StraightRoad;
-                            current.enter = Compass.North;
-                            isDetectNext = true;
+                    advanceDirection = Compass.East;
+                    advanceLimit[0] = _mapSize.y - startY - 2;
+                    advanceLimit[1] = _mapSize.x;
+                    advanceLimit[2] = startY - 2;
+                    advanceLimit[3] = 0;
 
-                            advanceLimit[2]--;
-                        }
-                        break;
-                    //東方向へ
-                    case Compass.East:
-                        if (current.right.floorType == FloorType.CommonFloor && advanceLimit[1] > 0)
-                        {
-                            if (isCurve)
-                            {
-                                current.floorType = FloorType.CurveRoad;
-                            }
+                    break;
 
-                            //今の区画が上で、次の区画が下の場合
-                            if (current.isUpperFloor && !current.right.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.right.isUpperFloor = true;
-                                }
-                                else
-                                {
-                                    current.isUpperFloor = false;
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
-                            //今の区画が下で、次の区画が上の場合
-                            else if (!current.isUpperFloor && current.right.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.right.isUpperFloor = false;
-                                }
-                                else
-                                {
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
+                case Compass.West:
 
-                            current.exit = Compass.East;
+                    map[startY, _mapSize.x - startX].floorType = FloorType.StraightRoad;
+                    map[startY, _mapSize.x - startX - 1].floorType = FloorType.StraightRoad;
+                    map[startY, _mapSize.x - startX - 1].enter = Compass.East;
+                    map[startY, _mapSize.x - startX - 1].exit = Compass.West;
+                    current = map[startY, _mapSize.x - startX - 1];
 
-                            current = current.right;
-                            current.floorType = FloorType.StraightRoad;
-                            current.enter = Compass.West;
-                            isDetectNext = true;
+                    advanceDirection = Compass.West;
+                    advanceLimit[0] = _mapSize.y - startY - 2;
+                    advanceLimit[1] = 0;
+                    advanceLimit[2] = startY - 2;
+                    advanceLimit[3] = _mapSize.x;
 
-                            advanceLimit[1]--;
-                        }
-                        break;
-                    //西方向
-                    case Compass.West:
-                        if (current.left.floorType == FloorType.CommonFloor && advanceLimit[3] > 0)
-                        {
-                            if (isCurve)
-                            {
-                                current.floorType = FloorType.CurveRoad;
-                            }
-
-                            //今の区画が上で、次の区画が下の場合
-                            if (current.isUpperFloor && !current.left.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.left.isUpperFloor = true;
-                                }
-                                else
-                                {
-                                    current.isUpperFloor = false;
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
-                            //今の区画が下で、次の区画が上の場合
-                            else if (!current.isUpperFloor && current.left.isUpperFloor)
-                            {
-                                if (isCurve)
-                                {
-                                    current.left.isUpperFloor = false;
-                                }
-                                else
-                                {
-                                    current.floorType = FloorType.SteepSlopeRoad;
-                                }
-                            }
-
-                            current.exit = Compass.West;
-
-                            current = current.left;
-                            current.floorType = FloorType.StraightRoad;
-                            current.enter = Compass.East;
-                            isDetectNext = true;
-
-                            advanceLimit[3]--;
-                        }
-                        break;
-                    default: break;
-                }
+                    break;
+                default: break;
             }
 
-            beforeStep = goNext;
-
-            //どこかマップの端に到達していれば離脱
-            if (current.up == null || current.down == null
-                || current.right == null || current.left == null)
+            //穴掘り
+            int loopLimit = _mapSize.x * _mapSize.y;
+            Compass beforeStep = advanceDirection;
+            bool isCurve = false;
+            for (int i = 0; i < loopLimit; i++)
             {
-                //最後の道の出口を外側に指定
-                switch (current.enter)
+                bool isDetectNext = false;
+                Compass goNext = advanceDirection;
+                for (int k = 0; k < NUMBER_OF_TRIAL && !isDetectNext; k++)
                 {
-                    case Compass.North:
-                        current.exit = Compass.South;
-                        break;
-                    case Compass.East:
-                        current.exit = Compass.West;
-                        break;
-                    case Compass.South:
-                        current.exit = Compass.North;
-                        break;
-                    case Compass.West:
-                        current.exit = Compass.East;
-                        break;
-                    default: break;
+                    rand = Random.value;
+                    //右サイドに向けて進行
+                    if (rand > 0.9f)
+                    {
+                        if ((int)advanceDirection > 2)
+                        {
+                            goNext = Compass.North;
+                        }
+                        else
+                        {
+                            goNext = advanceDirection + 1;
+                        }
+                    }
+                    //左サイドに向けて進行
+                    else if (rand > 0.8f)
+                    {
+                        if ((int)advanceDirection < 1)
+                        {
+                            goNext = Compass.West;
+                        }
+                        else
+                        {
+                            goNext = advanceDirection - 1;
+                        }
+                    }
+
+                    isCurve = goNext != beforeStep;
+
+
+                    //次に向かう方向
+                    switch (goNext)
+                    {
+                        //北方向へ
+                        case Compass.North:
+                            if (current.up.floorType == FloorType.CommonFloor && advanceLimit[0] > 0)
+                            {
+                                if (isCurve)
+                                {
+                                    current.floorType = FloorType.CurveRoad;
+                                }
+
+                                //今の区画が上で、次の区画が下の場合
+                                if (current.isUpperFloor && !current.up.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.up.isUpperFloor = true;
+                                    }
+                                    else
+                                    {
+                                        current.isUpperFloor = false;
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+                                //今の区画が下で、次の区画が上の場合
+                                else if (!current.isUpperFloor && current.up.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.up.isUpperFloor = false;
+                                    }
+                                    else
+                                    {
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+
+                                current.exit = Compass.North;
+
+                                current = current.up;
+                                current.floorType = FloorType.StraightRoad;
+                                current.enter = Compass.South;
+                                isDetectNext = true;
+
+                                advanceLimit[0]--;
+                            }
+                            break;
+                        //南方向へ
+                        case Compass.South:
+                            if (current.down.floorType == FloorType.CommonFloor && advanceLimit[2] > 0)
+                            {
+                                if (isCurve)
+                                {
+                                    current.floorType = FloorType.CurveRoad;
+                                }
+
+                                //今の区画が上で、次の区画が下の場合
+                                if (current.isUpperFloor && !current.down.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.down.isUpperFloor = true;
+                                    }
+                                    else
+                                    {
+                                        current.isUpperFloor = false;
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+                                //今の区画が下で、次の区画が上の場合
+                                else if (!current.isUpperFloor && current.down.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.down.isUpperFloor = false;
+                                    }
+                                    else
+                                    {
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+
+                                current.exit = Compass.South;
+
+                                current = current.down;
+                                current.floorType = FloorType.StraightRoad;
+                                current.enter = Compass.North;
+                                isDetectNext = true;
+
+                                advanceLimit[2]--;
+                            }
+                            break;
+                        //東方向へ
+                        case Compass.East:
+                            if (current.right.floorType == FloorType.CommonFloor && advanceLimit[1] > 0)
+                            {
+                                if (isCurve)
+                                {
+                                    current.floorType = FloorType.CurveRoad;
+                                }
+
+                                //今の区画が上で、次の区画が下の場合
+                                if (current.isUpperFloor && !current.right.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.right.isUpperFloor = true;
+                                    }
+                                    else
+                                    {
+                                        current.isUpperFloor = false;
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+                                //今の区画が下で、次の区画が上の場合
+                                else if (!current.isUpperFloor && current.right.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.right.isUpperFloor = false;
+                                    }
+                                    else
+                                    {
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+
+                                current.exit = Compass.East;
+
+                                current = current.right;
+                                current.floorType = FloorType.StraightRoad;
+                                current.enter = Compass.West;
+                                isDetectNext = true;
+
+                                advanceLimit[1]--;
+                            }
+                            break;
+                        //西方向
+                        case Compass.West:
+                            if (current.left.floorType == FloorType.CommonFloor && advanceLimit[3] > 0)
+                            {
+                                if (isCurve)
+                                {
+                                    current.floorType = FloorType.CurveRoad;
+                                }
+
+                                //今の区画が上で、次の区画が下の場合
+                                if (current.isUpperFloor && !current.left.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.left.isUpperFloor = true;
+                                    }
+                                    else
+                                    {
+                                        current.isUpperFloor = false;
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+                                //今の区画が下で、次の区画が上の場合
+                                else if (!current.isUpperFloor && current.left.isUpperFloor)
+                                {
+                                    if (isCurve)
+                                    {
+                                        current.left.isUpperFloor = false;
+                                    }
+                                    else
+                                    {
+                                        current.floorType = FloorType.SteepSlopeRoad;
+                                    }
+                                }
+
+                                current.exit = Compass.West;
+
+                                current = current.left;
+                                current.floorType = FloorType.StraightRoad;
+                                current.enter = Compass.East;
+                                isDetectNext = true;
+
+                                advanceLimit[3]--;
+                            }
+                            break;
+                        default: break;
+                    }
                 }
 
-                break;
+                beforeStep = goNext;
+
+                //どこかマップの端に到達していれば離脱
+                if (current.up == null || current.down == null
+                    || current.right == null || current.left == null)
+                {
+                    //最後の道の出口を外側に指定
+                    switch (current.enter)
+                    {
+                        case Compass.North:
+                            current.exit = Compass.South;
+                            break;
+                        case Compass.East:
+                            current.exit = Compass.West;
+                            break;
+                        case Compass.South:
+                            current.exit = Compass.North;
+                            break;
+                        case Compass.West:
+                            current.exit = Compass.East;
+                            break;
+                        default: break;
+                    }
+
+                    break;
+                }
             }
         }
+
+        //スタート位置登録
+        _startFloor = new Vector2Int(startX, startY);
+        _startFloorHeight = map[startY, startX].isUpperFloor ? 2f : 0f;
     }
 
     /// <summary>連絡通路指定</summary>
@@ -1478,8 +1549,6 @@ public class MapRandomizer : MonoBehaviour
                     pref = null;
 
                     isConectRoad = (map[y, x].floorType != FloorType.CommonFloor && map[y, x].up.floorType != FloorType.CommonFloor);
-                    //&& ((map[y, x].enter == Compass.North && map[y, x].up.exit == Compass.South)
-                    //    || (map[y, x].enter == Compass.South && map[y, x].up.exit == Compass.North));
                     isUpperThisFloor = map[y, x].isUpperFloor && !map[y, x].up.isUpperFloor;
                     isUpperThatFloor = !map[y, x].isUpperFloor && map[y, x].up.isUpperFloor;
 

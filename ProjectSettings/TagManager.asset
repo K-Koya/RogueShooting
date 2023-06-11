@@ -25,8 +25,8 @@ TagManager:
   - Prop
   - AlliseDamager
   - EnemyDamager
-  - 
-  - 
+  - AlliseAttack
+  - EnemyAttack
   - 
   - 
   - 
