@@ -56,6 +56,9 @@ public class ObjectPool<T>
 /// <summary>UnityのGameObjectのプール</summary>
 public class GameObjectPool : ObjectPool<GameObject>
 {
+    /// <summary>アクティブ化するオブジェクトのindex</summary>
+    uint _revolveCount = 0;
+
     /// <summary>UnityのGameObjectのプール</summary>
     /// <param name="pref">プールするオブジェクトのプレハブ</param>
     /// <param name="parent">親オブジェト</param>
@@ -105,14 +108,21 @@ public class GameObjectPool : ObjectPool<GameObject>
     public GameObject Instansiate()
     {
         GameObject obj = null;
-        foreach(GameObject val in _values)
+
+        uint retry = 0;
+        while(retry < _length)
         {
-            if (val is not null && !val.activeSelf) 
+            _revolveCount++;
+            if (_revolveCount > _length - 1) _revolveCount = 0;
+
+            if (_values[_revolveCount] is not null && !_values[_revolveCount].activeSelf)
             {
-                val.SetActive(true);
-                obj = val;
+                _values[_revolveCount].SetActive(true);
+                obj = _values[_revolveCount];
                 break;
             }
+
+            retry++;
         }
 
         return obj;

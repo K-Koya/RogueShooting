@@ -10,6 +10,9 @@ public class BulletController : MonoBehaviour
     /// <summary>弾道</summary>
     TrailRenderer _shotLine = null;
 
+    /// <summary>対象のコライダー</summary>
+    Collider _collider = null;
+
     [SerializeField, Tooltip("FixedUpdate毎の飛行距離")]
     float _fixedSpeed = 5f;
 
@@ -26,19 +29,23 @@ public class BulletController : MonoBehaviour
     float _destroyDelayTime = 0f;
 
     /// <summary>発砲地点</summary>
-    Vector3 _start = Vector3.zero;
+    Vector3? _start = null;
 
 
     void Start()
     {
         _shotAmmo = GetComponentInChildren<MeshRenderer>();
         _shotLine = GetComponentInChildren<TrailRenderer>();
+        _collider = GetComponent<Collider>();
+        _collider.enabled = false;
     }
 
     void OnEnable()
     {
-        _start = transform.position;
-        if(_shotAmmo) _shotAmmo.enabled = true;
+        _destroyDelayTime = 1;
+        _start = null;
+        if (_collider) _collider.enabled = true;
+        if (_shotAmmo) _shotAmmo.enabled = true;
     }
 
     void FixedUpdate()
@@ -58,28 +65,38 @@ public class BulletController : MonoBehaviour
             }
         }
         else
-        {            
-            //正面方向へ前進
-            transform.position += transform.forward * _fixedSpeed;
-
-            //最大射程まで飛んだら消す予約
-            if (Vector3.SqrMagnitude(transform.position - _start) > _maxRange * _maxRange)
+        {
+            if(_start is null)
             {
-                _destroyDelayTime = _shotLine.time;
-                _shotAmmo.enabled = false;
+                _start = transform.position;
+            }
+            else
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, transform.forward, out hit, _fixedSpeed, LayerManager.Instance.BulletHit))
+                {
+                    Damager dmg = null;
+                    if (hit.collider.TryGetComponent(out dmg))
+                    {
+                        dmg.GetDamage(_maxPower, _impact, transform.forward);
+                    }
+
+                    _destroyDelayTime = _shotLine.time;
+                    _shotAmmo.enabled = false;
+                    _collider.enabled = false;
+                }
+
+                //正面方向へ前進
+                transform.position += transform.forward * _fixedSpeed;
+
+                //最大射程まで飛んだら消す予約
+                if (Vector3.SqrMagnitude(transform.position - _start.Value) > _maxRange * _maxRange)
+                {
+                    _destroyDelayTime = _shotLine.time;
+                    _shotAmmo.enabled = false;
+                    _collider.enabled = false;
+                }
             }
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Damager dmg = null;
-        if(other.TryGetComponent(out dmg))
-        {
-            dmg.GetDamage(_maxPower, _impact, transform.forward);
-        }
-
-        _destroyDelayTime = _shotLine.time;
-        _shotAmmo.enabled = false;
     }
 }

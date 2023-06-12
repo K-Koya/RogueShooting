@@ -29,7 +29,7 @@ public class ComputerParameter : CharacterParameter, IReticleFocused
             ragdoll.transform.rotation = transform.rotation;
             ragdoll.GetComponent<DefeatedRagdoll>().BlowAway(impactDirection * impact);
 
-            Destroy(gameObject);
+            Destroy(gameObject, 0.1f);
         }
     }    
 }
