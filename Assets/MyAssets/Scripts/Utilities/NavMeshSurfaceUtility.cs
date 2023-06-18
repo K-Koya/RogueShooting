@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshSurface))]
-[DefaultExecutionOrder(-101)]
 public class NavMeshSurfaceUtility : MonoBehaviour
 {
     /// <summary>ナビメッシュを動的に作るやつ</summary>
@@ -13,8 +12,7 @@ public class NavMeshSurfaceUtility : MonoBehaviour
     /// <summary>true : LastUpdateナビメッシュを構成</summary>
     bool _doCreateNavMesh = false;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _nav = GetComponent<NavMeshSurface>();
         _doCreateNavMesh = true;
@@ -24,11 +22,5 @@ public class NavMeshSurfaceUtility : MonoBehaviour
             _nav.BuildNavMesh();
             _doCreateNavMesh = false;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

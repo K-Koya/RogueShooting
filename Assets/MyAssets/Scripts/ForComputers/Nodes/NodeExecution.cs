@@ -19,6 +19,12 @@ namespace BehaviorTreeNode
         /// <returns>成功or失敗or実行中</returns>
         public Status NextNode(ComputerParameter param, ComputerMove move)
         {
+            //該当キャラクターが倒されたら即終了
+            if (param.State.Kind is MotionState.StateKind.Defeat)
+            {
+                return Status.Failure;
+            }
+
             if (_execution is null)
             {
                 return Status.Failure;

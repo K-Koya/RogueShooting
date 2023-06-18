@@ -15,6 +15,7 @@ public class BehaviorTreeBase : MonoBehaviour
     /// <summary>該当キャラクターの移動メソッド</summary>
     ComputerMove _move = null;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,10 +23,10 @@ public class BehaviorTreeBase : MonoBehaviour
         _move = GetComponent<ComputerMove>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (_param.State.Kind is MotionState.StateKind.Defeat)
+        //ポーズ時は止める
+        if (GameManager.IsPose)
         {
             return;
         }

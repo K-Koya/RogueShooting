@@ -23,14 +23,25 @@ public class StartLocater : MonoBehaviour
     void Awake()
     {
         _map = GetComponent<IStartLocation>();
-
         if (_map is not null)
         {
-            Vector3 basePos = _map.StartFloorBasePosition;
-            foreach(LocationObject obj in _locationObjects)
+            GameObject baseObj = new GameObject();
+
+            foreach (LocationObject obj in _locationObjects)
             {
-                obj._object.transform.position = basePos + obj._relativePosition;
+                obj._object.transform.parent = baseObj.transform;
+                obj._object.transform.localPosition = obj._relativePosition;
             }
+
+            baseObj.transform.position = _map.StartFloorBasePosition;
+            baseObj.transform.forward = _map.StartFloorRoadCross;
+
+            foreach (LocationObject obj in _locationObjects)
+            {
+                obj._object.transform.parent = null;
+            }
+
+            Destroy(baseObj);
         }
     }
 }
@@ -39,4 +50,7 @@ public interface IStartLocation
 {
     /// <summary>äÓèÄç¿ïWéÊìæ</summary>
     public Vector3 StartFloorBasePosition { get; }
+
+    /// <summary>ìπÇ…êÇíºÇ»ï˚å¸ÇéÊìæ</summary>
+    public Vector3 StartFloorRoadCross { get; }
 }

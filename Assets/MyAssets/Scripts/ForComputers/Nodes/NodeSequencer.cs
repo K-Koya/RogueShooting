@@ -24,6 +24,13 @@ namespace BehaviorTreeNode
         /// <returns>成功or失敗or実行中</returns>
         public Status NextNode(ComputerParameter param, ComputerMove move)
         {
+            //該当キャラクターが倒されたら即終了
+            if (param.State.Kind is MotionState.StateKind.Defeat)
+            {
+                _runningSequences = null;
+                return Status.Failure;
+            }
+
             //このノードに初めて入った時
             if (_runningSequences is null)
             {
@@ -31,7 +38,7 @@ namespace BehaviorTreeNode
             }
 
             //基本全部成功するまで施行
-            while (_runningSequences.Count > 0)
+            if (_runningSequences.Count > 0)
             {
                 //実行
                 Status returnal = _runningSequences.First().NextNode(param, move);

@@ -23,6 +23,12 @@ public class PlayerMove : CharacterMove
     // Update is called once per frame
     protected override void Update()
     {
+        //ポーズ時は止める
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         base.Update();
 
         if (_param.State.Kind is MotionState.StateKind.Defeat)
@@ -96,6 +102,19 @@ public class PlayerMove : CharacterMove
         if (isMoving)
         {
             _ForceOfBrake = -VelocityOnPlane.normalized * 0.8f;
+        }
+
+        //ジャンプ入力
+        _jumpFlag = false;
+        if (IsGround && InputUtility.GetDownJump)
+        {
+            _jumpFlag = true;
+            _rb.AddForce(-GravityDirection * 7f, ForceMode.VelocityChange);
+        }
+        //ジャンプ力減衰
+        else if (!IsGround && !InputUtility.GetJump && Vector3.Dot(GravityDirection, _rb.velocity) < 0f)
+        {
+            _rb.velocity = Vector3.ProjectOnPlane(_rb.velocity, -GravityDirection);
         }
     }
 

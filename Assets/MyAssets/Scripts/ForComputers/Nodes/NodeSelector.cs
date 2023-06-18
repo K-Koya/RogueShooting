@@ -23,14 +23,21 @@ namespace BehaviorTreeNode
         /// <returns>成功or失敗or実行中</returns>
         public Status NextNode(ComputerParameter param, ComputerMove move)
         {
+            //該当キャラクターが倒されたら即終了
+            if (param.State.Kind is MotionState.StateKind.Defeat)
+            {
+                _runningSequences = null;
+                return Status.Failure;
+            }
+
             //このノードに初めて入った時
-            if(_runningSequences is null)
+            if (_runningSequences is null)
             {
                 _runningSequences = _selector.ToList();
             }
 
             //基本全部失敗するまで施行
-            while (_runningSequences.Count > 0)
+            if (_runningSequences.Count > 0)
             {
                 //実行
                 Status returnal = _runningSequences.First().NextNode(param, move);
@@ -47,8 +54,9 @@ namespace BehaviorTreeNode
                     default: break;
                 }
 
-                //失敗
+                //失敗だが、次のフレームに処理を持ち越し
                 _runningSequences.RemoveAt(0);
+                return Status.Running;
             }
 
             //全部失敗

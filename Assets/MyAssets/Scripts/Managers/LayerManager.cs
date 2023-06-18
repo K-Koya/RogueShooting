@@ -7,13 +7,6 @@ public class LayerManager : Singleton<LayerManager>
     [Header("以下に対応レイヤを指定")]
 
     #region メンバ
-    [SerializeField, Tooltip("敵レイヤ名")]
-    string _NameEnemy = "Enemy";
-    [SerializeField, Tooltip("敵の攻撃用レイヤ名")]
-    string _NameEnemyAttacker = "EnemyAttacker";
-    [SerializeField, Tooltip("プレイヤーおよび味方の攻撃用レイヤ名")]
-    string _NameAlliesAttacker = "AlliesAttacker";
-
     [SerializeField, Tooltip("地面レイヤ")]
     LayerMask _Ground = default;
     [SerializeField, Tooltip("カメラがすり抜ける地面レイヤ")]
@@ -33,13 +26,6 @@ public class LayerManager : Singleton<LayerManager>
     #endregion
 
     #region プロパティ
-    /// <summary>敵レイヤ名</summary>
-    public string NameEnemy { get => _NameEnemy; }
-    /// <summary>敵の攻撃用レイヤ名</summary>
-    public string NameEnemyAttacker { get => _NameEnemyAttacker; }
-    /// <summary>プレイヤーおよび味方の攻撃用レイヤ名</summary>
-    public string NameAlliesAttacker { get => _NameAlliesAttacker; }
-
     /// <summary>地面レイヤ</summary>
     public LayerMask Ground { get => _Ground | _SeeThroughGround; }
     /// <summary>カメラがすり抜ける地面レイヤ</summary>
@@ -58,6 +44,8 @@ public class LayerManager : Singleton<LayerManager>
     public LayerMask AllAllies { get => _Allies | _Player; }
     /// <summary>レティクルが乗る（ターゲットできるオブジェクト）のレイヤ</summary>
     public LayerMask OnTheReticle { get => _Allies | _Enemy | _Ground | _Prop; }
+    /// <summary>敵がターゲットできるオブジェクトのレイヤ</summary>
+    public LayerMask EnemyFocusable { get => _Player | _Allies | _Ground | _Prop; }
     /// <summary>銃弾が当たるレイヤ</summary>
     public LayerMask BulletHit { get => _AlliseDamager | _EnemyDamager | _Ground; }
 

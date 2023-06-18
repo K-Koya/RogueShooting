@@ -26,23 +26,31 @@ namespace BehaviorTreeNode
 
         public Status NextNode(ComputerParameter param, ComputerMove move)
         {
+            //該当キャラクターが倒されたら即終了
+            if (param.State.Kind is MotionState.StateKind.Defeat)
+            {
+                _runningIndex = -1;
+                return Status.Failure;
+            }
+
             //ループ対象ノードが未指定
             if (_repeat is null || _repeat.Length < 1)
             {
+                _runningIndex = -1;
                 return Status.Failure;
             }
 
             //このノードに初めて入った時
-            if (_runningIndex < 0 || _counter < 0)
+            if (_runningIndex < 0 && _counter < 0)
             {
                 _runningIndex = 0;
                 _counter = _count;
             }
 
             //指定回数ループを繰り返す
-            while (_counter > 0)
+            if (_counter > 0)
             {
-                while (_runningIndex < _repeat.Length)
+                if (_runningIndex < _repeat.Length)
                 {
                     //実行
                     Status returnal = _repeat[_runningIndex].NextNode(param, move);
@@ -67,6 +75,9 @@ namespace BehaviorTreeNode
 
                 _runningIndex = 0;
                 _counter--;
+
+                //1フレーム待機
+                return Status.Running;
             }
 
             _runningIndex = -1;

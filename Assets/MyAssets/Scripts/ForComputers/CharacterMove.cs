@@ -8,7 +8,10 @@ public class CharacterMove : MonoBehaviour
 {
     #region 定数
     /// <summary>速度が0であるとみなす数値</summary>
-    protected const float VELOCITY_ZERO_BORDER = 0.5f;
+    protected const float _VELOCITY_ZERO_BORDER = 0.5f;
+
+    /// <summary>落下最高速度</summary>
+    protected const float _LIMIT_SPEED_FALL = 10f;
 
     #endregion
 
@@ -84,6 +87,12 @@ public class CharacterMove : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        //ポーズ時は止める
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         //速度測定
         _speed = VelocityOnPlane.magnitude;
     }
@@ -95,64 +104,59 @@ public class CharacterMove : MonoBehaviour
             return;
         }
 
-        //着地しているか否かで分岐
-        //着地中
-        if (IsGround)
+        float gravityForce = 9.8f;
+
+        //回転する
+        Vector3 supVec = Vector3.ProjectOnPlane(_param.LookDirection, -GravityDirection);
+        CharacterRotation(supVec, -GravityDirection, 720f);
+
+        //移動力がかかっている
+        if (_moveInputRate > 0f)
         {
-            //回転する
-            Vector3 supVec = Vector3.ProjectOnPlane(_param.LookDirection, -GravityDirection);
-            CharacterRotation(supVec, -GravityDirection, 720f);
-
-            //移動力がかかっている
-            if (_moveInputRate > 0f)
+            //速度制限をかけつつ力をかける
+            if (_param.State.Kind == MotionState.StateKind.Run && _speed < _limitSpeedRun)
             {
-                //速度制限をかけつつ力をかける
-                if(_param.State.Kind == MotionState.StateKind.Run && _speed < _limitSpeedRun)
-                {
-                    _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
-                }
-                else if (_speed < _limitSpeedWalk)
-                {
-                    _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
-                }
-
-                //速度(向き)を、入力方向へ設定
-                _rb.velocity = Quaternion.FromToRotation(Vector3.ProjectOnPlane(_rb.velocity, -GravityDirection), _param.MoveDirection) * _rb.velocity;
-
-                //重力をかける
-                _rb.AddForce(GravityDirection * 2f, ForceMode.Acceleration);
+                _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
             }
-            //移動力がない
-            else
+            else if (_speed < _limitSpeedWalk)
             {
-                //速度を0に
-                _rb.velocity = Vector3.Project(_rb.velocity, -GravityDirection);
-
-                //重力をかける
-                _rb.AddForce(GravityDirection * 1f, ForceMode.Acceleration);
-            }
-        }
-        //空中
-        else
-        {
-            //移動力がかかっている
-            if (_moveInputRate > 0f)
-            {
-                //回転する
-                CharacterRotation(_param.MoveDirection, -GravityDirection, 90f);
-
-                //力をかける
                 _rb.AddForce(_param.MoveDirection * _moveInputRate * _movePower, ForceMode.Acceleration);
             }
 
+            //速度(向き)を、入力方向へ設定
+            _rb.velocity = Quaternion.FromToRotation(Vector3.ProjectOnPlane(_rb.velocity, -GravityDirection), _param.MoveDirection) * _rb.velocity;
+
             //重力をかける
-            _rb.AddForce(GravityDirection * 9.8f, ForceMode.Acceleration);
+            gravityForce = 2f;
         }
+        //移動力がない
+        else
+        {
+            //速度を0に
+            _rb.velocity = Vector3.Project(_rb.velocity, -GravityDirection);
+
+            //重力をかける
+            gravityForce = 0.5f;
+        }
+        
+        //空中
+        if(!IsGround)
+        {
+            //重力をかける
+            gravityForce = 9.8f;
+        }
+
 
         //速度減衰をかける
         if (_ForceOfBrake.sqrMagnitude > 0f)
         {
             _rb.AddForce(_ForceOfBrake, ForceMode.Acceleration);
+        }
+
+        //落下速度に制限をかけつつ重力をかける
+        if(Vector3.Dot(_rb.velocity, -GravityDirection) > -_LIMIT_SPEED_FALL)
+        {
+            _rb.AddForce(GravityDirection * gravityForce, ForceMode.Acceleration);
         }
     }
 

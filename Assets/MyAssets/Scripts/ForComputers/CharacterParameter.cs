@@ -2,10 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterParameter : MonoBehaviour
+public class CharacterParameter : MonoBehaviour, IGetStatus
 {
+    #region 定数
     /// <summary>最大所持銃器数</summary>
-    protected const byte INVENTORY_SIZE = 5;
+    protected const byte _INVENTORY_SIZE = 5;
+
+    #endregion
+
+    /// <summary>味方キャラクター集</summary>
+    protected static List<CharacterParameter> _Allies = new List<CharacterParameter>();
+
+    /// <summary>敵キャラクター集</summary>
+    protected static List<CharacterParameter> _Enemies = new List<CharacterParameter>();
 
 
     [SerializeField, Tooltip("最大ライフ")]
@@ -31,8 +40,6 @@ public class CharacterParameter : MonoBehaviour
     [SerializeField, Tooltip("キャラクターの目線位置")]
     protected Transform _eyePoint = null;
 
-    /// <summary>照準器の位置</summary>
-    protected Vector3 _reticlePoint = Vector3.zero;
 
     [SerializeField, Tooltip("キャラクターの種類")]
     protected CharacterKind _character = CharacterKind.Player;
@@ -49,6 +56,9 @@ public class CharacterParameter : MonoBehaviour
     [SerializeField, Tooltip("所持銃器情報")]
     protected GunInfo[] _inventory = null;
 
+    [SerializeField, Tooltip("放つ銃弾のレイヤー")]
+    LayerMask _bulletLayer = default;
+
     /// <summary>所持銃器のうち、手に持っているものの番号</summary>
     protected byte _inventoryNumber = 0;
 
@@ -60,7 +70,17 @@ public class CharacterParameter : MonoBehaviour
 
 
     #region プロパティ
-   
+
+    /// <summary>味方キャラクター集</summary>
+    public static List<CharacterParameter> Allies => _Allies;
+
+    /// <summary>敵キャラクター集</summary>
+    public static List<CharacterParameter> Enemies => _Enemies;
+
+
+    /// <summary>体力の割合値</summary>
+    public float LifeRatio => _currentLife / (float)_maxLife;
+
 
     /// <summary>移動可否ビットフラグ</summary>
     public MotionEnableFlag Can { get => _can; }
@@ -115,9 +135,9 @@ public class CharacterParameter : MonoBehaviour
         }
 
         //初期の所持武器を登録
-        _inventory = new GunInfo[INVENTORY_SIZE];
+        _inventory = new GunInfo[_INVENTORY_SIZE];
         GunInfo[] infos = GetComponentsInChildren<GunInfo>();
-        for(int i = 0; i < INVENTORY_SIZE; i++)
+        for(int i = 0; i < _INVENTORY_SIZE; i++)
         {
             if(i < infos.Length)
             {
@@ -131,7 +151,13 @@ public class CharacterParameter : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if(_state.Kind is MotionState.StateKind.Defeat)
+        //ポーズ時は止める
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
+        if (_state.Kind is MotionState.StateKind.Defeat)
         {
             return;
         }
@@ -233,6 +259,16 @@ public class CharacterParameter : MonoBehaviour
             default: break;
         }
     }
+}
+
+/// <summary>ステータスのみアクセス可能なインターフェース</summary>
+public interface IGetStatus
+{
+    /// <summary>ライフ値割合</summary>
+    public float LifeRatio { get; }
+
+    /// <summary>構えている銃の情報</summary>
+    public GunInfo UsingGun { get; }
 }
 
 /// <summary>キャラクターの種類</summary>

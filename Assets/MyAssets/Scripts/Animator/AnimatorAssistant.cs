@@ -19,6 +19,12 @@ public class AnimatorAssistant : MonoBehaviour
     /// <summary>アニメーターパラメータ名 : IsDefeat</summary>
     string _PARAM_NAME_IS_DEFEAT = "IsDefeat";
 
+    /// <summary>アニメーターパラメータ名 : IsJump</summary>
+    string _PARAM_NAME_IS_JUMP = "IsJump";
+
+    /// <summary>アニメーターパラメータ名 : IsGround</summary>
+    string _PARAM_NAME_IS_GROUND = "IsGround";
+
 
     [SerializeField, Tooltip("足音を発するスピーカー")]
     AudioSource _footSESource = null;
@@ -47,6 +53,12 @@ public class AnimatorAssistant : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ポーズ時は止める
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         //倒された
         if (_wasDefeat)
         {
@@ -66,6 +78,12 @@ public class AnimatorAssistant : MonoBehaviour
         _anim.SetFloat(_PARAM_NAME_RELATIVE_MOVE_DIRECTION_Y, Vector3.Dot(lookSupVec, _move.VelocityOnPlane));
         lookSupVec = Vector3.Cross(_param.LookDirection, _move.GravityDirection);
         _anim.SetFloat(_PARAM_NAME_RELATIVE_MOVE_DIRECTION_X, Vector3.Dot(lookSupVec, _move.VelocityOnPlane));
+
+        //ジャンプ
+        _anim.SetBool(_PARAM_NAME_IS_JUMP, _move.JumpFlag);
+
+        //接地状態
+        _anim.SetBool(_PARAM_NAME_IS_GROUND, _move.IsGround);
 
         //被弾
         if(_param.IsHurt)

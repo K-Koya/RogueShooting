@@ -24,25 +24,53 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     /// <summary>スタート地点になるフロアの高さ</summary>
     float _startFloorHeight = 0f;
 
+    /// <summary> スタート地点の道の方向 </summary>
+    Compass _startFloorRoadDirection = Compass.North;
+
+
+    /// <summary> スタート地点の道に垂直な方向 </summary>
+    public Vector3 StartFloorRoadCross
+    {
+        get
+        {
+            Vector3 dir = Vector3.forward;
+
+            switch (_startFloorRoadDirection)
+            {
+                case Compass.North:
+                    dir = Vector3.right;
+                    break;
+                case Compass.South:
+                    dir = Vector3.left;
+                    break;
+                case Compass.East:
+                    dir = Vector3.forward;
+                    break;
+                case Compass.West:
+                    dir = Vector3.back;
+                    break;
+                default: break;
+            }
+
+            return dir;
+        }
+    }
 
     /// <summary>スタート地点になるフロア座標</summary>
     public Vector3 StartFloorBasePosition => new Vector3(_startFloor.x * UNIT_FOR_FLOOR, _startFloorHeight, _startFloor.y * UNIT_FOR_FLOOR);
 
 
-    [SerializeField, Tooltip("マスの数(一辺15マス以上)")]
-    Vector2Int _mapSize = new Vector2Int(15, 15);
+    /// <summary>マスの数(一辺17マス以上)</summary>
+    static Vector2Int _MapSize = new Vector2Int(30, 30);
 
-    [SerializeField, Tooltip("true : 乱数シードを指定する")]
-    bool _useSeed = false;
-
-    [SerializeField, Tooltip("乱数シード")]
-    int _seed = 10;
+    /// <summary>乱数シード(nullならばその場で乱数生成)</summary>
+    static int? _seed = null;
 
 
     /// <summary>エリア外に行けないようにするコライダー</summary>
     BoxCollider[] _areaLimits = null;
 
-
+    #region マップのパーツ
     [Header("地面プレハブ")]
     [SerializeField, Tooltip("普通地面区画")]
     GameObject _commonFloor = null;
@@ -141,6 +169,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     [SerializeField, Tooltip("1つの土地を使う建物")]
     GameObject[] _buldings1x1 = null;
 
+    #endregion
 
 
 
@@ -149,6 +178,15 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
     /// <summary>橋のマップテーブル</summary>
     BridgeCell[,] bridges = null;
+
+
+    #region プロパティ
+    /// <summary>マスの数(一辺17マス以上)</summary>
+    static public Vector2Int MapSize { get => _MapSize; set => _MapSize = value; }
+    /// <summary>乱数シード(nullならばその場で乱数生成)</summary>
+    static public int? Seed { get => _seed; set => _seed = value; }
+
+    #endregion
 
 
     /// <summary>方角</summary>
@@ -192,12 +230,12 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     void Awake()
     {
         /*乱数指定*/
-        if (!_useSeed)
+        if (_seed is null)
         {
             //シード値生成
             _seed = Random.Range(int.MinValue, int.MaxValue);
         }
-        Random.InitState(_seed);
+        Random.InitState(_seed.Value);
 
 
         Initialize();
@@ -217,13 +255,13 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     /// <summary>テーブル初期化</summary>
     private void Initialize()
     {
-        if (_mapSize.x < 15) _mapSize.x = 15;
-        if (_mapSize.y < 15) _mapSize.y = 15;
-        map = new MapCell[_mapSize.y, _mapSize.x];
-        bridges = new BridgeCell[_mapSize.y * 2, _mapSize.x * 2];
-        for (int y = 0; y < _mapSize.y; y++)
+        if (_MapSize.x < 17) _MapSize.x = 17;
+        if (_MapSize.y < 17) _MapSize.y = 17;
+        map = new MapCell[_MapSize.y, _MapSize.x];
+        bridges = new BridgeCell[_MapSize.y * 2, _MapSize.x * 2];
+        for (int y = 0; y < _MapSize.y; y++)
         {
-            for (int x = 0; x < _mapSize.x; x++)
+            for (int x = 0; x < _MapSize.x; x++)
             {
                 map[y, x] = new MapCell();
                 bridges[y * 2, x * 2] = new BridgeCell(map[y, x]);
@@ -231,8 +269,8 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                 bridges[y * 2, x * 2 + 1] = new BridgeCell(map[y, x]);
                 bridges[y * 2 + 1, x * 2 + 1] = new BridgeCell(map[y, x]);
 
-                if (GAME_AREA_AROUND_DISTANCE - 1 < y && y < _mapSize.y - GAME_AREA_AROUND_DISTANCE - 1
-                    && GAME_AREA_AROUND_DISTANCE - 1 < x && x < _mapSize.x - GAME_AREA_AROUND_DISTANCE - 1)
+                if (GAME_AREA_AROUND_DISTANCE - 1 < y && y < _MapSize.y - GAME_AREA_AROUND_DISTANCE - 1
+                    && GAME_AREA_AROUND_DISTANCE - 1 < x && x < _MapSize.x - GAME_AREA_AROUND_DISTANCE - 1)
                 {
                     map[y, x].region = 1;
                 }
@@ -245,9 +283,9 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
         /*リンク設定*/
         //地面
-        for (int y = 0; y < _mapSize.y; y++)
+        for (int y = 0; y < _MapSize.y; y++)
         {
-            for (int x = 0; x < _mapSize.x; x++)
+            for (int x = 0; x < _MapSize.x; x++)
             {
                 //真下取得
                 if (y > 0)
@@ -260,7 +298,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                         map[y, x].downLeft = map[y - 1, x - 1];
                     }
                     //右下取得
-                    if (x < _mapSize.x - 1)
+                    if (x < _MapSize.x - 1)
                     {
                         map[y, x].downRight = map[y - 1, x + 1];
                     }
@@ -271,12 +309,12 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     map[y, x].left = map[y, x - 1];
                 }
                 //真右取得
-                if (x < _mapSize.x - 1)
+                if (x < _MapSize.x - 1)
                 {
                     map[y, x].right = map[y, x + 1];
                 }
                 //真上取得
-                if (y < _mapSize.y - 1)
+                if (y < _MapSize.y - 1)
                 {
                     map[y, x].up = map[y + 1, x];
 
@@ -286,7 +324,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                         map[y, x].upLeft = map[y + 1, x - 1];
                     }
                     //右上取得
-                    if (x < _mapSize.x - 1)
+                    if (x < _MapSize.x - 1)
                     {
                         map[y, x].upRight = map[y + 1, x + 1];
                     }
@@ -350,20 +388,20 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
             switch (i)
             {
                 case 0:
-                    _areaLimits[i].center = new Vector3((GAME_AREA_AROUND_DISTANCE - 0.5f) * UNIT_FOR_FLOOR, 5f, (_mapSize.y - 2f) * UNIT_FOR_FLOOR / 2f);
-                    _areaLimits[i].size = new Vector3(0.5f, 10f, (_mapSize.y - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR);
+                    _areaLimits[i].center = new Vector3((GAME_AREA_AROUND_DISTANCE - 0.5f) * UNIT_FOR_FLOOR, 5f, (_MapSize.y - 2f) * UNIT_FOR_FLOOR / 2f);
+                    _areaLimits[i].size = new Vector3(0.5f, 10f, (_MapSize.y - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR);
                     break;
                 case 1:
-                    _areaLimits[i].center = new Vector3((_mapSize.x - GAME_AREA_AROUND_DISTANCE - 1.5f) * UNIT_FOR_FLOOR, 5f, (_mapSize.y - 2f) * UNIT_FOR_FLOOR / 2f);
-                    _areaLimits[i].size = new Vector3(0.5f, 10f, (_mapSize.y - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR);
+                    _areaLimits[i].center = new Vector3((_MapSize.x - GAME_AREA_AROUND_DISTANCE - 1.5f) * UNIT_FOR_FLOOR, 5f, (_MapSize.y - 2f) * UNIT_FOR_FLOOR / 2f);
+                    _areaLimits[i].size = new Vector3(0.5f, 10f, (_MapSize.y - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR);
                     break;
                 case 2:
-                    _areaLimits[i].center = new Vector3((_mapSize.x - 2f) * UNIT_FOR_FLOOR / 2f, 5f, (GAME_AREA_AROUND_DISTANCE - 0.5f) * UNIT_FOR_FLOOR);
-                    _areaLimits[i].size = new Vector3((_mapSize.x - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR, 10f, 0.5f);
+                    _areaLimits[i].center = new Vector3((_MapSize.x - 2f) * UNIT_FOR_FLOOR / 2f, 5f, (GAME_AREA_AROUND_DISTANCE - 0.5f) * UNIT_FOR_FLOOR);
+                    _areaLimits[i].size = new Vector3((_MapSize.x - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR, 10f, 0.5f);
                     break;
                 case 3:
-                    _areaLimits[i].center = new Vector3((_mapSize.x - 2f) * UNIT_FOR_FLOOR / 2f, 5f, (_mapSize.y - GAME_AREA_AROUND_DISTANCE - 1.5f) * UNIT_FOR_FLOOR);
-                    _areaLimits[i].size = new Vector3((_mapSize.x - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR, 10f, 0.5f);
+                    _areaLimits[i].center = new Vector3((_MapSize.x - 2f) * UNIT_FOR_FLOOR / 2f, 5f, (_MapSize.y - GAME_AREA_AROUND_DISTANCE - 1.5f) * UNIT_FOR_FLOOR);
+                    _areaLimits[i].size = new Vector3((_MapSize.x - GAME_AREA_AROUND_DISTANCE * 2f) * UNIT_FOR_FLOOR, 10f, 0.5f);
                     break;
                 default: break;
             }
@@ -380,7 +418,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
         float rand = Random.value;
         if (rand < 0.25f)
         {
-            processDepth = new Vector2Int(0, _mapSize.y - 1);
+            processDepth = new Vector2Int(0, _MapSize.y - 1);
 
             if (rand < 0.125f)
             {
@@ -395,7 +433,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
         }
         else if (rand < 0.5f)
         {
-            processDepth = new Vector2Int(_mapSize.x - 1, 0);
+            processDepth = new Vector2Int(_MapSize.x - 1, 0);
 
             if (rand < 0.375f)
             {
@@ -410,7 +448,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
         }
         else if (rand < 0.75f)
         {
-            processDepth = new Vector2Int(_mapSize.x - 1, _mapSize.y - 1);
+            processDepth = new Vector2Int(_MapSize.x - 1, _MapSize.y - 1);
 
             if (rand < 0.625f)
             {
@@ -441,15 +479,15 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
         int depth = 0;
         int width = 0;
         Vector2Int processWidth = Vector2Int.zero;
-        while (-1 < processDepth.x && processDepth.x < _mapSize.x
-                && -1 < processDepth.y && processDepth.y < _mapSize.y)
+        while (-1 < processDepth.x && processDepth.x < _MapSize.x
+                && -1 < processDepth.y && processDepth.y < _MapSize.y)
         {
             processWidth = processDepth;
 
             if (depth < 1)
             {
-                depth = (int)Random.Range(2f, Mathf.Min(_mapSize.x, _mapSize.y) / 2f);
-                width = (int)Random.Range(0f, Mathf.Min(_mapSize.x, _mapSize.y));
+                depth = (int)Random.Range(2f, Mathf.Min(_MapSize.x, _MapSize.y) / 2f);
+                width = (int)Random.Range(0f, Mathf.Min(_MapSize.x, _MapSize.y));
             }
 
             for (int i = 0; i < width; i++)
@@ -467,8 +505,8 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     void SetRoad()
     {
         //マップの中央付近のどこかをスタート位置に指定
-        int startX = (int)Random.Range(_mapSize.x * 0.4f, _mapSize.x * 0.6f);
-        int startY = (int)Random.Range(_mapSize.y * 0.4f, _mapSize.y * 0.6f);
+        int startX = (int)Random.Range(_MapSize.x * 0.4f, _MapSize.x * 0.6f);
+        int startY = (int)Random.Range(_MapSize.y * 0.4f, _MapSize.y * 0.6f);
 
         //東西南北穴掘りする方向を指定
         Compass[] fowards = new Compass[2];
@@ -526,8 +564,8 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     current = map[startY + 1, startX];
 
                     advanceDirection = Compass.North;
-                    advanceLimit[0] = _mapSize.y;
-                    advanceLimit[1] = _mapSize.x - startX - 2;
+                    advanceLimit[0] = _MapSize.y;
+                    advanceLimit[1] = _MapSize.x - startX - 2;
                     advanceLimit[2] = 0;
                     advanceLimit[3] = startX - 2;
 
@@ -535,17 +573,17 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
                 case Compass.South:
 
-                    map[_mapSize.y - startY, startX].floorType = FloorType.StraightRoad;
-                    map[_mapSize.y - startY - 1, startX].floorType = FloorType.StraightRoad;
-                    map[_mapSize.y - startY - 1, startX].enter = Compass.North;
-                    map[_mapSize.y - startY - 1, startX].exit = Compass.South;
-                    map[_mapSize.y - startY - 1, startX].isUpperFloor = map[startY, startX].isUpperFloor;
-                    current = map[_mapSize.y - startY - 1, startX];
+                    map[startY, startX].floorType = FloorType.StraightRoad;
+                    map[startY - 1, startX].floorType = FloorType.StraightRoad;
+                    map[startY - 1, startX].enter = Compass.North;
+                    map[startY - 1, startX].exit = Compass.South;
+                    map[startY - 1, startX].isUpperFloor = map[startY, startX].isUpperFloor;
+                    current = map[startY - 1, startX];
 
                     advanceDirection = Compass.South;
                     advanceLimit[0] = 0;
-                    advanceLimit[1] = _mapSize.x - startX - 2;
-                    advanceLimit[2] = _mapSize.y;
+                    advanceLimit[1] = _MapSize.x - startX - 2;
+                    advanceLimit[2] = _MapSize.y;
                     advanceLimit[3] = startX - 2;
 
                     break;
@@ -560,8 +598,8 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                     current = map[startY, startX + 1];
 
                     advanceDirection = Compass.East;
-                    advanceLimit[0] = _mapSize.y - startY - 2;
-                    advanceLimit[1] = _mapSize.x;
+                    advanceLimit[0] = _MapSize.y - startY - 2;
+                    advanceLimit[1] = _MapSize.x;
                     advanceLimit[2] = startY - 2;
                     advanceLimit[3] = 0;
 
@@ -569,25 +607,25 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
                 case Compass.West:
 
-                    map[startY, _mapSize.x - startX].floorType = FloorType.StraightRoad;
-                    map[startY, _mapSize.x - startX - 1].floorType = FloorType.StraightRoad;
-                    map[startY, _mapSize.x - startX - 1].enter = Compass.East;
-                    map[startY, _mapSize.x - startX - 1].exit = Compass.West;
-                    map[startY, _mapSize.x - startX - 1].isUpperFloor = map[startY, startX].isUpperFloor;
-                    current = map[startY, _mapSize.x - startX - 1];
+                    map[startY, startX].floorType = FloorType.StraightRoad;
+                    map[startY, startX - 1].floorType = FloorType.StraightRoad;
+                    map[startY, startX - 1].enter = Compass.East;
+                    map[startY, startX - 1].exit = Compass.West;
+                    map[startY, startX - 1].isUpperFloor = map[startY, startX].isUpperFloor;
+                    current = map[startY, startX - 1];
 
                     advanceDirection = Compass.West;
-                    advanceLimit[0] = _mapSize.y - startY - 2;
+                    advanceLimit[0] = _MapSize.y - startY - 2;
                     advanceLimit[1] = 0;
                     advanceLimit[2] = startY - 2;
-                    advanceLimit[3] = _mapSize.x;
+                    advanceLimit[3] = _MapSize.x;
 
                     break;
                 default: break;
             }
 
             //穴掘り
-            int loopLimit = _mapSize.x * _mapSize.y;
+            int loopLimit = _MapSize.x * _MapSize.y;
             Compass beforeStep = advanceDirection;
             bool isCurve = false;
             for (int i = 0; i < loopLimit; i++)
@@ -844,17 +882,18 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
         //スタート位置登録
         _startFloor = new Vector2Int(startX, startY);
         _startFloorHeight = map[startY, startX].isUpperFloor ? 2f : 0f;
+        _startFloorRoadDirection = map[startY, startX].exit;
     }
 
     /// <summary>連絡通路指定</summary>
     void SetBridge()
     {
         //配置試行回数を決定
-        int ratioBase = (_mapSize.x + _mapSize.y) / 2;
+        int ratioBase = (_MapSize.x + _MapSize.y) / 2;
         int numberOfTrySetBridge = (int)Random.Range(ratioBase * 0.5f, ratioBase * 1.5f);
 
         //連絡通路の最大範囲を指定
-        int lengthOfBridge = (_mapSize.x + _mapSize.y) / 4;
+        int lengthOfBridge = (_MapSize.x + _MapSize.y) / 4;
 
         //配置を試行 できなかった場合は中断して回数だけ消費
         for (int i = 0; i < numberOfTrySetBridge; i++)
@@ -865,7 +904,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
             Vector2Int enterPos = Vector2Int.zero;
             for (; trial < NUMBER_OF_TRIAL; trial++)
             {
-                enterPos = new Vector2Int(Random.Range(1, bridges.GetLength(0)), Random.Range(1, bridges.GetLength(1)));
+                enterPos = new Vector2Int(Random.Range(1, bridges.GetLength(1) - 2), Random.Range(1, bridges.GetLength(0) - 2));
                 enterStair = bridges[enterPos.y, enterPos.x];
                 if (enterStair.FloorData.buildType == BuildType.None
                     && enterStair.FloorData.floorType == FloorType.CommonFloor)
@@ -882,8 +921,8 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
             Vector2Int exitPos = Vector2Int.zero;
             for (; trial < NUMBER_OF_TRIAL; trial++)
             {
-                exitPos.x = Random.Range(Mathf.Max(0, enterPos.x - lengthOfBridge), Mathf.Min(enterPos.x + lengthOfBridge, bridges.GetLength(0)));
-                exitPos.y = Random.Range(Mathf.Max(0, enterPos.y - lengthOfBridge), Mathf.Min(enterPos.y + lengthOfBridge, bridges.GetLength(1)));
+                exitPos.x = Random.Range(Mathf.Max(0, enterPos.x - lengthOfBridge), Mathf.Min(enterPos.x + lengthOfBridge, bridges.GetLength(1)));
+                exitPos.y = Random.Range(Mathf.Max(0, enterPos.y - lengthOfBridge), Mathf.Min(enterPos.y + lengthOfBridge, bridges.GetLength(0)));
                 exitStair = bridges[exitPos.y, exitPos.x];
                 if (exitStair != enterStair
                     && exitStair.FloorData.isUpperFloor == enterStair.FloorData.isUpperFloor
@@ -902,7 +941,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
             //enterからexitに向けて1マスずつ進む
             int moveOnX = enterPos.x - exitPos.x < 0 ? 1 : -1;
             int moveOnY = enterPos.y - exitPos.y < 0 ? 1 : -1;
-            List<Vector2Int> posCashe = new List<Vector2Int>(_mapSize.x + _mapSize.y);
+            List<Vector2Int> posCashe = new List<Vector2Int>(_MapSize.x + _MapSize.y);
             bool err = false;
             Compass nextEnter = Compass.North;
             while (enterPos != exitPos)
@@ -1060,13 +1099,13 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     void SetParts()
     {
         //構造物配置決めのためのリスト
-        List<Vector2Int> buildCandidates = new List<Vector2Int>(_mapSize.x * _mapSize.y);
+        List<Vector2Int> buildCandidates = new List<Vector2Int>(_MapSize.x * _MapSize.y);
 
         /*地形配置*/
         GameObject pref = null;
-        for (int y = 0; y < _mapSize.y; y++)
+        for (int y = 0; y < _MapSize.y; y++)
         {
-            for (int x = 0; x < _mapSize.x; x++)
+            for (int x = 0; x < _MapSize.x; x++)
             {
                 Vector3 forward = Vector3.forward;
                 if (map[y, x].floorType != FloorType.CommonFloor)
@@ -1534,9 +1573,9 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
         /*壁配置*/
         //右と上に対して壁の配置を検討
-        for (int y = 0; y < _mapSize.y - 1; y++)
+        for (int y = 0; y < _MapSize.y - 1; y++)
         {
-            for (int x = 0; x < _mapSize.x - 1; x++)
+            for (int x = 0; x < _MapSize.x - 1; x++)
             {
                 //配置する高さ
                 float height = 0f;
@@ -1724,7 +1763,7 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                             data = map[candidate.y, candidate.x].GetField2x2();
                             cells = data.Item1;
                             centerPos += data.Item2 * 0.5f;
-                            pref = _buldings2x1[(int)Random.Range(0f, _buldings2x1.Length - 0.01f)];
+                            pref = _buldings2x2[(int)Random.Range(0f, _buldings2x2.Length - 0.01f)];
                             break;
                         //2x1の探索
                         case 3:

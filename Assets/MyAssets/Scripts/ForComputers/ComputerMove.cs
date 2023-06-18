@@ -63,18 +63,30 @@ public class ComputerMove : CharacterMove
         base.Start();
 
         _nav = GetComponent<NavMeshAgent>();
+        _nav.enabled = false;
         _rb.useGravity = false;
-
-        _nav.isStopped = true;
-
-        _destination = null;
-        _resultDestination = null;
     }
 
     // Update is called once per frame
     protected override void Update()
     {
+        //ポーズ時は止める
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         base.Update();
+
+        //ナビメッシュエージェントを、わずかに時間をおいてから有効化
+        if (!_nav.enabled)
+        {
+            _nav.enabled = true;
+            _nav.isStopped = true;
+
+            _destination = null;
+            _resultDestination = null;
+        }
 
         if (_param.State.Kind is MotionState.StateKind.Defeat)
         {

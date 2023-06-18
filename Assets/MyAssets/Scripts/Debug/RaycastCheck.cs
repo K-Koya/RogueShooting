@@ -21,6 +21,12 @@ public class RaycastCheck : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //É|Å[ÉYéûÇÕé~ÇﬂÇÈ
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, length, mask))
         {

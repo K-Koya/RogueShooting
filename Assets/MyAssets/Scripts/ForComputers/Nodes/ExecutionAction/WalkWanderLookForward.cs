@@ -45,6 +45,7 @@ namespace BehaviorTreeNode
                 if (_timer < 0f)
                 {
                     move.Destination = null;
+                    _isInitialized = false;
                     return Status.Failure;
                 }
             }

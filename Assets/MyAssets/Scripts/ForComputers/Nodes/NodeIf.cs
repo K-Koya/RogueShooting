@@ -12,33 +12,42 @@ namespace BehaviorTreeNode
          */
 
         [SerializeReference, SelectableSerializeReference]
-        [Tooltip("施行する判定インターフェース（0以下 : Failure）")]
+        [Tooltip("施行する判定インターフェース")]
         IIfWhileConditionMethod _if = null;
 
         [SerializeReference, SelectableSerializeReference]
         [Tooltip("判定先のノード")]
         INodeConnecter _doNext = null;
 
-        /// <summary>判定値のキャッシュ（マイナス値 : 未初期化）</summary>
-        short result = -1;
+        /// <summary>判定値のキャッシュ</summary>
+        bool? result = null;
 
 
         public Status NextNode(ComputerParameter param, ComputerMove move)
         {
-            //分岐条件が未指定
+            //該当キャラクターが倒されたら即終了
+            if(param.State.Kind is MotionState.StateKind.Defeat)
+            {
+                result = null;
+                return Status.Failure;
+            }
+
+            //分岐条件が未指定なら失敗
             if (_if is null)
             {
+                result = null;
                 return Status.Failure;
             }
 
             //このノードに初めて入った
-            if (result < 0)
+            if (result is null)
             {
                 result = _if.Condition(param, move);
 
                 //条件に当てはまらない場合は失敗
-                if (result < 1)
+                if (!result.Value)
                 {
+                    result = null;
                     return Status.Failure;
                 }
             }
@@ -48,7 +57,7 @@ namespace BehaviorTreeNode
             //終了か中断
             if(status != Status.Running)
             {
-                result = -1;
+                result = null;
             }
 
             return status;

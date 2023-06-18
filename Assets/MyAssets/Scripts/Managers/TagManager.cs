@@ -9,33 +9,32 @@ public class TagManager : Singleton<TagManager>
 
     #region メンバ
     [SerializeField, Tooltip("メインカメラのタグ")]
-    string _MainCamera = "MainCamera";
+    string _mainCamera = "MainCamera";
     [SerializeField, Tooltip("プレイヤーのタグ")]
-    string _Player = "Player";
+    string _player = "Player";
     [SerializeField, Tooltip("敵のタグ")]
-    string _Enemy = "Enemy";
+    string _enemy = "Enemy";
     [SerializeField, Tooltip("味方キャラクターのタグ")]
-    string _Allies = "Allies";
-    [SerializeField, Tooltip("攻撃情報を持つコライダーのタグ")]
-    string _AttackCollider = "AttackCollider";
-    [SerializeField, Tooltip("攻撃を受けることになるコライダーのタグ")]
-    string _DamagedCollider = "DamagedCollider";
+    string _allies = "Allies";
+    [SerializeField, Tooltip("敵の出現地点タグ")]
+    string _spawner = "Spawner";
+    [SerializeField, Tooltip("床タグ")]
+    string _floor = "Floor";
     #endregion
 
     #region プロパティ
     /// <summary>メインカメラのタグ</summary>
-    public string MainCamera { get => _MainCamera; }
+    public string MainCamera { get => _mainCamera; }
     /// <summary>プレイヤーのタグ</summary>
-    public string Player { get => _Player; }
+    public string Player { get => _player; }
     /// <summary>敵のタグ</summary>
-    public string Enemy { get => _Enemy; }
+    public string Enemy { get => _enemy; }
     /// <summary>味方キャラクターのタグ</summary>
-    public string Allies { get => _Allies; }
+    public string Allies { get => _allies; }
     /// <summary>攻撃情報を持つコライダーのタグ</summary>
-    public string AttackCollider { get => _AttackCollider; }
-    /// <summary>攻撃を受けることになるコライダーのタグ</summary>
-    public string DamagedCollider { get => _DamagedCollider; }
-
+    public string Spawner { get => _spawner; }
+    /// <summary>床となるコライダーのタグ</summary>
+    public string Floor { get => _floor; }
     #endregion
 }
 

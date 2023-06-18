@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 543369104851896536}
   m_Layer: 6
   m_Name: Curve_Road_Floor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -198,7 +198,7 @@ Transform:
   - {fileID: 3993963439508704213}
   - {fileID: 3993963441719890867}
   m_Father: {fileID: 0}
-  m_RootOrder: 32
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &543369104851896536
 BoxCollider:

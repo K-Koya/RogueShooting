@@ -38,6 +38,12 @@ public class PlayerReticle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //É|Å[ÉYéûÇÕé~ÇﬂÇÈ
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         RaycastHit hit;
         if(Physics.Raycast(_mainCameraTransform.position, _mainCameraTransform.forward, out hit, _maxDistance, LayerManager.Instance.OnTheReticle, QueryTriggerInteraction.Collide))
         {

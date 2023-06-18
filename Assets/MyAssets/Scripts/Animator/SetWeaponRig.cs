@@ -30,6 +30,12 @@ public class SetWeaponRig : MonoBehaviour
 
     void Update()
     {
+        //É|Å[ÉYéûÇÕé~ÇﬂÇÈ
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         if (_dataRightHandTarget)
         {
             _rightHandTarget.position = _dataRightHandTarget.position;

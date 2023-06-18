@@ -11,9 +11,6 @@ GameObject:
   - component: {fileID: 4347852741151023072}
   - component: {fileID: 4347852741151023071}
   - component: {fileID: 4347852741151023070}
-  - component: {fileID: 4347852741151023069}
-  - component: {fileID: 8287455926184070581}
-  - component: {fileID: 2929115776537959827}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -49,9 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDontDestroyOnLoad: 0
-  _NameEnemy: Enemy
-  _NameEnemyAttacker: EnemyAttacker
-  _NameAlliesAttacker: AlliesAttacker
   _Ground:
     serializedVersion: 2
     m_Bits: 64
@@ -89,63 +83,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDontDestroyOnLoad: 0
-  _MainCamera: MainCamera
-  _Player: Player
-  _Enemy: Enemy
-  _Allies: Allise
-  _AttackCollider: AttackCollider
-  _DamagedCollider: DamagedCollider
---- !u!114 &4347852741151023069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4347852741151023068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cacde5f1281221447858e7e930e19da7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isUsePointer: 0
---- !u!114 &8287455926184070581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4347852741151023068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 448
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 0}
---- !u!114 &2929115776537959827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4347852741151023068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1338ee9fa68a21448b8caa84959b29ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _mainCamera: MainCamera
+  _player: Player
+  _enemy: Enemy
+  _allies: Allies
+  _spawner: Spawner
+  _floor: Floor

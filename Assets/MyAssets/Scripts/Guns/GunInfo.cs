@@ -62,6 +62,9 @@ public class GunInfo : MonoBehaviour
     [SerializeField, Tooltip("射撃間隔")]
     float _shotInterval = 0.3f;
 
+    /// <summary>銃弾を飛ばしたい方向</summary>
+    Vector3 _targetPoint = Vector3.zero;
+
 
 
     /// <summary>射撃間隔計測タイマー</summary>
@@ -69,7 +72,6 @@ public class GunInfo : MonoBehaviour
 
     /// <summary>true : セミオート式</summary>
     bool _isSemiAuto = false;
-
 
 
     #region デリゲート
@@ -92,7 +94,6 @@ public class GunInfo : MonoBehaviour
     public byte MaxLoadAmmo => _maxLoadAmmo;
     /// <summary>現在の弾の装填数</summary>
     public byte CurrentLoadAmmo => _currentLoadAmmo;
-
     #endregion
 
     /// <summary>発射処理</summary>
@@ -193,6 +194,12 @@ public class GunInfo : MonoBehaviour
 
     void Update()
     {
+        //ポーズ時は止める
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         if (_intervalTimer > 0f)
         {
             _intervalTimer -= Time.deltaTime;
@@ -223,10 +230,7 @@ public class GunInfo : MonoBehaviour
             return;
         }
 
-        GameObject ins = _Instantiate();
-        ins.transform.position = _shotSESource.transform.position;
-        ins.transform.forward = Vector3.Normalize(target - _shotSESource.transform.position);
-        _currentLoadAmmo--;
+        _targetPoint = target;
         _anim.SetTrigger(_PARAM_NAME_DO_SHOT);
         _intervalTimer = _shotInterval;
     }
@@ -259,10 +263,7 @@ public class GunInfo : MonoBehaviour
             return;
         }
 
-        GameObject ins = _Instantiate();
-        ins.transform.position = _shotSESource.transform.position;
-        ins.transform.forward = Vector3.Normalize(target - _shotSESource.transform.position);
-        _currentLoadAmmo--;
+        _targetPoint = target;
         _anim.SetTrigger(_PARAM_NAME_DO_SHOT);
         _intervalTimer = _shotInterval;
     }
@@ -279,6 +280,15 @@ public class GunInfo : MonoBehaviour
     }
 
     #region アニメーターイベント用
+    /// <summary>発砲して銃弾を射出</summary>
+    public void EmitBulletFromGun()
+    {
+        GameObject ins = _Instantiate();
+        ins.transform.position = _shotSESource.transform.position;
+        ins.transform.forward = Vector3.Normalize(_targetPoint - _shotSESource.transform.position);
+        _currentLoadAmmo--;
+    }
+
     /// <summary>リロード完了</summary>
     public void ReloadComprete()
     {

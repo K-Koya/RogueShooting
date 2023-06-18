@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2464252628247694249}
   m_Layer: 6
   m_Name: Common_Floor_InnerStair
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

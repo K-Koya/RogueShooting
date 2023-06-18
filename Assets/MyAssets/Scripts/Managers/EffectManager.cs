@@ -12,6 +12,11 @@ public class EffectManager : Singleton<EffectManager>
     [SerializeField, Tooltip("SAR2000の射出弾エフェクト")]
     GameObject _bulletSAR2000Pref = null;
 
+    [SerializeField, Tooltip("弾がキャラクターに当たった時に発生させるエフェクト")]
+    GameObject _bulletHitCharacterPref = null;
+
+    [SerializeField, Tooltip("弾が地形に当たった時に発生させるエフェクト")]
+    GameObject _bulletHitGroundPref = null;
 
 
     /// <summary>AKMの射出弾エフェクトのプール</summary>
@@ -19,6 +24,12 @@ public class EffectManager : Singleton<EffectManager>
 
     /// <summary>SAR2000の射出弾エフェクトのプール</summary>
     GameObjectPool _bulletSAR2000Effects = null;
+
+    /// <summary>弾がキャラクターに当たった時のエフェクトのプール</summary>
+    GameObjectPool _bulletHitCharacterEffects = null;
+
+    /// <summary>弾が地形に当たった時のエフェクトのプール</summary>
+    GameObjectPool _bulletHitGroundEffects = null;
 
 
 
@@ -28,7 +39,11 @@ public class EffectManager : Singleton<EffectManager>
     /// <summary>SAR2000の射出弾エフェクトのプール</summary>
     public GameObjectPool BulletSAR2000Effects => _bulletSAR2000Effects;
 
+    /// <summary>弾がキャラクターに当たった時のエフェクトのプール</summary>
+    public GameObjectPool BulletHitCharacterEffects => _bulletHitCharacterEffects;
 
+    /// <summary>弾が地形に当たった時のエフェクトのプール</summary>
+    public GameObjectPool BulletHitGroundEffects => _bulletHitGroundEffects;
 
 
     // Start is called before the first frame update
@@ -36,8 +51,10 @@ public class EffectManager : Singleton<EffectManager>
     {
         base.Awake();
 
-        _bulletAKMEffects = new GameObjectPool(_bulletAKMPref, transform, 60);
+        _bulletAKMEffects = new GameObjectPool(_bulletAKMPref, transform, 20);
         _bulletSAR2000Effects = new GameObjectPool(_bulletSAR2000Pref, transform, 20);
+        _bulletHitCharacterEffects = new GameObjectPool(_bulletHitCharacterPref, transform, 20);
+        _bulletHitGroundEffects = new GameObjectPool(_bulletHitGroundPref, transform, 20);
     }
 
 }

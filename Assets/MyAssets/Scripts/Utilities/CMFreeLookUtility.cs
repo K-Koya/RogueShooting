@@ -19,6 +19,12 @@ public class CMFreeLookUtility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //É|Å[ÉYéûÇÕé~ÇﬂÇÈ
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         _cm.enabled = true;
 
         if (!_cm.Follow || !_cm.LookAt)

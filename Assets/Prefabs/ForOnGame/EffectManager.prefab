@@ -47,3 +47,5 @@ MonoBehaviour:
   _isDontDestroyOnLoad: 0
   _bulletAKMPref: {fileID: 8970778630650100623, guid: ed653204c09ea964c9f584cf666fe5de, type: 3}
   _bulletSAR2000Pref: {fileID: 1499863158504206161, guid: 878b5248bfc0539499c2ee48c4a1609a, type: 3}
+  _bulletHitCharacterPref: {fileID: 1995751390818292632, guid: e9c5483a24fe8f84486e6f0d713ab149, type: 3}
+  _bulletHitGroundPref: {fileID: 5865271129723007746, guid: 9da5648d3138e694b86cb49185414640, type: 3}

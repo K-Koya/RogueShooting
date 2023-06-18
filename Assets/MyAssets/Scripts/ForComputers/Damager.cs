@@ -21,6 +21,9 @@ public class Damager : MonoBehaviour
     /// <param name="impact">ÕŒ‚‚Ì‘å‚«‚³</param>
     public void GetDamage(short damage, float impact, Vector3 impactDirection)
     {
-        _param.GaveDamage((short)(damage * _damageRatio), impact, impactDirection);
+        if (_param)
+        {
+            _param.GaveDamage((short)(damage * _damageRatio), impact, impactDirection);
+        }
     }
 }

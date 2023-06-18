@@ -32,6 +32,12 @@ public class DefeatedRagdoll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //É|Å[ÉYéûÇÕé~ÇﬂÇÈ
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         _timer -= Time.deltaTime;
         if(_timer < 0f)
         {

@@ -42,6 +42,12 @@ public class GroundChecker : MonoBehaviour
 
     void Update()
     {
+        //É|Å[ÉYéûÇÕé~ÇﬂÇÈ
+        if (GameManager.IsPose)
+        {
+            return;
+        }
+
         _isGround = false;
         RaycastHit hit;
         if (Physics.SphereCast(_castBasePosition + transform.position, _collider.radius * 0.99f, _gravityDirection, out hit, _collider.radius, LayerManager.Instance.AllGround))

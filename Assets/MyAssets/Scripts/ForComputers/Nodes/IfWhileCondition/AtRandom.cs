@@ -10,9 +10,9 @@ namespace BehaviorTreeNode
         [SerializeField, Tooltip("true”ä—¦")]
         float _numberOfSelection = 0.5f;
 
-        public short Condition(ComputerParameter param, ComputerMove move)
+        public bool Condition(ComputerParameter param, ComputerMove move)
         {
-            return (short)(Random.value < _numberOfSelection ? 1 : 0);
+            return Random.value < _numberOfSelection ? true : false;
         }
     }
 }

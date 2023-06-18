@@ -7,8 +7,6 @@ namespace BehaviorTreeNode
     [System.Serializable]
     public class NodeWhile : INodeConnecter
     {
-        [Header("While")]
-
         /*
          * 配下ノードを指定条件を満たす間施行するノード
          */
@@ -26,9 +24,17 @@ namespace BehaviorTreeNode
 
         public Status NextNode(ComputerParameter param, ComputerMove move)
         {
+            //該当キャラクターが倒されたら即終了
+            if (param.State.Kind is MotionState.StateKind.Defeat)
+            {
+                _runningIndex = -1;
+                return Status.Failure;
+            }
+
             //分岐条件・ループ対象ノードが未指定
             if (_while is null || _doLoop is null || _doLoop.Length < 1)
             {
+                _runningIndex = -1;
                 return Status.Failure;
             }
 
@@ -39,8 +45,8 @@ namespace BehaviorTreeNode
             }
 
             //ループ条件を満たさなくなるまで繰り返し
-            int result = _while.Condition(param, move);
-            while (result > 0)
+            bool result = _while.Condition(param, move);
+            if (result)
             {
                 //実行
                 Status returnal = _doLoop[_runningIndex].NextNode(param, move);
@@ -59,17 +65,20 @@ namespace BehaviorTreeNode
 
                 _runningIndex--;
                 if (_runningIndex < 0) _runningIndex = (short)(_doLoop.Length - 1);
+
+                //1フレーム待機
+                return Status.Running;
             }
 
             _runningIndex = -1;
-            return result < 0 ? Status.Failure : Status.Success;
+            return result ? Status.Success : Status.Failure;
         }
     }
 
     public interface IIfWhileConditionMethod
     {
         /// <summary>分岐条件</summary>
-        /// <returns>ノード配列の番号（マイナス値 : 失敗）</returns>
-        public short Condition(ComputerParameter param, ComputerMove move);
+        /// <returns>true : 成功・false : 失敗</returns>
+        public bool Condition(ComputerParameter param, ComputerMove move);
     }
 }

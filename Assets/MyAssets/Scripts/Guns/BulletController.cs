@@ -76,9 +76,21 @@ public class BulletController : MonoBehaviour
                 if (Physics.Raycast(transform.position, transform.forward, out hit, _fixedSpeed, LayerManager.Instance.BulletHit))
                 {
                     Damager dmg = null;
+                    GameObject ins = null;
                     if (hit.collider.TryGetComponent(out dmg))
                     {
                         dmg.GetDamage(_maxPower, _impact, transform.forward);
+                        ins = EffectManager.Instance.BulletHitCharacterEffects.Instansiate();
+                    }
+                    else
+                    {
+                        ins = EffectManager.Instance.BulletHitGroundEffects.Instansiate();
+                    }
+
+                    if (ins)
+                    {
+                        ins.transform.position = transform.position;
+                        ins.transform.forward = -transform.forward;
                     }
 
                     _destroyDelayTime = _shotLine.time;
