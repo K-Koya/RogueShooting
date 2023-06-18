@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class StageManager : MonoBehaviour
 {
@@ -23,6 +24,10 @@ public class StageManager : MonoBehaviour
 
     [SerializeField, Tooltip("ステージゲームオーバー時に表示するテロップ")]
     GameObject _stageFailureTelop = null;
+
+    [SerializeField, Tooltip("ポーズボタン押下時に実行したいメソッド")]
+    UnityEvent _OnPushPauseButton = null;
+
 
     /// <summary>テロップを表示するタイマー</summary>
     float _telopAppearTimer = 0f;
@@ -57,7 +62,7 @@ public class StageManager : MonoBehaviour
         _stageStartTelop.SetActive(true);
         _stageClearTelop.SetActive(false);
         _stageFailureTelop.SetActive(false);
-        GameManager.PoseMode(false);
+        GameManager.PauseMode(false);
         GameManager.CursorMode(false);
     }
 
@@ -86,6 +91,12 @@ public class StageManager : MonoBehaviour
             }
         }
 
+        //ポーズ
+        if (InputUtility.GetDownPause)
+        {
+            PauseMode(true);
+        }
+
         //クリア条件（ノルマ分敵を倒す）
         if (ComputerParameter.DefeatedEnemyQuota < ComputerParameter.DefeatedEnemyCount + 1)
         {
@@ -95,6 +106,7 @@ public class StageManager : MonoBehaviour
             //すべてのステージを完了
             if(_NumberOfCurrentStage > _NumberOfAllStage - 1)
             {
+                _NumberOfCurrentStage = 0;
                 SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_RESULT);
             }
             else
@@ -106,8 +118,21 @@ public class StageManager : MonoBehaviour
         else if(_player.LifeRatio <= 0)
         {
             _isStageEnd = true;
+            _NumberOfCurrentStage = 0;
             _stageFailureTelop.SetActive(true);
             SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_TITLE);
         }
+    }
+
+    /// <summary>ポーズ起動・解除</summary>
+    /// <param name="isPause">true : ポーズ起動</param>
+    public void PauseMode(bool isPause)
+    {
+        if (isPause)
+        {
+            _OnPushPauseButton?.Invoke();
+        }
+        GameManager.PauseMode(isPause);
+        GameManager.CursorMode(isPause);
     }
 }

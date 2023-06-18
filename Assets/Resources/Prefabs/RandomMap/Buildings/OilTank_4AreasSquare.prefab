@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 226740627234506887}
   - component: {fileID: 216454603443463815}
   - component: {fileID: 267501390965632317}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dumpsters_v1_garbadge (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
 --- !u!33 &226740627234506887
 MeshFilter:
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 219571269467666518}
   - component: {fileID: 227600911588872692}
   - component: {fileID: 259643198410151532}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Oil_tank_v1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &219571269467666518
 MeshFilter:
@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: 1607586090422144263}
   - component: {fileID: 443640995409889752}
   - component: {fileID: 8056383094903778806}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dumpsters_v1_garbadge (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &1607586090422144263
 MeshFilter:
@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 197214774900172939}
   - component: {fileID: 271773634878159340}
   - component: {fileID: 3589320614059607254}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dumpsters_v1_garbadge (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +324,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &197214774900172939
 MeshFilter:
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 2010914404367919423}
   - component: {fileID: 2003179108057311585}
   - component: {fileID: 1980426603700972997}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Electric_box_v3 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2010914404367919423
 MeshFilter:
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 7759185549086389520}
   - component: {fileID: 3240264873852198541}
   - component: {fileID: 3046445102978878979}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Generator_v1 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,7 +562,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7759185549086389520
 MeshFilter:
@@ -639,7 +639,7 @@ GameObject:
   - component: {fileID: 3308342724752115839}
   - component: {fileID: 3300315097436441659}
   - component: {fileID: 3278614826268664795}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dumpsters_v1_empty (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -659,7 +659,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
 --- !u!33 &3308342724752115839
 MeshFilter:
@@ -737,7 +737,7 @@ GameObject:
   - component: {fileID: 462058701916576269}
   - component: {fileID: 8475477117886855219}
   - component: {fileID: 7729573338164283240}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Oil_tank_v2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -757,7 +757,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &462058701916576269
 MeshFilter:
@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 4627793606585542584}
   - component: {fileID: 4620045546704863886}
   - component: {fileID: 4659793754524417602}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Generator_v1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -855,7 +855,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4627793606585542584
 MeshFilter:
@@ -932,7 +932,7 @@ GameObject:
   - component: {fileID: 498452177209078175}
   - component: {fileID: 8751954507764167832}
   - component: {fileID: 1535579603049594748}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dumpsters_v1_empty (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -952,7 +952,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
 --- !u!33 &498452177209078175
 MeshFilter:
@@ -1030,7 +1030,7 @@ GameObject:
   - component: {fileID: 3504007247893784163}
   - component: {fileID: 3171125663584665390}
   - component: {fileID: 7594045502882849303}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Generator_v1 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,7 +1050,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3504007247893784163
 MeshFilter:
@@ -1127,7 +1127,7 @@ GameObject:
   - component: {fileID: 713303062424483780}
   - component: {fileID: 4592260626845234351}
   - component: {fileID: 3101638078142469524}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Generator_v1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1147,7 +1147,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &713303062424483780
 MeshFilter:
@@ -1224,7 +1224,7 @@ GameObject:
   - component: {fileID: 7861241935548191957}
   - component: {fileID: 2511575440322962196}
   - component: {fileID: 8310542310412533552}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dumpsters_v1_garbadge (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1244,7 +1244,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4382047526401057384}
-  m_RootOrder: -1
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &7861241935548191957
 MeshFilter:

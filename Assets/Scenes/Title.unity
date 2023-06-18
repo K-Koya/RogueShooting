@@ -1846,7 +1846,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1134127481}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: PoseMode
+        m_MethodName: PauseMode
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3095,7 +3095,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'BREACH
 
-    BREACHERS'
+    BREACHER'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 19d1feb9a36704a439a369adedc58bf5, type: 2}
   m_sharedMaterial: {fileID: 8997626510926995425, guid: 19d1feb9a36704a439a369adedc58bf5, type: 2}
@@ -3287,7 +3287,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u7D42\u4E86\u3057\u307E\u3059"
+  m_text: Exit?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 19d1feb9a36704a439a369adedc58bf5, type: 2}
   m_sharedMaterial: {fileID: 8997626510926995425, guid: 19d1feb9a36704a439a369adedc58bf5, type: 2}
@@ -4062,7 +4062,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u51FA\u767A\u3057\u307E\u3059"
+  m_text: Game play?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 19d1feb9a36704a439a369adedc58bf5, type: 2}
   m_sharedMaterial: {fileID: 8997626510926995425, guid: 19d1feb9a36704a439a369adedc58bf5, type: 2}
@@ -6772,7 +6772,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1134127481}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: PoseMode
+        m_MethodName: PauseMode
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

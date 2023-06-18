@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>ポーズ処理</summary>
     /// <param name="isActive">true : ポーズを起動</param>
-    public static void PoseMode(bool isActive)
+    public static void PauseMode(bool isActive)
     {
         _IsPose = isActive;
 

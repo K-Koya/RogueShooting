@@ -64,7 +64,10 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     static Vector2Int _MapSize = new Vector2Int(30, 30);
 
     /// <summary>乱数シード(nullならばその場で乱数生成)</summary>
-    static int? _seed = null;
+    static int _Seed = 1;
+
+    /// <summary>true : Seed値を使う</summary>
+    static bool _IsUseSeed = false;
 
 
     /// <summary>エリア外に行けないようにするコライダー</summary>
@@ -184,7 +187,9 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     /// <summary>マスの数(一辺17マス以上)</summary>
     static public Vector2Int MapSize { get => _MapSize; set => _MapSize = value; }
     /// <summary>乱数シード(nullならばその場で乱数生成)</summary>
-    static public int? Seed { get => _seed; set => _seed = value; }
+    static public int Seed { get => _Seed; set => _Seed = value; }
+    /// <summary>true : Seed値を使う</summary>
+    static public bool IsUseSeed { get => _IsUseSeed; set => _IsUseSeed = value; }
 
     #endregion
 
@@ -230,12 +235,13 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     void Awake()
     {
         /*乱数指定*/
-        if (_seed is null)
+        int seed = _Seed;
+        if (!_IsUseSeed)
         {
-            //シード値生成
-            _seed = Random.Range(int.MinValue, int.MaxValue);
+            //シード値をこの場で生成
+            seed = Random.Range(int.MinValue, int.MaxValue);
         }
-        Random.InitState(_seed.Value);
+        Random.InitState(seed);
 
 
         Initialize();
