@@ -242,11 +242,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interval: 1
-  _spawnRadius: 30
-  _despawnRadius: 35
+  _spawnRadius: 25
+  _despawnRadius: 30
   _enemyPrefs:
-  - {fileID: 2508830219777377494, guid: 6ce7ff3e675d53545be89e683dd413d5, type: 3}
   - {fileID: 80875476179958665, guid: 006aa151fd268244281247c390f231b9, type: 3}
+  - {fileID: 2508830219777377494, guid: 6ce7ff3e675d53545be89e683dd413d5, type: 3}
+  - {fileID: 3863632408800961227, guid: d16a406c8bcce4f4da3814eb3dd52e82, type: 3}
 --- !u!4 &172703225
 Transform:
   m_ObjectHideFlags: 0
@@ -1504,7 +1505,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 192
   m_UseGeometry: 1
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1

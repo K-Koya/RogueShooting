@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         _DifficultyData = _difficultyData_Inner;
         _DoInitialize?.Invoke();
         CursorMode(true);
+        PauseMode(false);
     }
 
     /// <summary>É|Å[ÉYèàóù</summary>

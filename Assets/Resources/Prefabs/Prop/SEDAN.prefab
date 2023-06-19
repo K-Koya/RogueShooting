@@ -1524,7 +1524,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8606855647984153266}
   - component: {fileID: 247288572}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SEDAN_COLLIDER
   m_TagString: Untagged
   m_Icon: {fileID: 0}

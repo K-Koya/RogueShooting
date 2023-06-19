@@ -52,6 +52,9 @@ public class StageManager : MonoBehaviour
         GameManager.SetDifficulty(_NumberOfCurrentStage, out _NumberOfAllStage);
         _player = FindObjectOfType<PlayerParameter>();
         _NumberOfCurrentStage++;
+
+        GameManager.PauseMode(false);
+        GameManager.CursorMode(false);
     }
 
     // Start is called before the first frame update
@@ -62,8 +65,6 @@ public class StageManager : MonoBehaviour
         _stageStartTelop.SetActive(true);
         _stageClearTelop.SetActive(false);
         _stageFailureTelop.SetActive(false);
-        GameManager.PauseMode(false);
-        GameManager.CursorMode(false);
     }
 
     // Update is called once per frame

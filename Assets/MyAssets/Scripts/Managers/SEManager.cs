@@ -31,6 +31,13 @@ public class SEManager : Singleton<SEManager>
     [SerializeField, Tooltip("効果音 : プルバック音")]
     AudioClip _pullBack = null;
 
+    [SerializeField, Tooltip("効果音 : 銃弾が物に当たった時の音")]
+    AudioClip[] _bulletRicochets = null;
+
+    /// <summary>銃弾が物に当たった時の音の数</summary>
+    byte _numberOfBulletRicochets = 1;
+
+
 
     /// <summary>効果音 : 石畳・歩行時足音</summary>
     public AudioClip FootStampWalkOnRock { get => _footStampWalkOnRocks[Random.Range(0, _numberOfFootStampWalkOnRock)]; }
@@ -46,6 +53,8 @@ public class SEManager : Singleton<SEManager>
     public AudioClip MagazineConnect { get => _magazineConnect; }
     /// <summary>効果音 : プルバック音</summary>
     public AudioClip PullBack { get => _pullBack; }
+    /// <summary>効果音 : 銃弾が物に当たった時の音</summary>
+    public AudioClip BulletRicochets { get => _bulletRicochets[Random.Range(0, _numberOfBulletRicochets)]; }
 
 
 
@@ -54,5 +63,6 @@ public class SEManager : Singleton<SEManager>
     {
         _numberOfFootStampWalkOnRock = (byte)_footStampWalkOnRocks.Length;
         _numberOfFootStampRunOnRock = (byte)_footStampRunOnRocks.Length;
+        _numberOfBulletRicochets = (byte)_bulletRicochets.Length;
     }
 }

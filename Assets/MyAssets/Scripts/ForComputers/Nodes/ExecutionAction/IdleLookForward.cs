@@ -32,8 +32,8 @@ namespace BehaviorTreeNode
                 param.State.Kind = MotionState.StateKind.Stay;
             }
 
-            //指定時間待ったら成功
-            if (_timer < 0)
+            //指定時間待つか、ターゲットを見つけると成功
+            if (_timer < 0 || param.Target)
             {
                 _isInitialized = false;
                 return Status.Success;

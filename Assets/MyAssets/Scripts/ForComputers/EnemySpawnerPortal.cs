@@ -33,8 +33,7 @@ public class EnemySpawnerPortal : MonoBehaviour
     [SerializeField, Tooltip("出現する敵集")]
     GameObject[] _enemyPrefs = null;
 
-
-    /// <summary>敵情報所持</summary>
+    [SerializeField, Tooltip("敵情報所持")]
     GameObject[] _comObjects = null;
 
     /// <summary>プレイヤー情報</summary>
@@ -61,13 +60,18 @@ public class EnemySpawnerPortal : MonoBehaviour
     {
         while (true)
         {
+            if (GameManager.IsPose)
+            {
+                yield return null;
+            }
+
             //出現数が最大に達していなければ追加
             for(int i = 0; i < _comObjects.Length; i++)
             {
                 if (_comObjects[i] is null)
                 {
                     //出現させる地面を指定
-                    float angle = Random.Range(0f, Mathf.PI);
+                    float angle = Random.Range(0f, Mathf.PI * 2f);
                     Vector3 pos = _player.transform.position + new Vector3(Mathf.Cos(angle) * _spawnRadius, 20f, Mathf.Sin(angle) * _spawnRadius);
                     RaycastHit hit;
                     if (Physics.Raycast(pos, Vector3.down, out hit, 30f, LayerManager.Instance.Ground))
@@ -98,7 +102,12 @@ public class EnemySpawnerPortal : MonoBehaviour
     {
         for (int i = _comObjects.Length - 1; ; i--)
         {
-            if (i < 1)
+            if (GameManager.IsPose)
+            {
+                yield return null;
+            }
+
+            if (i < 0)
             {
                 i = _comObjects.Length - 1;
             }
@@ -115,6 +124,10 @@ public class EnemySpawnerPortal : MonoBehaviour
                 }
             }
             catch (MissingReferenceException)
+            {
+                _comObjects[i] = null;
+            }
+            catch (System.NullReferenceException)
             {
                 _comObjects[i] = null;
             }

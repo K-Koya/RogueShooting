@@ -38,9 +38,10 @@ public class ComputerParameter : CharacterParameter, IReticleFocused
     public static byte DefeatedEnemyCount => _DefeatedEnemyCount;
     /// <summary>照準時のブレの大きさの基本値</summary>
     public static float BaseAccuracyAim => _BaseAccuracyAim;
-
     /// <summary>襲うターゲット</summary>
     public CharacterParameter Target => _target;
+    /// <summary>true : ターゲットへの射線が通っている</summary>
+    public bool IsThroughLineOfSight => _missingTime <= _timer;
 
     #endregion
 

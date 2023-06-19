@@ -169,6 +169,7 @@ public class GunInfo : MonoBehaviour
                 _maxLoadAmmo = (byte)Mathf.Clamp(_maxLoadAmmo, 30, 100);
                 _DoShot = DoShotFullAuto;
                 _DoReload = DoReloadFullAuto;
+                _Instantiate = EffectManager.Instance.BulletM10Effects.Instansiate;
                 _isSemiAuto = false;
 
                 break;

@@ -25,7 +25,7 @@ public class ComputerMove : CharacterMove
 
     #region ナビメッシュ用メンバ
     [SerializeField, Tooltip("目的地に接近したとみなす距離")]
-    float _closeDistance = 3f;
+    float _closeDistance = 1f;
 
     [SerializeField, Tooltip("true : 移動先をNavMesh上に見つけられた")]
     bool _isFoundDestination = false;
@@ -191,14 +191,21 @@ public class ComputerMove : CharacterMove
             }
             else
             {
-                RaycastHit hit;
-                if (Physics.Raycast((Vector3)_destination + Vector3.up * 0.2f, Vector3.down, out hit, 10f, LayerManager.Instance.AllGround))
+                if (_nav.isOnNavMesh)
                 {
-                    _nav.destination = hit.point;
-                    _isFoundDestination = true;
-                }
+                    RaycastHit hit;
+                    if (Physics.Raycast((Vector3)_destination + Vector3.up * 0.2f, Vector3.down, out hit, 10f, LayerManager.Instance.AllGround))
+                    {
+                        _nav.destination = hit.point;
+                        _isFoundDestination = true;
+                    }
 
-                yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForSeconds(0.2f);
+                }
+                else
+                {
+                    yield return null;
+                }
             }
         }
     }

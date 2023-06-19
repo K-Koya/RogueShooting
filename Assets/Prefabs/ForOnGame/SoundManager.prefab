@@ -68,6 +68,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 02d4b2dff380d194fab91c0864b0c386, type: 3}
   _gunshotSmall: {fileID: 8300000, guid: 65201ddabb4144f6a8fb9480120b7656, type: 3}
   _gunshotLarge: {fileID: 8300000, guid: fc582df3572b64d279888946675505af, type: 3}
-  _magazineRemove: {fileID: 8300000, guid: 2dc35d77cfe164a2eab57d08500740e2, type: 3}
-  _magazineConnect: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
+  _magazineRemove: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
+  _magazineConnect: {fileID: 8300000, guid: 9158afb6966d445db9caf1dccf7acbcc, type: 3}
   _pullBack: {fileID: 8300000, guid: cef0fa03af5b747f0abe82cde0b2bccc, type: 3}
+  _bulletRicochets:
+  - {fileID: 8300000, guid: 4031e628cfc564d93ac39f8955afbbda, type: 3}
+  - {fileID: 8300000, guid: e8210ab1fe6784e7eb15956b135716c9, type: 3}

@@ -53,9 +53,10 @@ namespace BehaviorTreeNode
             //常に移動方向を注視
             param.LookDirection = param.MoveDirection;
 
-            //到着したら成功
-            if (move.IsCloseDestination)
+            //到着するか、ターゲットを発見すると成功
+            if (move.IsCloseDestination || param.Target)
             {
+                param.State.Kind = MotionState.StateKind.Stay;
                 move.Destination = null;
                 _isInitialized = false;
                 return Status.Success;

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8970778630650100621}
   - component: {fileID: 8970778630650100622}
-  - component: {fileID: 644214650}
+  - component: {fileID: 6198026955230041653}
   m_Layer: 15
   m_Name: AKM_Bullet
   m_TagString: Untagged
@@ -50,7 +50,7 @@ MonoBehaviour:
   _maxRange: 100
   _maxPower: 25
   _impact: 3
---- !u!136 &644214650
+--- !u!136 &6198026955230041653
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,10 +60,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 0
-  m_Radius: 0.005
-  m_Height: 10
+  m_Radius: 0.01
+  m_Height: 5
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 4.98}
+  m_Center: {x: 0, y: 0, z: 2.49}
 --- !u!1 &8970778630820037078
 GameObject:
   m_ObjectHideFlags: 0

@@ -55,9 +55,9 @@ public class SceneManager : Singleton<SceneManager>
             if (_delayTimer < 0f)
             {
                 _delayTimer = 0f;
-                GameManager.PauseMode(false);
                 string sceneName = _bookingChangeSceneName;
                 _bookingChangeSceneName = null;
+                GameManager.PauseMode(false);
                 UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
             }
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BehaviorTreeNode
 {
     [System.Serializable]
-    public class ShotTarget : IExecutionMethod
+    public class ShotTargetWithStay : IExecutionMethod
     {
         [SerializeField, Tooltip("Æ€ƒuƒŒ‚Ì‘å‚«‚³")]
         float _noiseSize = 3.0f;
@@ -20,25 +20,20 @@ namespace BehaviorTreeNode
             //‚±‚Ìƒm[ƒh‚É‰‚ß‚Ä“ü‚Á‚½
             if (!_isInitialized)
             {
+                move.Destination = null;
                 _isInitialized = true;
+                param.State.Kind = MotionState.StateKind.Stay;
             }
 
-            //ƒ^[ƒQƒbƒg‚ğŒ©¸‚Á‚½‚ç¸”s
-            if (!param.Target)
-            {
-                _isInitialized = false;
-                return Status.Failure;
-            }
-
-            //‘•“U‚µ‚½’e‚ªs‚«‚½‚ç¸”s
-            if (param.UsingGun.CurrentLoadAmmo < 1)
+            //ƒ^[ƒQƒbƒg‚ğŒ©¸‚¤‚©‘•“U‚µ‚½’e‚ªs‚«‚½‚ç¸”s
+            if (!param.IsThroughLineOfSight || param.UsingGun.CurrentLoadAmmo < 1)
             {
                 _isInitialized = false;
                 return Status.Failure;
             }
 
             //ƒ^[ƒQƒbƒg‚ÉŒü‚¯‚ÄŒ‚‚Â
-            Vector3 noise = new Vector3((Random.value - 0.5f) * 2f, (Random.value - 0.5f) * 2f, (Random.value - 0.5f) * 2f) * _noiseSize * ComputerParameter.BaseAccuracyAim;
+            Vector3 noise = _noiseSize * ComputerParameter.BaseAccuracyAim * new Vector3((Random.value - 0.5f) * 2f, (Random.value - 0.5f) * 2f, (Random.value - 0.5f) * 2f);
             param.UsingGun.DoShot(noise + param.Target.EyePoint.position);
 
             //í‚Éƒ^[ƒQƒbƒg‚ğ’‹

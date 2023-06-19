@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8771370102364108458}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isDontDestroyOnLoad: 0
   _bulletAKMPref: {fileID: 8970778630650100623, guid: ed653204c09ea964c9f584cf666fe5de, type: 3}
+  _bulletM10Pref: {fileID: 8720135871930346541, guid: 09c62ca5134794f43b225930a621cb6f, type: 3}
   _bulletSAR2000Pref: {fileID: 1499863158504206161, guid: 878b5248bfc0539499c2ee48c4a1609a, type: 3}
   _bulletHitCharacterPref: {fileID: 1995751390818292632, guid: e9c5483a24fe8f84486e6f0d713ab149, type: 3}
   _bulletHitGroundPref: {fileID: 5865271129723007746, guid: 9da5648d3138e694b86cb49185414640, type: 3}

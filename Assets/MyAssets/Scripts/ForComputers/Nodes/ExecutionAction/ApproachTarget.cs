@@ -12,6 +12,9 @@ namespace BehaviorTreeNode
         [SerializeField, Tooltip("追跡制限時間")]
         float _timeOut = 20f;
 
+        [SerializeField, Tooltip("接近距離")]
+        float _justRightDistance = 15f;
+
         /// <summary>時間計測</summary>
         float _timer = 0f;
 
@@ -22,11 +25,13 @@ namespace BehaviorTreeNode
             {
                 _timer = _timeOut;
                 _isInitialized = true;
+                param.State.Kind = MotionState.StateKind.Run;
             }
 
             //ターゲットを見失ったら失敗
             if (!param.Target)
             {
+                move.Destination = null;
                 _isInitialized = false;
                 return Status.Failure;
             }
@@ -39,15 +44,19 @@ namespace BehaviorTreeNode
 
             _timer -= Time.deltaTime;
 
-            //到着したら成功
-            if (move.IsCloseDestination)
+            //到着・接近したら成功
+            if (move.IsCloseDestination 
+                || Vector3.SqrMagnitude(param.Target.transform.position - param.transform.position) < _justRightDistance * _justRightDistance)
             {
+                param.State.Kind = MotionState.StateKind.Stay;
                 move.Destination = null;
                 _isInitialized = false;
                 return Status.Success;
             }
             else if(_timer < 0f)
             {
+                param.State.Kind = MotionState.StateKind.Stay;
+                move.Destination = null;
                 _isInitialized = false;
                 return Status.Failure;
             }
