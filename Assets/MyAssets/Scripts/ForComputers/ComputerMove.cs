@@ -183,6 +183,12 @@ public class ComputerMove : CharacterMove
     {
         while (true)
         {
+            if (!gameObject.activeSelf)
+            {
+                yield return null;
+                continue;
+            }
+
             _isFoundDestination = false;
 
             if (_destination == null)

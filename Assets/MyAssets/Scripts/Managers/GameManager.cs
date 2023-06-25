@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    /// <summary>  </summary>
+    const float _SLOW_SPEED_RATE = 0.1f;
+
     /// <summary>true : ポーズ中</summary>
     static bool _IsPose = false;
 
@@ -25,13 +28,19 @@ public class GameManager : MonoBehaviour
     /// <summary>true : ポーズ中</summary>
     public static bool IsPose => _IsPose;
 
+    void Awake()
+    {
+        CursorMode(true);
+        PauseMode(false);
+    }
 
     void Start()
     {
+        SlowMode(false);
         _DifficultyData = _difficultyData_Inner;
         _DoInitialize?.Invoke();
-        CursorMode(true);
-        PauseMode(false);
+
+        BGMManager.Instance.BGMCallBaseSpace();
     }
 
     /// <summary>ポーズ処理</summary>
@@ -48,6 +57,20 @@ public class GameManager : MonoBehaviour
         else
         {
             Time.timeScale = _TimeScaleCache;
+        }
+    }
+
+    /// <summary>スロー演出処理</summary>
+    /// <param name="isActive">true : 演出起動</param>
+    public static void SlowMode(bool isActive)
+    {
+        if (isActive)
+        {
+            Time.timeScale = _SLOW_SPEED_RATE;
+        }
+        else
+        {
+            Time.timeScale = 1f;
         }
     }
 

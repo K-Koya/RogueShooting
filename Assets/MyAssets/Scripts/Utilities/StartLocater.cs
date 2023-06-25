@@ -5,7 +5,7 @@ using UnityEngine;
 public class StartLocater : MonoBehaviour
 {
     /// <summary>マップ情報（IStartLocationを継承）</summary>
-    IStartLocation _map = null;
+    IGetPlantMapData _map = null;
 
     [System.Serializable]
     struct LocationObject
@@ -22,7 +22,7 @@ public class StartLocater : MonoBehaviour
 
     void Awake()
     {
-        _map = GetComponent<IStartLocation>();
+        _map = GetComponent<IGetPlantMapData>();
         if (_map is not null)
         {
             GameObject baseObj = new GameObject();
@@ -44,13 +44,4 @@ public class StartLocater : MonoBehaviour
             Destroy(baseObj);
         }
     }
-}
-
-public interface IStartLocation
-{
-    /// <summary>基準座標取得</summary>
-    public Vector3 StartFloorBasePosition { get; }
-
-    /// <summary>道に垂直な方向を取得</summary>
-    public Vector3 StartFloorRoadCross { get; }
 }

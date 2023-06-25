@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EnemySpawnerPortal : MonoBehaviour
@@ -9,32 +8,36 @@ public class EnemySpawnerPortal : MonoBehaviour
     static byte _Capacity = 15;
 
 
+    /// <summary>対象マップ情報</summary>
+    IGetPlantMapData _mapData = null;
 
     [SerializeField, Tooltip("出現間隔")]
     float _interval = 2f;
 
+    [SerializeField, Tooltip("敵有効化半径")]
+    float _activeRadius = 20f;
+
+    [SerializeField, Tooltip("敵無効化半径")]
+    float _disableRadius = 25f;
+
+
+
     /// <summary>一定周期で敵を出現させるコルーチン</summary>
     Coroutine _spawnCoroutine = null;
 
-    /// <summary>出現を待つコルーチン用パラメータ</summary>
-    WaitForSeconds _waitCoroutine = null;
+    /// <summary>一定周期で敵を位置関係で有効・無効を検討するコルーチン</summary>
+    Coroutine _activateSelectCoroutine = null;
 
-    [SerializeField, Tooltip("敵出現半径")]
-    float _spawnRadius = 5f;
+    /// <summary>出現を待つコルーチン用待ち時間</summary>
+    WaitForSeconds _waitSpawnCoroutine = null;
 
-    [SerializeField, Tooltip("敵退陣半径")]
-    float _despawnRadius = 20f;
-
-    /// <summary>一定周期で距離の離れた敵を消すコルーチン</summary>
-    Coroutine _despawnCoroutine = null;
+    /// <summary>敵の有効・無効を検討するコルーチン用待ち時間</summary>
+    WaitForSeconds _waitActivateSelectCoroutine = null;
 
 
 
     [SerializeField, Tooltip("出現する敵集")]
     GameObject[] _enemyPrefs = null;
-
-    [SerializeField, Tooltip("敵情報所持")]
-    GameObject[] _comObjects = null;
 
     /// <summary>プレイヤー情報</summary>
     PlayerParameter _player = null;
@@ -47,12 +50,23 @@ public class EnemySpawnerPortal : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _waitCoroutine = new WaitForSeconds(_interval);
-        _comObjects = new GameObject[_Capacity];
+        _waitSpawnCoroutine = new WaitForSeconds(_interval);
+        _waitActivateSelectCoroutine = new WaitForSeconds(_interval * 2f);
+
         _player = FindObjectOfType<PlayerParameter>();
+        _mapData = FindObjectOfType<MapRandomizer_Plant>();
 
         _spawnCoroutine = StartCoroutine(SpawnCoroutine());
-        _despawnCoroutine = StartCoroutine(DespawnCoroutine());
+        //TODO
+        //_activateSelectCoroutine = StartCoroutine(ActivateSelectCoroutine());
+    }
+
+    void Update()
+    {
+        if (GameManager.IsPose)
+        {
+            return;
+        }
     }
 
     /// <summary>一定間隔で敵を出現させていくコルーチン</summary>
@@ -63,18 +77,18 @@ public class EnemySpawnerPortal : MonoBehaviour
             if (GameManager.IsPose)
             {
                 yield return null;
+                continue;
             }
 
             //出現数が最大に達していなければ追加
-            for(int i = 0; i < _comObjects.Length; i++)
+            if(CharacterParameter.Enemies.Count < _Capacity + 1)
             {
-                if (_comObjects[i] is null)
+                //出現させる地面を指定、ただし、プレイヤー付近は回避
+                Vector3 pos = new Vector3(Random.Range(_mapData.GameAreaMin.x, _mapData.GameAreaMax.x), 0f, Random.Range(_mapData.GameAreaMin.y, _mapData.GameAreaMax.y));
+                if(Vector3.SqrMagnitude(_player.transform.position - pos) > _activeRadius * _activeRadius)
                 {
-                    //出現させる地面を指定
-                    float angle = Random.Range(0f, Mathf.PI * 2f);
-                    Vector3 pos = _player.transform.position + new Vector3(Mathf.Cos(angle) * _spawnRadius, 20f, Mathf.Sin(angle) * _spawnRadius);
                     RaycastHit hit;
-                    if (Physics.Raycast(pos, Vector3.down, out hit, 30f, LayerManager.Instance.Ground))
+                    if (Physics.Raycast(pos + Vector3.up * 20f, Vector3.down, out hit, 30f, LayerManager.Instance.Ground))
                     {
                         if (hit.collider.CompareTag(TagManager.Instance.Floor))
                         {
@@ -85,54 +99,43 @@ public class EnemySpawnerPortal : MonoBehaviour
                             //出現させて位置を調整
                             GameObject ins = Instantiate(_enemyPrefs[Random.Range(0, _enemyPrefs.Length)]);
                             ins.transform.position = pos;
-                            _comObjects[i] = ins;
                         }
-                    }
 
-                    break;
+                        yield return _waitSpawnCoroutine;
+                    }
                 }
             }
 
-            yield return _waitCoroutine;
+            yield return null;
         }
     }
 
-    /// <summary>一定間隔で離れた敵を削除するコルーチン</summary>
-    IEnumerator DespawnCoroutine()
+    /// <summary>一定周期で敵を位置関係で有効・無効を検討するコルーチン</summary>
+    IEnumerator ActivateSelectCoroutine()
     {
-        for (int i = _comObjects.Length - 1; ; i--)
+        while (true)
         {
             if (GameManager.IsPose)
             {
                 yield return null;
+                continue;
             }
 
-            if (i < 0)
+            //敵の有効化・無効化
+            foreach (CharacterParameter param in CharacterParameter.Enemies)
             {
-                i = _comObjects.Length - 1;
-            }
-
-            try
-            {
-                if (_comObjects[i] is not null)
+                float playerSqrDistance = Vector3.SqrMagnitude(_player.transform.position - param.transform.position);
+                if (playerSqrDistance < _activeRadius * _activeRadius)
                 {
-                    if (Vector3.SqrMagnitude(_player.transform.position - _comObjects[i].transform.position) > _despawnRadius * _despawnRadius)
-                    {
-                        Destroy(_comObjects[i]);
-                        _comObjects[i] = null;
-                    }
+                    param.gameObject.SetActive(true);
+                }
+                else if (playerSqrDistance > _disableRadius * _disableRadius)
+                {
+                    param.gameObject.SetActive(false);
                 }
             }
-            catch (MissingReferenceException)
-            {
-                _comObjects[i] = null;
-            }
-            catch (System.NullReferenceException)
-            {
-                _comObjects[i] = null;
-            }
 
-            yield return null;
+            yield return _waitSpawnCoroutine;
         }
     }
 }

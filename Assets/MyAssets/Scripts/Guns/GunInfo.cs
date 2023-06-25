@@ -65,6 +65,9 @@ public class GunInfo : MonoBehaviour
     /// <summary>銃弾を飛ばしたい方向</summary>
     Vector3 _targetPoint = Vector3.zero;
 
+    /// <summary>true : リロード中</summary>
+    bool _isReloadInterval = false;
+
 
 
     /// <summary>射撃間隔計測タイマー</summary>
@@ -160,8 +163,10 @@ public class GunInfo : MonoBehaviour
 
                 break;
             case GunType.ShotGun:
-                _maxLoadAmmo = (byte)Mathf.Clamp(_maxLoadAmmo, 2, 9);
-
+                _maxLoadAmmo = (byte)Mathf.Clamp(_maxLoadAmmo, 2, 12);
+                _DoShot = DoShotShotGun;
+                _DoReload = DoReloadShotGun;
+                _Instantiate = EffectManager.Instance.BulletM590Effects.Instansiate;
                 _isSemiAuto = true;
 
                 break;
@@ -240,10 +245,46 @@ public class GunInfo : MonoBehaviour
     void DoReloadSemiAuto()
     {
         //残弾が減っていたら実行
-        if (_currentLoadAmmo < _maxLoadAmmo)
+        if (!_isReloadInterval && _currentLoadAmmo < _maxLoadAmmo)
         {
             _currentLoadAmmo = 0;
             _anim.SetBool(_PARAM_NAME_IS_RELOAD, true);
+            _isReloadInterval = true;
+        }
+    }
+
+    /// <summary>ショットガンの射撃</summary>
+    void DoShotShotGun(Vector3 target)
+    {
+        _anim.SetBool(_PARAM_NAME_IS_RELOAD, false);
+
+        //残弾が0発なら射撃しない
+        if (_currentLoadAmmo < 1)
+        {
+
+            return;
+        }
+
+        //射撃中は受け付けない
+        if (_intervalTimer > 0f)
+        {
+
+            return;
+        }
+
+        _targetPoint = target;
+        _anim.SetTrigger(_PARAM_NAME_DO_SHOT);
+        _intervalTimer = _shotInterval;
+    }
+
+    /// <summary>ショットガンのリロード</summary>
+    void DoReloadShotGun()
+    {
+        //残弾が減っていたら実行
+        if (!_isReloadInterval && _currentLoadAmmo < _maxLoadAmmo)
+        {
+            _anim.SetTrigger(_PARAM_NAME_IS_RELOAD);
+            _isReloadInterval = true;
         }
     }
 
@@ -273,10 +314,11 @@ public class GunInfo : MonoBehaviour
     void DoReloadFullAuto()
     {
         //残弾が減っていたら実行
-        if (_currentLoadAmmo < _maxLoadAmmo)
+        if (!_isReloadInterval && _currentLoadAmmo < _maxLoadAmmo)
         {
             _currentLoadAmmo = 0;
             _anim.SetBool(_PARAM_NAME_IS_RELOAD, true);
+            _isReloadInterval = true;
         }
     }
 
@@ -290,11 +332,33 @@ public class GunInfo : MonoBehaviour
         _currentLoadAmmo--;
     }
 
+    /// <summary>ショットガンを発砲して銃弾を射出</summary>
+    public void EmitBulletFromShotGun()
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            GameObject ins = _Instantiate();
+            ins.transform.position = _shotSESource.transform.position;
+            Vector3 spread = new Vector3(Random.value - 0.5f, Random.value - 0.5f, Random.value - 0.5f) * 6f;
+            ins.transform.forward = Vector3.Normalize(_targetPoint + spread - _shotSESource.transform.position);
+        }
+        _currentLoadAmmo--;
+    }
+
     /// <summary>リロード完了</summary>
     public void ReloadComprete()
     {
         _currentLoadAmmo = _maxLoadAmmo;
         _anim.SetBool(_PARAM_NAME_IS_RELOAD, false);
+        _isReloadInterval = false;
+    }
+
+    /// <summary>一発分だけリロード</summary>
+    public void ReloadWithOne()
+    {
+        _currentLoadAmmo++;
+        _anim.SetBool(_PARAM_NAME_IS_RELOAD, false);
+        _isReloadInterval = false;
     }
 
     /// <summary>小さい発砲音</summary>

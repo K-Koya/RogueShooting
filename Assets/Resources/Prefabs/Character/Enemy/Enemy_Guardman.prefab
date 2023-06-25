@@ -528,8 +528,10 @@ MonoBehaviour:
       data:
         _selector:
         - rid: 1409463294837915670
-        - rid: 1409463294837915715
+        - rid: 1409463401553854491
         - rid: 1409463294837915676
+        - rid: 1409463401553854496
+        - rid: 1409463401553854500
     - rid: 1409463294837915670
       type: {class: NodeIf, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
@@ -556,21 +558,62 @@ MonoBehaviour:
       type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
         _execution:
-          rid: 1409463294837915678
-    - rid: 1409463294837915678
-      type: {class: ReloadAmmoOnJustRight, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+          rid: 1409463401553854495
+    - rid: 1409463401553854491
+      type: {class: NodeIf, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        _justRightDistance: 15
-    - rid: 1409463294837915715
+        _if:
+          rid: 1409463401553854492
+        _doNext:
+          rid: 1409463401553854493
+    - rid: 1409463401553854492
+      type: {class: CheckDistance, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _borderDistance: 10
+        _isCheckNear: 0
+    - rid: 1409463401553854493
       type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
         _execution:
-          rid: 1409463294837915716
-    - rid: 1409463294837915716
-      type: {class: ShotTargetOnJustRight, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+          rid: 1409463401553854494
+    - rid: 1409463401553854494
+      type: {class: ShotTargetWithStay, ns: BehaviorTreeNode, asm: Assembly-CSharp}
       data:
-        _noiseSize: 1.4
-        _justRightDistance: 15
+        _noiseSize: 2
+    - rid: 1409463401553854495
+      type: {class: ShotTargetWithDodgeStep, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _noiseSize: 4
+        _sideStepDistance: 2
+        _timeOut: 1
+    - rid: 1409463401553854496
+      type: {class: NodeIf, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _if:
+          rid: 1409463401553854497
+        _doNext:
+          rid: 1409463401553854498
+    - rid: 1409463401553854497
+      type: {class: ThroughLineOfSight, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+    - rid: 1409463401553854498
+      type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _execution:
+          rid: 1409463401553854499
+    - rid: 1409463401553854499
+      type: {class: ReloadAmmoWithDodgeStep, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _sideStepDistance: 2
+        _timeOut: 1
+    - rid: 1409463401553854500
+      type: {class: NodeExecution, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _execution:
+          rid: 1409463401553854501
+    - rid: 1409463401553854501
+      type: {class: ApproachTargetToReachSight, ns: BehaviorTreeNode, asm: Assembly-CSharp}
+      data:
+        _timeOut: 20
 --- !u!1 &3743907076359777466
 GameObject:
   m_ObjectHideFlags: 0

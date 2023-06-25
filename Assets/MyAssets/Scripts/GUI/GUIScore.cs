@@ -9,9 +9,6 @@ public class GUIScore : MonoBehaviour
     [SerializeField, Tooltip("倒した敵の数を表示するテキスト")]
     TMP_Text _textDefeatedEnemy = null;
 
-    [SerializeField, Tooltip("今出現している敵の数を表示するテキスト")]
-    TMP_Text _textAppearEnemy = null;
-
     // Update is called once per frame
     void Update()
     {
@@ -22,6 +19,5 @@ public class GUIScore : MonoBehaviour
         }
 
         _textDefeatedEnemy.text = $"{ComputerParameter.DefeatedEnemyCount} / {ComputerParameter.DefeatedEnemyQuota}";
-        _textAppearEnemy.text = $"Appear : {CharacterParameter.Enemies.Count}";
     }
 }

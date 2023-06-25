@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[RequireComponent(typeof(BoxCollider))]
-public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
+public class MapRandomizer_Plant : MonoBehaviour, IGetPlantMapData
 {
     /// <summary>基本試行回数</summary>
     int NUMBER_OF_TRIAL = 40;
@@ -27,37 +26,11 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
     /// <summary> スタート地点の道の方向 </summary>
     Compass _startFloorRoadDirection = Compass.North;
 
+    /// <summary>ゲーム中侵入可能になるエリアの内、小さい座標</summary>
+    Vector2 _gameAreaMin = Vector2.zero;
 
-    /// <summary> スタート地点の道に垂直な方向 </summary>
-    public Vector3 StartFloorRoadCross
-    {
-        get
-        {
-            Vector3 dir = Vector3.forward;
-
-            switch (_startFloorRoadDirection)
-            {
-                case Compass.North:
-                    dir = Vector3.right;
-                    break;
-                case Compass.South:
-                    dir = Vector3.left;
-                    break;
-                case Compass.East:
-                    dir = Vector3.forward;
-                    break;
-                case Compass.West:
-                    dir = Vector3.back;
-                    break;
-                default: break;
-            }
-
-            return dir;
-        }
-    }
-
-    /// <summary>スタート地点になるフロア座標</summary>
-    public Vector3 StartFloorBasePosition => new Vector3(_startFloor.x * UNIT_FOR_FLOOR, _startFloorHeight, _startFloor.y * UNIT_FOR_FLOOR);
+    /// <summary>ゲーム中侵入可能になるエリアの内、大きい座標</summary>
+    Vector2 _gameAreaMax = Vector2.one;
 
 
     /// <summary>マスの数(一辺17マス以上)</summary>
@@ -68,6 +41,10 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
     /// <summary>true : Seed値を使う</summary>
     static bool _IsUseSeed = false;
+
+
+    [SerializeField, Tooltip("テスト用手動マップサイズ指定")]
+    Vector2Int _MapSizeTest = Vector2Int.zero;
 
 
     /// <summary>エリア外に行けないようにするコライダー</summary>
@@ -184,6 +161,40 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
 
 
     #region プロパティ
+    /// <summary> スタート地点の道に垂直な方向 </summary>
+    public Vector3 StartFloorRoadCross
+    {
+        get
+        {
+            Vector3 dir = Vector3.forward;
+
+            switch (_startFloorRoadDirection)
+            {
+                case Compass.North:
+                    dir = Vector3.right;
+                    break;
+                case Compass.South:
+                    dir = Vector3.left;
+                    break;
+                case Compass.East:
+                    dir = Vector3.forward;
+                    break;
+                case Compass.West:
+                    dir = Vector3.back;
+                    break;
+                default: break;
+            }
+
+            return dir;
+        }
+    }
+    /// <summary>スタート地点になるフロア座標</summary>
+    public Vector3 StartFloorBasePosition => new Vector3(_startFloor.x * UNIT_FOR_FLOOR, _startFloorHeight, _startFloor.y * UNIT_FOR_FLOOR);
+    /// <summary>ゲーム中侵入可能になるエリアの内、小さい座標</summary>
+    public Vector2 GameAreaMin => _gameAreaMin;
+    /// <summary>ゲーム中侵入可能になるエリアの内、大きい座標</summary>
+    public Vector2 GameAreaMax => _gameAreaMax;
+
     /// <summary>マスの数(一辺17マス以上)</summary>
     static public Vector2Int MapSize { get => _MapSize; set => _MapSize = value; }
     /// <summary>乱数シード(nullならばその場で乱数生成)</summary>
@@ -242,6 +253,14 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
             seed = Random.Range(int.MinValue, int.MaxValue);
         }
         Random.InitState(seed);
+
+        /*盤面の手動設定*/
+        //手動の指定値がゲームエリア外の大きさを考慮したサイズなら、そちらでマップ生成
+        if(_MapSizeTest.y > GAME_AREA_AROUND_DISTANCE * 2
+            && _MapSizeTest.x > GAME_AREA_AROUND_DISTANCE * 2)
+        {
+            _MapSize = _MapSizeTest;
+        }
 
 
         Initialize();
@@ -412,6 +431,10 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
                 default: break;
             }
         }
+
+        //マップのゲームエリアを計算
+        _gameAreaMin = Vector2.one * GAME_AREA_AROUND_DISTANCE * UNIT_FOR_FLOOR;
+        _gameAreaMax = new Vector2(_MapSize.x - GAME_AREA_AROUND_DISTANCE - 2, _MapSize.y - GAME_AREA_AROUND_DISTANCE - 2) * UNIT_FOR_FLOOR;
     }
 
     /// <summary>高低差構成</summary>
@@ -2031,4 +2054,20 @@ public class MapRandomizer_Plant : MonoBehaviour, IStartLocation
             floorData = floorInfo;
         }
     }
+}
+
+
+public interface IGetPlantMapData
+{
+    /// <summary>基準座標取得</summary>
+    public Vector3 StartFloorBasePosition { get; }
+
+    /// <summary>道に垂直な方向を取得</summary>
+    public Vector3 StartFloorRoadCross { get; }
+
+    /// <summary>ゲーム中侵入可能になるエリアの内、小さい座標</summary>
+    public Vector2 GameAreaMin { get; }
+
+    /// <summary>ゲーム中侵入可能になるエリアの内、大きい座標</summary>
+    public Vector2 GameAreaMax { get; }
 }

@@ -122,7 +122,6 @@ public class ComputerParameter : CharacterParameter, IReticleFocused
         }
         else
         {
-            _timer = _missingTime;
             foreach (CharacterParameter parameter in _Allies)
             {
                 toTarget = Vector3.Normalize(parameter.EyePoint.position - _eyePoint.position);
@@ -138,6 +137,7 @@ public class ComputerParameter : CharacterParameter, IReticleFocused
                         {
                             //É^Å[ÉQÉbÉgìoò^
                             _target = parameter;
+                            _timer = _missingTime;
                             break;
                         }
                     }

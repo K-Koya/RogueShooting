@@ -35,8 +35,12 @@ public class StageManager : MonoBehaviour
     /// <summary>プレイヤーキャラクターのステータス値</summary>
     IGetStatus _player = null;
 
+    /// <summary>true : プレイヤーが敵に見つかっている</summary>
+    bool _isPlayerTargeted = false;
+
     /// <summary>true : 何らかのステージの終了条件を満たした</summary>
     bool _isStageEnd = false;
+
 
 
     /// <summary>ステージの総数</summary>
@@ -60,11 +64,15 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameManager.SlowMode(false);
+
         _telopAppearTimer = _TELOP_APPEAR_TIME;
 
         _stageStartTelop.SetActive(true);
         _stageClearTelop.SetActive(false);
         _stageFailureTelop.SetActive(false);
+
+        BGMManager.Instance.BGMCallField();
     }
 
     // Update is called once per frame
@@ -79,6 +87,7 @@ public class StageManager : MonoBehaviour
         //ステージの終了条件を満たしている
         if (_isStageEnd)
         {
+            GameManager.SlowMode(true);
             return;
         }
 
@@ -107,7 +116,7 @@ public class StageManager : MonoBehaviour
             //すべてのステージを完了
             if(_NumberOfCurrentStage > _NumberOfAllStage - 1)
             {
-                _NumberOfCurrentStage = 0;
+                ResetCurrentStage();
                 SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_RESULT);
             }
             else
@@ -119,9 +128,26 @@ public class StageManager : MonoBehaviour
         else if(_player.LifeRatio <= 0)
         {
             _isStageEnd = true;
-            _NumberOfCurrentStage = 0;
+            BGMManager.Instance.BGMOff();
+            ResetCurrentStage();
             _stageFailureTelop.SetActive(true);
             SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_TITLE);
+        }
+
+        //プレイヤーが見つかったらBGMを変える
+        bool isTarget = false;
+        foreach(CharacterParameter param in CharacterParameter.Enemies)
+        {
+            if((param as ComputerParameter).Target)
+            {
+                isTarget = true;
+                break;
+            }
+        }
+        if(isTarget != _isPlayerTargeted || CharacterParameter.Enemies.Count < 1)
+        {
+            BGMManager.Instance.SwitchCallCation(isTarget);
+            _isPlayerTargeted = isTarget;
         }
     }
 
@@ -135,5 +161,11 @@ public class StageManager : MonoBehaviour
         }
         GameManager.PauseMode(isPause);
         GameManager.CursorMode(isPause);
+    }
+
+    /// <summary>ステージの進行状況をリセットする</summary>
+    public void ResetCurrentStage()
+    {
+        _NumberOfCurrentStage = 0;
     }
 }

@@ -53,10 +53,10 @@ namespace BehaviorTreeNode
                 move.Destination = null;
                 param.State.Kind = MotionState.StateKind.Stay;
                 return Status.Failure;
-            }            
+            }
 
             //ターゲットに向けて撃つ
-            Vector3 noise = _noiseSize * ComputerParameter.BaseAccuracyAim * new Vector3((Random.value - 0.5f) * 2f, (Random.value - 0.5f) * 2f, (Random.value - 0.5f) * 2f);
+            Vector3 noise = _noiseSize * ComputerParameter.BaseAccuracyAim * new Vector3(Random.value - 0.5f, Random.value - 0.5f, Random.value - 0.5f) * 2f;
             param.UsingGun.DoShot(noise + param.Target.EyePoint.position);
 
 

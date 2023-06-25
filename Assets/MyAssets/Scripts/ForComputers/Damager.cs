@@ -21,7 +21,8 @@ public class Damager : MonoBehaviour
     /// <param name="impact">衝撃の大きさ</param>
     public void GetDamage(short damage, float impact, Vector3 impactDirection)
     {
-        if (_param)
+        //ステータスがあり、かつやられていない場合にダメージ処理
+        if (_param && _param.State.Kind != MotionState.StateKind.Defeat)
         {
             _param.GaveDamage((short)(damage * _damageRatio), impact, impactDirection);
         }

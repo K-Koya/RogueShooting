@@ -10,15 +10,12 @@ public class ActiveEventTelop : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        GameManager.PauseMode(true);
-        GameManager.CursorMode(true);
-        _callTelop.SetActive(true);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        GameManager.PauseMode(true);
-        GameManager.CursorMode(true);
-        _callTelop.SetActive(true);
+        PlayerParameter param;
+        if (other.TryGetComponent(out param))
+        {
+            GameManager.PauseMode(true);
+            GameManager.CursorMode(true);
+            _callTelop.SetActive(true);
+        }
     }
 }

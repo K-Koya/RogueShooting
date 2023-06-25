@@ -15,6 +15,15 @@ public class SceneManager : Singleton<SceneManager>
 
 
 
+    /// <summary>シーン変更時にかけるフェードを制御するアニメーション</summary>
+    Animator _fadeAnimator = null;
+
+    [SerializeField, Tooltip("フェードインをかけるアニメーション")]
+    string _animNameFadeIn = "FadeIn";
+
+    [SerializeField, Tooltip("フェードアウトをかけるアニメーション")]
+    string _animNameFadeOut = "FadeOut";
+
     [SerializeField, Tooltip("シーン変更時に遅延する時間")]
     float _delay = 2f;
 
@@ -34,7 +43,7 @@ public class SceneManager : Singleton<SceneManager>
         #endif
     }
 
-    /// <summary>シーンを変更する</summary>
+    /// <summary>フェードをかけてシーンを変更する</summary>
     /// <param name="sceneName">シーン名</param>
     public void ChangeScene(string sceneName)
     {
@@ -44,7 +53,11 @@ public class SceneManager : Singleton<SceneManager>
         _delayTimer = _delay;
     }
 
-
+    protected override void Awake()
+    {
+        base.Awake();
+        _fadeAnimator = GetComponent<Animator>();
+    }
 
     void Update()
     {
@@ -55,11 +68,17 @@ public class SceneManager : Singleton<SceneManager>
             if (_delayTimer < 0f)
             {
                 _delayTimer = 0f;
-                string sceneName = _bookingChangeSceneName;
-                _bookingChangeSceneName = null;
-                GameManager.PauseMode(false);
-                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+                _fadeAnimator?.PlayInFixedTime(_animNameFadeIn);
             }
         }
+    }
+
+    /// <summary>アニメーターより呼び出し、シーンを変更</summary>
+    void SceneJump()
+    {
+        string sceneName = _bookingChangeSceneName;
+        _bookingChangeSceneName = null;
+        GameManager.PauseMode(false);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e47c372db8b7e4696ce15c44268218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDontDestroyOnLoad: 0
+  _isDontDestroyOnLoad: 1
   _footStampWalkOnRocks:
   - {fileID: 8300000, guid: 1f0199a4c6005ec4abbb302f71bc036d, type: 3}
   - {fileID: 8300000, guid: 53e2adf2ac488ef46bb2b4074de9e363, type: 3}

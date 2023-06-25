@@ -192,13 +192,13 @@ public class CharacterParameter : MonoBehaviour, IGetStatus
     /// <param name="impactDirection">衝撃の方向</param>
     public virtual void GaveDamage(short damage, float impact, Vector3 impactDirection)
     {
+        //ライフがなくなり次第倒された状態に
         _currentLife -= damage;
         if (_currentLife < 1)
         {
             _state.Kind = MotionState.StateKind.Defeat;
             //ReleaseGunAll();
         }
-        //ライフがなくなり次第倒された状態に
         else
         {
             _state.Kind = MotionState.StateKind.Hurt;

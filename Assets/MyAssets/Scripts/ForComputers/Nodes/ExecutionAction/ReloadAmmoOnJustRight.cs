@@ -27,8 +27,10 @@ namespace BehaviorTreeNode
             {
                 _isInitialized = true;
                 param.State.Kind = MotionState.StateKind.Walk;
-                param.UsingGun.DoReload();
             }
+
+            //リロード要求
+            param.UsingGun.DoReload();
 
             //ターゲットとの相対位置
             Vector3 relative = param.Target.EyePoint.position - param.EyePoint.position;
@@ -72,6 +74,7 @@ namespace BehaviorTreeNode
                 param.State.Kind = MotionState.StateKind.Stay;
                 return Status.Success;
             }
+
 
             return Status.Running;
         }
