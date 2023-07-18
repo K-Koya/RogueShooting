@@ -78,7 +78,7 @@ public class SceneManager : Singleton<SceneManager>
     {
         string sceneName = _bookingChangeSceneName;
         _bookingChangeSceneName = null;
-        GameManager.PauseMode(false);
+        GameManager.Instance.PauseMode(false);
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }

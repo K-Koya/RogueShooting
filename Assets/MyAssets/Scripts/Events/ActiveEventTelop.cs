@@ -13,8 +13,8 @@ public class ActiveEventTelop : MonoBehaviour
         PlayerParameter param;
         if (other.TryGetComponent(out param))
         {
-            GameManager.PauseMode(true);
-            GameManager.CursorMode(true);
+            GameManager.Instance.PauseMode(true);
+            GameManager.Instance.CursorMode(true);
             _callTelop.SetActive(true);
         }
     }

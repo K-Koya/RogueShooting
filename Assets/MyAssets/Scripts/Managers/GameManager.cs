@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.Utilities;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     /// <summary>  </summary>
     const float _SLOW_SPEED_RATE = 0.1f;
@@ -12,32 +13,50 @@ public class GameManager : MonoBehaviour
     static bool _IsPose = false;
 
     /// <summary>TimeScaleをポーズ用に保管</summary>
-    static float _TimeScaleCache = 1f;
+    float _timeScaleCache = 1f;
 
-    /// <summary>指定された難易度データ</summary>
-    static DifficultyDataColumn[] _DifficultyData = null;
+    /// <summary>選択したゲームの種類</summary>
+    SceneType _gameType = SceneType.Title;
 
     [SerializeField, Tooltip("初めてシーンに入った時に実行するメソッドをアサイン")]
     UnityEvent _DoInitialize = null;
 
-    [SerializeField, Tooltip("難易度データ入力")]
-    DifficultyDataColumn[] _difficultyData_Inner = null;
+
+    [SerializeField, Tooltip("敵討伐モードの難易度データ入力")]
+    StageManager_Raid.DifficultyDataColumn[] _difficultyData_Raid = null;
 
 
 
     /// <summary>true : ポーズ中</summary>
     public static bool IsPose => _IsPose;
 
-    void Awake()
+    /// <summary>敵討伐モードの難易度データ</summary>
+    public ReadOnlyArray<StageManager_Raid.DifficultyDataColumn> DifficultyData_Raid => _difficultyData_Raid;
+
+
+
+    protected override void Awake()
     {
-        CursorMode(true);
-        PauseMode(false);
+        switch (_gameType)
+        {
+            case SceneType.Title:
+            case SceneType.Result_Raid:
+                CursorMode(true);
+                PauseMode(false);
+                break;
+            case SceneType.Tutorial_Basic:
+            case SceneType.Tutorial_Raid:
+            case SceneType.InGame_Raid:
+                CursorMode(false);
+                PauseMode(false);
+                break;
+            default: break;
+        }
     }
 
     void Start()
     {
         SlowMode(false);
-        _DifficultyData = _difficultyData_Inner;
         _DoInitialize?.Invoke();
 
         BGMManager.Instance.BGMCallBaseSpace();
@@ -45,24 +64,24 @@ public class GameManager : MonoBehaviour
 
     /// <summary>ポーズ処理</summary>
     /// <param name="isActive">true : ポーズを起動</param>
-    public static void PauseMode(bool isActive)
+    public void PauseMode(bool isActive)
     {
         _IsPose = isActive;
 
         if (isActive)
         {
-            _TimeScaleCache = Time.timeScale;
+            _timeScaleCache = Time.timeScale;
             Time.timeScale = 0f;
         }
         else
         {
-            Time.timeScale = _TimeScaleCache;
+            Time.timeScale = _timeScaleCache;
         }
     }
 
     /// <summary>スロー演出処理</summary>
     /// <param name="isActive">true : 演出起動</param>
-    public static void SlowMode(bool isActive)
+    public void SlowMode(bool isActive)
     {
         if (isActive)
         {
@@ -76,7 +95,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>マウスカーソルの表示設定</summary>
     /// <param name="isActive">true : 表示する</param>
-    public static void CursorMode(bool isActive)
+    public void CursorMode(bool isActive)
     {
         if (isActive)
         {
@@ -90,31 +109,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>難易度データに格納されている基準値を各要素に反映</summary>
-    public static void SetDifficulty(int numberOfStage, out int numberOfAllStage)
+    /// <summary>ゲームの種類を指定</summary>
+    public void SetGame(int enumId)
     {
-        numberOfAllStage = _DifficultyData.Length;
-        ComputerParameter.SetEnemyData(_DifficultyData[numberOfStage]._quotaDefeated, _DifficultyData[numberOfStage]._baseAccuracyAim);
-        MapRandomizer_Plant.MapSize = _DifficultyData[numberOfStage]._stageSize;
-        EnemySpawnerPortal.Capacity = _DifficultyData[numberOfStage]._enemyCount;
+        _gameType = (SceneType)enumId;
+        switch (_gameType)
+        {
+            case SceneType.Tutorial_Raid:
+            case SceneType.InGame_Raid:
+            case SceneType.Result_Raid:
+                StageManager.SetStageData(DifficultyData_Raid.Count, 0);
+                break;
+            default: break;
+        }
     }
 }
 
-[System.Serializable]
-/// <summary>難易度テーブルの一項目</summary>
-struct DifficultyDataColumn
+
+
+/// <summary>現シーンの分類</summary>
+public enum SceneType : byte
 {
-    /// <summary>マップの縦横マス数</summary>
-    public Vector2Int _stageSize;
-
-    /// <summary>同時出現人数</summary>
-    public byte _enemyCount;
-
-    /// <summary>クリアノルマ</summary>
-    public byte _quotaDefeated;
-
-    /// <summary>基本照準精度（ブレの基本値）</summary>
-    public float _baseAccuracyAim;
+    /// <summary>タイトル</summary>
+    Title = 0,
+    /// <summary>共通チュートリアル</summary>
+    Tutorial_Basic,
+    /// <summary>チュートリアル:敵討伐</summary>
+    Tutorial_Raid = 10,
+    /// <summary>ゲームモード:敵討伐</summary>
+    InGame_Raid,
+    /// <summary>リザルト:敵討伐</summary>
+    Result_Raid,
 }
-
-

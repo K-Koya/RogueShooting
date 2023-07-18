@@ -3,43 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class StageManager : MonoBehaviour
+public abstract class StageManager : MonoBehaviour
 {
     /// <summary>テロップを表示させる時間</summary>
     const byte _TELOP_APPEAR_TIME = 5;
 
 
     /// <summary>ステージの総数</summary>
-    static int _NumberOfAllStage = 5;
+    static protected int _NumberOfAllStage = 5;
 
     /// <summary>現在のステージ番号</summary>
-    static int _NumberOfCurrentStage = 0;
+    static protected int _NumberOfCurrentStage = 0;
 
 
     [SerializeField, Tooltip("ステージ開始時に表示するテロップ")]
-    GameObject _stageStartTelop = null;
+    protected GameObject _stageStartTelop = null;
 
     [SerializeField, Tooltip("ステージクリア時に表示するテロップ")]
-    GameObject _stageClearTelop = null;
+    protected GameObject _stageClearTelop = null;
 
     [SerializeField, Tooltip("ステージゲームオーバー時に表示するテロップ")]
-    GameObject _stageFailureTelop = null;
+    protected GameObject _stageFailureTelop = null;
 
     [SerializeField, Tooltip("ポーズボタン押下時に実行したいメソッド")]
-    UnityEvent _OnPushPauseButton = null;
+    protected UnityEvent _OnPushPauseButton = null;
 
 
     /// <summary>テロップを表示するタイマー</summary>
-    float _telopAppearTimer = 0f;
+    protected float _telopAppearTimer = 0f;
 
     /// <summary>プレイヤーキャラクターのステータス値</summary>
-    IGetStatus _player = null;
+    protected IGetStatus _player = null;
 
     /// <summary>true : プレイヤーが敵に見つかっている</summary>
-    bool _isPlayerTargeted = false;
+    protected bool _isPlayerTargeted = false;
 
     /// <summary>true : 何らかのステージの終了条件を満たした</summary>
-    bool _isStageEnd = false;
+    protected bool _isStageEnd = false;
 
 
 
@@ -51,32 +51,47 @@ public class StageManager : MonoBehaviour
 
 
 
-    void Awake()
-    {
-        GameManager.SetDifficulty(_NumberOfCurrentStage, out _NumberOfAllStage);
-        _player = FindObjectOfType<PlayerParameter>();
-        _NumberOfCurrentStage++;
+    /// <summary>ステージクリア条件</summary>
+    abstract protected bool StageClearBorder();
+    /// <summary>ステージクリア時に行わせる動作</summary>
+    abstract protected void StageCleared();
+    /// <summary>ゲームオーバー条件</summary>
+    abstract protected bool GameOverBorder();
+    /// <summary>ゲームオーバー時に行わせる動作</summary>
+    abstract protected void GameOvered();
 
-        GameManager.PauseMode(false);
-        GameManager.CursorMode(false);
+
+    /// <summary>ステージ情報を指定</summary>
+    public static void SetStageData(int numberOfAllStage, int numberOfCurrentStage)
+    {
+        _NumberOfAllStage = numberOfAllStage;
+        _NumberOfCurrentStage = numberOfCurrentStage;
+    }
+
+
+
+    protected virtual void Awake()
+    {
+        _player = FindObjectOfType<PlayerParameter>();
+        
+        GameManager.Instance.PauseMode(false);
+        GameManager.Instance.CursorMode(false);
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        GameManager.SlowMode(false);
+        GameManager.Instance.SlowMode(false);
 
         _telopAppearTimer = _TELOP_APPEAR_TIME;
 
         _stageStartTelop.SetActive(true);
         _stageClearTelop.SetActive(false);
         _stageFailureTelop.SetActive(false);
-
-        BGMManager.Instance.BGMCallField();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         //ポーズ時は止める
         if (GameManager.IsPose)
@@ -87,7 +102,6 @@ public class StageManager : MonoBehaviour
         //ステージの終了条件を満たしている
         if (_isStageEnd)
         {
-            GameManager.SlowMode(true);
             return;
         }
 
@@ -108,30 +122,14 @@ public class StageManager : MonoBehaviour
         }
 
         //クリア条件（ノルマ分敵を倒す）
-        if (ComputerParameter.DefeatedEnemyQuota < ComputerParameter.DefeatedEnemyCount + 1)
+        if (StageClearBorder())
         {
-            _isStageEnd = true;
-            _stageClearTelop.SetActive(true);
-
-            //すべてのステージを完了
-            if(_NumberOfCurrentStage > _NumberOfAllStage - 1)
-            {
-                ResetCurrentStage();
-                SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_RESULT);
-            }
-            else
-            {
-                SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_STAGE);
-            }
+            StageCleared();
         }
         //ゲームオーバー条件（プレイヤーキャラクターのライフが尽きる）
-        else if(_player.LifeRatio <= 0)
+        else if(GameOverBorder())
         {
-            _isStageEnd = true;
-            BGMManager.Instance.BGMOff();
-            ResetCurrentStage();
-            _stageFailureTelop.SetActive(true);
-            SceneManager.Instance.ChangeScene(SceneManager._SCENE_NAME_TITLE);
+            GameOvered();
         }
 
         //プレイヤーが見つかったらBGMを変える
@@ -159,13 +157,14 @@ public class StageManager : MonoBehaviour
         {
             _OnPushPauseButton?.Invoke();
         }
-        GameManager.PauseMode(isPause);
-        GameManager.CursorMode(isPause);
+        GameManager.Instance.PauseMode(isPause);
+        GameManager.Instance.CursorMode(isPause);
     }
 
     /// <summary>ステージの進行状況をリセットする</summary>
     public void ResetCurrentStage()
     {
+        _NumberOfAllStage = 0;
         _NumberOfCurrentStage = 0;
     }
 }
