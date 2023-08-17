@@ -30,6 +30,9 @@ public class ComputerMove : CharacterMove
     [SerializeField, Tooltip("true : 移動先をNavMesh上に見つけられた")]
     bool _isFoundDestination = false;
 
+    [SerializeField, Tooltip("true : 目的地がたどり着ける・大きく遠回りにならない位置にある")]
+    bool _isEasyToGetToDestination = false;
+
     [SerializeField, Tooltip("true : 移動先座標に接近した")]
     bool _isCloseDestination = true;
 
@@ -51,6 +54,9 @@ public class ComputerMove : CharacterMove
 
     /// <summary>true : 移動先をNavMesh上に見つけられた</summary>
     public bool IsFoundDestination { get => _isFoundDestination; }
+
+    /// <summary>true : 目的地がたどり着ける・大きく遠回りにならない位置にある</summary>
+    public bool IsEasyToGetToDestination { get => _isEasyToGetToDestination; }
 
     /// <summary>true : 移動先座標に接近した</summary>
     public bool IsCloseDestination { get => _isCloseDestination; }
@@ -88,6 +94,7 @@ public class ComputerMove : CharacterMove
             _resultDestination = null;
         }
 
+        //倒されたら、ナビメッシュエージェントを停止
         if (_param.State.Kind is MotionState.StateKind.Defeat)
         {
             _isCloseDestination = true;
@@ -102,6 +109,8 @@ public class ComputerMove : CharacterMove
         MoveByNavMesh();
         SetResultDestination();
     }
+
+    
 
     /// <summary>ナビメッシュを利用した移動メソッド</summary>
     void MoveByNavMesh()

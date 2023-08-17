@@ -15,7 +15,7 @@ public class SceneManager : Singleton<SceneManager>
 
 
 
-    /// <summary>シーン変更時にかけるフェードを制御するアニメーション</summary>
+    [SerializeField, Tooltip("シーン変更時にかけるフェードを制御するアニメーター")]
     Animator _fadeAnimator = null;
 
     [SerializeField, Tooltip("フェードインをかけるアニメーション")]
@@ -56,7 +56,6 @@ public class SceneManager : Singleton<SceneManager>
     protected override void Awake()
     {
         base.Awake();
-        _fadeAnimator = GetComponent<Animator>();
     }
 
     void Update()

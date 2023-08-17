@@ -270,7 +270,6 @@ public class MapRandomizer_Plant : MonoBehaviour, IGetPlantMapData
         SetBridge();
         SetParts();
 
-        //BoxCollider col = GetComponent<BoxCollider>();
 
         /*ƒƒ‚ƒŠ‰ğ•ú*/
         map = null;

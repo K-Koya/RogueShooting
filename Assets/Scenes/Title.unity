@@ -2967,7 +2967,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1425025663}
+      - m_Target: {fileID: 1541317615}
         m_TargetAssemblyTypeName: SceneManager, Assembly-CSharp
         m_MethodName: ChangeScene
         m_Mode: 5
@@ -8094,7 +8094,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4bb80dae07ec2ec4dbe2eccb3be23ffa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c77bcff3da2f8642bea2a13924172bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8333,7 +8333,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1425025663}
+      - m_Target: {fileID: 1541317615}
         m_TargetAssemblyTypeName: SceneManager, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
@@ -11098,17 +11098,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412179377}
   m_CullTransparentMesh: 1
---- !u!114 &1425025663 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6918683379163687808, guid: e9b4182c01833124baff8885853a91bd, type: 3}
-  m_PrefabInstance: {fileID: 6918683378516629274}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cacde5f1281221447858e7e930e19da7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1442908551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11529,7 +11518,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1425025663}
+      - m_Target: {fileID: 1541317615}
         m_TargetAssemblyTypeName: SceneManager, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
@@ -11821,6 +11810,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4293368238282194816, guid: 6fe5db8397204ee438cbbeff6953855c, type: 3}
   m_PrefabInstance: {fileID: 1804365258}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1541317615 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 424842946, guid: e9b4182c01833124baff8885853a91bd, type: 3}
+  m_PrefabInstance: {fileID: 6918683378516629274}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cacde5f1281221447858e7e930e19da7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1551810217
 GameObject:
   m_ObjectHideFlags: 0
@@ -20411,7 +20411,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4bb80dae07ec2ec4dbe2eccb3be23ffa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c77bcff3da2f8642bea2a13924172bc, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -20536,7 +20536,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4bb80dae07ec2ec4dbe2eccb3be23ffa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c77bcff3da2f8642bea2a13924172bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -20760,13 +20760,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneManager
       objectReference: {fileID: 0}
-    - target: {fileID: 6918683377468469785, guid: e9b4182c01833124baff8885853a91bd, type: 3}
+    - target: {fileID: 6918683379347245405, guid: e9b4182c01833124baff8885853a91bd, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918683379347245407, guid: e9b4182c01833124baff8885853a91bd, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6918683379163687808, guid: e9b4182c01833124baff8885853a91bd, type: 3}
-      propertyPath: _delay
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9b4182c01833124baff8885853a91bd, type: 3}
