@@ -133,23 +133,43 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _difficultyData_Raid:
-  - _stageSize: {x: 20, y: 20}
+  - _stageSize: {x: 24, y: 24}
     _enemyCount: 5
     _quotaDefeated: 3
     _baseAccuracyAim: 2
-  - _stageSize: {x: 20, y: 20}
+  - _stageSize: {x: 24, y: 24}
     _enemyCount: 5
     _quotaDefeated: 5
     _baseAccuracyAim: 2
-  - _stageSize: {x: 25, y: 20}
+  - _stageSize: {x: 30, y: 21}
     _enemyCount: 7
     _quotaDefeated: 5
-    _baseAccuracyAim: 1.5
+    _baseAccuracyAim: 1.7
   - _stageSize: {x: 21, y: 30}
     _enemyCount: 10
-    _quotaDefeated: 10
+    _quotaDefeated: 7
+    _baseAccuracyAim: 1.7
+  - _stageSize: {x: 26, y: 26}
+    _enemyCount: 15
+    _quotaDefeated: 7
     _baseAccuracyAim: 1.5
-  - _stageSize: {x: 35, y: 19}
+  - _stageSize: {x: 26, y: 35}
     _enemyCount: 15
     _quotaDefeated: 10
-    _baseAccuracyAim: 1.2
+    _baseAccuracyAim: 1.5
+  - _stageSize: {x: 35, y: 35}
+    _enemyCount: 15
+    _quotaDefeated: 10
+    _baseAccuracyAim: 1
+  - _stageSize: {x: 41, y: 25}
+    _enemyCount: 17
+    _quotaDefeated: 12
+    _baseAccuracyAim: 1
+  - _stageSize: {x: 45, y: 21}
+    _enemyCount: 17
+    _quotaDefeated: 12
+    _baseAccuracyAim: 0.5
+  - _stageSize: {x: 35, y: 45}
+    _enemyCount: 20
+    _quotaDefeated: 15
+    _baseAccuracyAim: 0.5

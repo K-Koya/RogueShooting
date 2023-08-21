@@ -88,11 +88,12 @@ public class EnemySpawnerPortal : MonoBehaviour
                 if(Vector3.SqrMagnitude(_player.transform.position - pos) > _activeRadius * _activeRadius)
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(pos + Vector3.up * 20f, Vector3.down, out hit, 30f, LayerManager.Instance.Ground))
+                    if (Physics.Raycast(pos + Vector3.up * 12f, Vector3.down, out hit, 30f, LayerManager.Instance.Ground))
                     {
                         if (hit.collider.CompareTag(TagManager.Instance.Floor))
                         {
                             pos = hit.point;
+                            Debug.Log(pos);
 
                             yield return null;
 

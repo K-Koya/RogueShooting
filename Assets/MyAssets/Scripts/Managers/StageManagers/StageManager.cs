@@ -85,9 +85,9 @@ public abstract class StageManager : MonoBehaviour
 
         _telopAppearTimer = _TELOP_APPEAR_TIME;
 
-        _stageStartTelop.SetActive(true);
-        _stageClearTelop.SetActive(false);
-        _stageFailureTelop.SetActive(false);
+        _stageStartTelop?.SetActive(true);
+        _stageClearTelop?.SetActive(false);
+        _stageFailureTelop?.SetActive(false);
     }
 
     // Update is called once per frame
@@ -111,7 +111,7 @@ public abstract class StageManager : MonoBehaviour
             _telopAppearTimer -= Time.deltaTime;
             if (_telopAppearTimer < 0f)
             {
-                _stageStartTelop.SetActive(false);
+                _stageStartTelop?.SetActive(false);
             }
         }
 
