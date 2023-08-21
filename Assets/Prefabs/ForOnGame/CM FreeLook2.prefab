@@ -426,8 +426,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4293368238282194820}
   - component: {fileID: 4293368238282194821}
-  - component: {fileID: 4293368238282194822}
   - component: {fileID: 4293368238282194823}
+  - component: {fileID: 158804963070686809}
   m_Layer: 0
   m_Name: CM FreeLook2
   m_TagString: Untagged
@@ -557,22 +557,6 @@ MonoBehaviour:
   - {fileID: 4293368237992349334}
   - {fileID: 4293368236924192454}
   - {fileID: 4293368238785130509}
---- !u!114 &4293368238282194822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4293368238282194816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb7194dc27b9df64c8beca7482ee8e0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerIndex: -1
-  AutoEnableInputs: 1
-  XYAxis: {fileID: -3185210613003159, guid: a618ce5b1139eef4ca589b8843fcbb32, type: 3}
-  ZAxis: {fileID: -3185210613003159, guid: a618ce5b1139eef4ca589b8843fcbb32, type: 3}
 --- !u!114 &4293368238282194823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,6 +587,22 @@ MonoBehaviour:
   m_Damping: 0
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!114 &158804963070686809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4293368238282194816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522849975e4b64e48b5c8ccd681c4726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerIndex: -1
+  AutoEnableInputs: 1
+  XYAxis: {fileID: -3185210613003159, guid: a618ce5b1139eef4ca589b8843fcbb32, type: 3}
+  ZAxis: {fileID: -3185210613003159, guid: a618ce5b1139eef4ca589b8843fcbb32, type: 3}
 --- !u!1 &4293368238440789800
 GameObject:
   m_ObjectHideFlags: 0
